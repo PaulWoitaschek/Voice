@@ -11,10 +11,13 @@ import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.request.ImageRequest
 import coil3.request.Options
 import coil3.toUri
+import java.io.IOException
 import kotlin.io.path.createTempDirectory
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
@@ -106,6 +109,19 @@ class ServerCoversTest {
     }
 
     assertNotNull(imageLoader.diskCache!!.openSnapshot(cover)).close()
+  }
+
+  @Test
+  fun `a page that isn't a cover isn't kept as the cover`() = runTest {
+    server.enqueue(
+      MockResponse(code = 200, headers = headersOf("Content-Type", "text/html"), body = "Sign in"),
+    )
+    val fetcher =
+      covers.create("abs://item/item/cover?ts=2000".toUri(), Options(context), imageLoader)!!
+
+    assertFailsWith<IOException> { withContext(Dispatchers.IO) { fetcher.fetch() } }
+
+    assertNull(imageLoader.diskCache!!.openSnapshot("abs://item/item/cover?ts=2000"))
   }
 
   private fun cover() =

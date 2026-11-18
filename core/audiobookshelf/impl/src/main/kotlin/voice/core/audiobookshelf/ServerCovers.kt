@@ -3,6 +3,7 @@ package voice.core.audiobookshelf
 import coil3.ImageLoader
 import coil3.Uri
 import coil3.fetch.Fetcher
+import coil3.fetch.SourceFetchResult
 import coil3.pathSegments
 import coil3.request.Options
 import coil3.toUri
@@ -32,7 +33,14 @@ public class ServerCovers internal constructor(private val accountStore: Account
     return Fetcher {
       val serverUrl = accountStore.data.first()?.serverUrl ?: throw IOException("Signed out")
       val url = "${serverUrl}api/items/$itemId/cover?width=800&format=jpeg".toUri()
-      imageLoader.components.newFetcher(url, cacheOptions, imageLoader)?.first?.fetch()
+      val result = imageLoader.components.newFetcher(url, cacheOptions, imageLoader)?.first?.fetch()
+      // a captive portal answers with a page, which must not stay in the cache as the cover
+      if (result is SourceFetchResult && result.mimeType?.startsWith("image/") != true) {
+        result.source.close()
+        imageLoader.diskCache?.remove(cacheOptions.diskCacheKey!!)
+        throw IOException("The server sent no image")
+      }
+      result
     }
   }
 }
