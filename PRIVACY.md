@@ -25,8 +25,9 @@ backup account, on most phones your Google account. The login to an Audiobookshe
 
 ## Google Play build
 
-The Google Play build includes Firebase from Google. The F-Droid, GitHub and IzzyDroid builds contain no Google
-libraries, and nothing in this section applies to them.
+The Google Play build includes Firebase from Google. On GitHub, it is the APK app-play.apk. The F-Droid build, the
+IzzyOnDroid build and app-free-release.apk from GitHub contain no Google libraries, and nothing in this section applies
+to them.
 
 ### Crash reports
 
@@ -77,4 +78,4 @@ Paul Woitaschek, [woitaschek@gmail.com](mailto:woitaschek@gmail.com)
 
 When Voice starts sending a new kind of data, this page changes with that release.
 
-Last updated: 2026-11-07
+Last updated: 2026-11-18

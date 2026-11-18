@@ -77,13 +77,14 @@ jobs:
           mkdir -p artifacts
           cp app/build/outputs/bundle/playRelease/app-play-release.aab artifacts/app-play-release.aab
 
+      # The GitHub key is the app signing key of Play, so listeners can switch between both APKs and Play.
       - name: Build GitHub APKs
         env:
           GITHUB_SIGNING_STORE_PASSWORD: ${{ secrets.GH_SIGNING_STORE_PASSWORD }}
           GITHUB_SIGNING_KEY_ALIAS: ${{ secrets.GH_SIGNING_KEY_ALIAS }}
           GITHUB_SIGNING_KEY_PASSWORD: ${{ secrets.GH_SIGNING_KEY_PASSWORD }}
         run: |
-          ./gradlew :app:assembleFreeRelease \
+          ./gradlew :app:assembleFreeRelease :app:assemblePlayRelease \
             -Pvoice.versionName="${{ steps.tag.outputs.version_name }}" \
             -Pvoice.versionCode="${{ steps.tag.outputs.version_code }}" \
             -Pandroid.injected.signing.store.file="$PWD/signing/free/signing.keystore" \
@@ -92,20 +93,23 @@ jobs:
             -Pandroid.injected.signing.key.password="$GITHUB_SIGNING_KEY_PASSWORD"
           mkdir -p artifacts
           cp app/build/outputs/apk/free/release/app-free-release.apk artifacts/app-free-release.apk
+          cp app/build/outputs/apk/play/release/app-play-release.apk artifacts/app-play.apk
 
       # Only the internal track, so the build is on Play. The Promote to Play workflow sends it to review.
       - name: Upload to INTERNAL
         run: bundle exec fastlane android upload_internal aab_path:artifacts/app-play-release.aab
 
+      # Obtainium keeps the chosen APK by position and IzzyOnDroid takes the first *release.apk, so upload the free APK alone first.
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "${{ steps.tag.outputs.tag }}" \
-            artifacts/*.apk \
+            artifacts/app-free-release.apk \
             --draft \
             --notes-file .github/release_notes_template.md \
             --target "$GITHUB_SHA"
+          gh release upload "${{ steps.tag.outputs.tag }}" artifacts/app-play.apk
 
       # Once Play has the version code it can't be released again, so keep the builds to finish by hand.
       - uses: actions/upload-artifact@v7
