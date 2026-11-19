@@ -6,7 +6,13 @@ plugins {
 
 android {
   namespace = "voice.baselineprofile"
-  compileSdk = libs.versions.sdk.compile.get().toInt()
+  val compileSdkVersion = libs.versions.sdk.compile.get().split(".")
+  compileSdk {
+    version =
+      release(compileSdkVersion[0].toInt()) {
+        minorApiLevel = compileSdkVersion.getOrNull(1)?.toInt()
+      }
+  }
   targetProjectPath = ":app"
 
   defaultConfig {
