@@ -79,15 +79,18 @@ Give each finding a row in the ledger, with the state `open`, before you fix any
 ## 4. Fix
 
 - Fix all high and medium findings. If one is wrong, don't fix it. Set its row to `wrong` with the reason.
+- Weigh a medium edge case against the complexity rule in `AGENTS.md` first. When the case is rare and its fix adds
+  new logic, like an effect, stored state or a branch that needs its own tests, don't fix it. Set its row to
+  `left out` with the reason, and name the case in the pull request.
 - Fix a low finding only when the fix is small and clearly makes the code better. If not, set its row to `skipped`.
 - When a finding says the brief is wrong, don't change the brief. Stop and ask.
 - Run the format-and-test skill, then commit the fixes. Set each fixed row to `fixed` with the commit.
 
 ## 5. Repeat
 
-Go back to step 2 with the seats that had a high or medium finding. They review the whole diff again. Stop when the
-ledger has no open row and the round had no new high or medium finding. Run at most four rounds. If round four still
-has one, stop, show the open rows and ask.
+Go back to step 2 with the seats that had a high or medium finding, and with the Simplicity seat when a fix added new
+logic. They review the whole diff again. Stop when the ledger has no open row and the round had no new high or medium
+finding. Run at most four rounds. If round four still has one, stop, show the open rows and ask.
 
 ## 6. Report
 
@@ -114,6 +117,6 @@ One row for each finding. A finding from several seats gets one row that names t
 | 3 | 2 | Rules | Low | The log line in the scanner has no use. | skipped |
 ```
 
-- **State:** `open`, `fixed in <commit>`, `wrong: <reason>` or `skipped`.
+- **State:** `open`, `fixed in <commit>`, `wrong: <reason>`, `left out: <reason>` or `skipped`.
 - Never delete a row. When a seat shows that a fix didn't work, set the row back to `open` and add the round.
 - A `wrong` row only opens again when a seat gives an argument that the reason doesn't answer.
