@@ -34,6 +34,7 @@ import voice.core.playback.nextChapterTarget
 import voice.core.playback.session.bookId
 import voice.core.playback.session.currentBookId
 import voice.core.playback.session.toMediaIdOrNull
+import voice.core.playback.stats.ListeningSessionRecorder
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerState
 
@@ -52,6 +53,7 @@ class VoicePlayer(
   private val analytics: Analytics,
   private val historyRecorder: ListeningHistoryRecorder,
   private val commandSourceResolver: CommandSourceResolver,
+  private val listeningSessionRecorder: ListeningSessionRecorder,
 ) : ForwardingPlayer(player) {
 
   private var skipSilence = false
@@ -299,6 +301,7 @@ class VoicePlayer(
     val bookId = player.currentBookId() ?: return
     // the app's own controllers resolve to no source, but record theirs right before they play
     val source = commandSource?.source ?: historyRecorder.lastSource
+    listeningSessionRecorder.playPressed(source)
     analytics.event(
       "play",
       mapOf(
@@ -404,7 +407,8 @@ private fun speedRange(speed: Float): String =
     else -> "faster"
   }
 
-private fun ListeningEvent.Source?.analyticsName(): String =
+// the listening counts on the phone are stored under these names too, so they must stay
+internal fun ListeningEvent.Source?.analyticsName(): String =
   when (this) {
     ListeningEvent.Source.Widget -> "widget"
     ListeningEvent.Source.Notification -> "notification"

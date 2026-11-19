@@ -12,12 +12,16 @@ public interface ListeningSessionDao {
   @Upsert public suspend fun upsert(session: ListeningSession): Long
 
   @Query(
-    "SELECT COALESCE(SUM(listenedMillis), 0) FROM listening_session WHERE startedAtMillis >= :from AND startedAtMillis < :to",
+    """
+    SELECT COALESCE(SUM(listenedMillis), 0) AS listenedMillis,
+      COALESCE(SUM(audioMillis), 0) AS audioMillis
+    FROM listening_session WHERE startedAtMillis >= :from AND startedAtMillis < :to
+    """,
   )
-  public suspend fun listenedMillis(
+  public suspend fun times(
     from: Long,
     to: Long,
-  ): Long
+  ): ListeningTimesRow
 
   @Query(
     """
@@ -48,6 +52,11 @@ public interface ListeningSessionDao {
     to: BookId,
   )
 }
+
+public data class ListeningTimesRow(
+  val listenedMillis: Long,
+  val audioMillis: Long,
+)
 
 public data class FinishedBookRow(
   val bookId: BookId,

@@ -338,6 +338,46 @@ class ProgressCarryOverTest {
   }
 
   @Test
+  fun `a book with marks and nights, rename its folder, the marks and nights stay with the book`() =
+    runTest {
+      val oldChapters = listOf("1.mp3", "2.mp3").map { file("primary:Audiobooks/Book/$it") }
+      val markedAt = Instant.parse("2026-01-01T10:00:00Z")
+      val old =
+        bookContent(
+            id =
+              BookId(
+                documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book"),
+              ),
+            chapters = oldChapters,
+          )
+          .copy(
+            currentChapter = oldChapters[1],
+            lastPlayedAt = markedAt,
+            markedCompletedAt = markedAt,
+            startedBeforeMark = true,
+          )
+      val newChapters = listOf("1.mp3", "2.mp3").map { file("primary:Audiobooks/Book (2020)/$it") }
+      val new =
+        bookContent(
+          id =
+            BookId(
+              documentUri(
+                tree = "primary:Audiobooks",
+                document = "primary:Audiobooks/Book (2020)",
+              ),
+            ),
+          chapters = newChapters,
+        )
+
+      val carried = carryOver(new, previous = listOf(old))
+
+      assertEquals(expected = markedAt, actual = carried.markedCompletedAt)
+      assertEquals(expected = true, actual = carried.startedBeforeMark)
+      // the nights are in the tally, which moves with the sessions
+      coVerify { listeningStatsRepo.moveToBook(from = listOf(old.id), to = new.id) }
+    }
+
+  @Test
   fun `a book whose folder was renamed keeps its progress, name and bookmarks`() = runTest {
     val oldChapters = listOf("1.mp3", "2.mp3").map { file("primary:Audiobooks/Book/$it") }
     val old =

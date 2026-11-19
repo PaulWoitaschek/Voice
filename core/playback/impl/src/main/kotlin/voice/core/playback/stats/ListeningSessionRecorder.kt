@@ -19,8 +19,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.core.data.BookId
+import voice.core.data.ListeningEvent
 import voice.core.data.ListeningSession
 import voice.core.data.repo.ListeningStatsRepo
+import voice.core.playback.player.analyticsName
 import voice.core.playback.session.bookId
 import voice.core.playback.session.toMediaIdOrNull
 
@@ -37,11 +39,18 @@ class ListeningSessionRecorder(
   private val clock: Clock,
   private val zone: () -> ZoneId,
   private val scope: CoroutineScope,
+  private val tally: ListeningTallyRecorder,
+  private val outputDetector: AudioOutputDetector,
 ) {
 
   private var session: OpenSession? = null
   private var playing = false
   private var speed = 1F
+  private var place: ListeningEvent.Source? = null
+  private var output = AudioOutputDetector.OTHER
+
+  // a drag of the speed slider counts many times, and this keeps it to one write for each save
+  private val counted = mutableMapOf<String, Long>()
 
   // the listening time is counted up to here
   private var countedUntil = 0L
@@ -112,13 +121,21 @@ class ListeningSessionRecorder(
     this.speed = speed
     playing = true
     countedUntil = now
+    output = outputDetector.current()
     checkpoints = scope.launch {
       while (true) {
         delay(CHECKPOINT_INTERVAL)
         count()
+        output = outputDetector.current()
         save()
       }
     }
+  }
+
+  fun playPressed(place: ListeningEvent.Source?) {
+    // what played so far was started from the old place
+    count()
+    this.place = place
   }
 
   fun speedChanged(speed: Float) {
@@ -158,10 +175,17 @@ class ListeningSessionRecorder(
     session.audioMillis += (elapsed * speed).roundToLong()
     session.endedAtMillis = session.endedAtMillis.coerceAtLeast(now)
     countedUntil = now
+    if (elapsed == 0L) return
+    // Android can't tell a car from a Bluetooth speaker, but a play from the car is in the car
+    val output = if (place == ListeningEvent.Source.Car) "car" else output
+    counted.merge("listened_from_${place.analyticsName()}", elapsed, Long::plus)
+    counted.merge("listened_on_$output", elapsed, Long::plus)
   }
 
   private fun save() {
     val session = session ?: return
+    counted.forEach { (name, millis) -> tally.add(session.bookId, name, millis) }
+    counted.clear()
     if (session.listenedMillis == 0L && !session.reachedEnd) return
     val snapshot = session.toListeningSession()
     scope.launch {

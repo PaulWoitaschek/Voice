@@ -14,6 +14,7 @@ import voice.core.data.repo.internals.dao.ChapterDao
 import voice.core.data.repo.internals.dao.CustomMetadataDao
 import voice.core.data.repo.internals.dao.ListeningEventDao
 import voice.core.data.repo.internals.dao.ListeningSessionDao
+import voice.core.data.repo.internals.dao.ListeningTallyDao
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 
 @BindingContainer
@@ -37,6 +38,9 @@ public object PersistenceModule {
 
   @Provides
   private fun listeningSessionDao(appDb: AppDb): ListeningSessionDao = appDb.listeningSessionDao()
+
+  @Provides
+  private fun listeningTallyDao(appDb: AppDb): ListeningTallyDao = appDb.listeningTallyDao()
 
   @Provides
   @SingleIn(AppScope::class)

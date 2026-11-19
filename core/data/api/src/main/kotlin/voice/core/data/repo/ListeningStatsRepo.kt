@@ -4,6 +4,7 @@ import kotlin.time.Duration
 import kotlin.time.Instant
 import voice.core.data.BookId
 import voice.core.data.ListeningSession
+import voice.core.data.ListeningTally
 
 /** Listening sessions, kept on the device to tell listeners about their listening. */
 public interface ListeningStatsRepo {
@@ -17,6 +18,8 @@ public interface ListeningStatsRepo {
     to: Instant = Instant.DISTANT_FUTURE,
   ): ListeningSummary
 
+  public suspend fun add(tally: ListeningTally)
+
   /** Hands the sessions over when a book shows up under a new id. */
   public suspend fun moveToBook(
     from: List<BookId>,
@@ -26,6 +29,7 @@ public interface ListeningStatsRepo {
 
 public data class ListeningSummary(
   val listened: Duration,
+  val audio: Duration,
   /** The number of local days with listening. */
   val listeningDays: Int,
   /** Newest first, each book once. */

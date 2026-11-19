@@ -10,12 +10,17 @@ import io.mockk.slot
 import io.mockk.verify
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlinx.coroutines.test.runTest
+import voice.core.data.Book
+import voice.core.data.BookCategory
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.category
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.playback.LastPlaybackSpeedStore
@@ -80,6 +85,59 @@ class EditBookCategoryViewModelTest {
       assertTrue(updated.lastPlayedAt >= before)
       assertEquals(1.5F, updated.playbackSpeed)
     }
+
+  @Test
+  fun `a book in current, mark as completed, the day is kept, and that the book was started`() =
+    runTest {
+      val before = Clock.System.now()
+
+      val updated = mark(book, BottomSheetItem.BookCategoryMarkAsCompleted)
+
+      assertTrue(updated.markedCompletedAt!! in before..Clock.System.now())
+      assertTrue(updated.startedBeforeMark)
+    }
+
+  @Test
+  fun `a book not started yet, mark as completed, the day is kept, and that the book was not started`() =
+    runTest {
+      val before = Clock.System.now()
+
+      val updated = mark(book(time = 0), BottomSheetItem.BookCategoryMarkAsCompleted)
+
+      assertTrue(updated.markedCompletedAt!! in before..Clock.System.now())
+      assertFalse(updated.startedBeforeMark)
+    }
+
+  @Test
+  fun `a book marked as completed, mark as current or as not started yet, the mark is gone`() =
+    runTest {
+      val marked = book.update {
+        mark(book, BottomSheetItem.BookCategoryMarkAsCompleted)
+      }
+      assertEquals(expected = BookCategory.FINISHED, actual = marked.category)
+
+      listOf(
+          BottomSheetItem.BookCategoryMarkAsCurrent,
+          BottomSheetItem.BookCategoryMarkAsNotStarted,
+        )
+        .forEach { item ->
+          val updated = mark(marked, item)
+
+          assertNull(updated.markedCompletedAt)
+          assertFalse(updated.startedBeforeMark)
+        }
+    }
+
+  private suspend fun mark(
+    book: Book,
+    item: BottomSheetItem,
+  ): BookContent {
+    val update = slot<(BookContent) -> BookContent>()
+    coEvery { repo.get(book.id) } returns book
+    coEvery { repo.updateBook(book.id, capture(update)) } just runs
+    viewModel.onItemClick(book.id, item)
+    return update.captured(book.content)
+  }
 
   @Test
   fun `marking the book the player holds moves the player too`() = runTest {

@@ -11,6 +11,7 @@ dependencies {
   implementation(projects.core.data.api)
   implementation(projects.core.search)
   implementation(projects.core.analytics.api)
+  implementation(projects.core.initializer)
 
   implementation(libs.coil)
   implementation(libs.coroutines.guava)

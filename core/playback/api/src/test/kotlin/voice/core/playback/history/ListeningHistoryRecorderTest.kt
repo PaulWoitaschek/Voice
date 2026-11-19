@@ -4,6 +4,7 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.verify
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -16,6 +17,7 @@ import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.ListeningHistoryRepo
+import voice.core.playback.stats.ListeningTallyRecorder
 
 class ListeningHistoryRecorderTest {
 
@@ -25,6 +27,7 @@ class ListeningHistoryRecorderTest {
     mockk<ListeningHistoryRepo> {
       coEvery { add(capture(events)) } just Runs
     }
+  private val tally = mockk<ListeningTallyRecorder>(relaxUnitFun = true)
   private val recorder =
     ListeningHistoryRecorder(
       repo = repo,
@@ -33,6 +36,7 @@ class ListeningHistoryRecorderTest {
           override fun now(): Instant = Instant.parse("2026-10-07T10:00:00Z")
         },
       scope = scope,
+      tally = tally,
     )
   private val chapter = ChapterId("chapter")
   private val otherChapter = ChapterId("other")
@@ -84,5 +88,49 @@ class ListeningHistoryRecorderTest {
       expected = listOf(ListeningEvent.Type.Seek, ListeningEvent.Type.JumpBack),
       actual = events.map { it.type },
     )
+  }
+
+  private fun sleepTimer(type: ListeningEvent.Type) =
+    recorder.record(type, ListeningEvent.Source.SleepTimer, at(0))
+
+  @Test
+  fun `the sleep timer runs out at 23_40, one night, the day and the book`() = scope.runTest {
+    sleepTimer(ListeningEvent.Type.SleepTimerStarted)
+    sleepTimer(ListeningEvent.Type.SleepTimerEnded)
+
+    verify(exactly = 1) { tally.add(BookId("book"), "sleep_timer_night") }
+    verify(exactly = 0) { tally.add(any(), "sleep_timer_shake") }
+  }
+
+  @Test
+  fun `the timer stopped, shake, and the timer runs out again, the same night, with 1 shake`() =
+    scope.runTest {
+      sleepTimer(ListeningEvent.Type.SleepTimerStarted)
+      sleepTimer(ListeningEvent.Type.SleepTimerEnded)
+      sleepTimer(ListeningEvent.Type.SleepTimerExtended)
+      sleepTimer(ListeningEvent.Type.SleepTimerEnded)
+
+      verify(exactly = 1) { tally.add(BookId("book"), "sleep_timer_night") }
+      verify(exactly = 1) { tally.add(BookId("book"), "sleep_timer_shake") }
+    }
+
+  @Test
+  fun `a shake while the sound fades out counts too`() = scope.runTest {
+    sleepTimer(ListeningEvent.Type.SleepTimerStarted)
+    sleepTimer(ListeningEvent.Type.SleepTimerExtended)
+    sleepTimer(ListeningEvent.Type.SleepTimerEnded)
+
+    verify(exactly = 1) { tally.add(BookId("book"), "sleep_timer_night") }
+    verify(exactly = 1) { tally.add(BookId("book"), "sleep_timer_shake") }
+  }
+
+  @Test
+  fun `a sleep timer that is started again by hand counts a new night`() = scope.runTest {
+    sleepTimer(ListeningEvent.Type.SleepTimerStarted)
+    sleepTimer(ListeningEvent.Type.SleepTimerEnded)
+    sleepTimer(ListeningEvent.Type.SleepTimerStarted)
+    sleepTimer(ListeningEvent.Type.SleepTimerEnded)
+
+    verify(exactly = 2) { tally.add(BookId("book"), "sleep_timer_night") }
   }
 }

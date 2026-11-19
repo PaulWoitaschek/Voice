@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.room.TypeConverter
 import java.io.File
+import java.time.LocalDate
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.serialization.builtins.ListSerializer
@@ -42,6 +43,10 @@ internal class Converters {
   fun toInstant(string: String): Instant {
     return Instant.parse(string)
   }
+
+  @TypeConverter fun fromLocalDate(date: LocalDate): String = date.toString()
+
+  @TypeConverter fun toLocalDate(string: String): LocalDate = LocalDate.parse(string)
 
   @TypeConverter fun fromUri(uri: Uri): String = uri.toString()
 

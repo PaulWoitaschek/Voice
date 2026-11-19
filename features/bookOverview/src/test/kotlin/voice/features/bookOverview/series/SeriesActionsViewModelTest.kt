@@ -24,9 +24,13 @@ import kotlinx.coroutines.test.runTest
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookCategory
+import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.CurrentBookStore
+import voice.core.playback.LastPlaybackSpeedStore
+import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.editBookCategory.BookCategoryChanger
@@ -192,6 +196,44 @@ class SeriesActionsViewModelTest {
     coVerify { bookCategoryChanger.change(current.id, BookCategory.FINISHED) }
     coVerify(exactly = 2) { bookCategoryChanger.change(any(), any()) }
   }
+
+  @Test
+  fun `a series with 1 book in progress and 5 not started, mark the series as completed, 6 marks, 1 started, 5 not started`() =
+    runTest {
+      val inProgress = book(series = "Saga", time = 1_000)
+      books.value = List(5) { book(series = "Saga", time = 0) } + inProgress + other
+      coEvery { repo.get(any()) } answers { books.value.find { it.id == firstArg<BookId>() } }
+      coEvery { repo.updateBook(any(), any()) } answers
+        {
+          val update = secondArg<(BookContent) -> BookContent>()
+          books.value =
+            books.value.map { if (it.id == firstArg<BookId>()) it.update(update) else it }
+        }
+      val viewModel =
+        SeriesActionsViewModel(
+          repo,
+          bookHider,
+          BookCategoryChanger(
+            repo = repo,
+            playerController = mockk(),
+            currentBookStore = CurrentBookStore(MemoryDataStore(null)),
+            lastPlaybackSpeedStore = LastPlaybackSpeedStore(MemoryDataStore(1F)),
+          ),
+          navigator,
+          bookSelectionRequests,
+          dispatcherProvider,
+          "Saga",
+        )
+
+      viewModel.onItemClick(BottomSheetItem.BookCategoryMarkAsCompleted)
+
+      val marked = books.value.filter { it.content.markedCompletedAt != null }
+      assertEquals(expected = 6, actual = marked.size)
+      assertEquals(
+        expected = listOf(inProgress.id),
+        actual = marked.filter { it.content.startedBeforeMark }.map { it.id },
+      )
+    }
 
   @Test
   fun `marking a series as not started resets its hidden books too`() = runTest {

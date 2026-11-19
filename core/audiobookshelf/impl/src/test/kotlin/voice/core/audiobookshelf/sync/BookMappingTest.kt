@@ -149,6 +149,8 @@ class BookMappingTest {
           positionInChapter = 4_000,
           playbackSpeed = 1.5F,
           lastPlayedAt = Instant.fromEpochMilliseconds(5_000),
+          markedCompletedAt = Instant.fromEpochMilliseconds(6_000),
+          startedBeforeMark = true,
         )
 
     val updated =
@@ -161,6 +163,8 @@ class BookMappingTest {
     assertEquals(4_000, updated.positionInChapter)
     assertEquals(1.5F, updated.playbackSpeed)
     assertEquals(Instant.fromEpochMilliseconds(5_000), updated.lastPlayedAt)
+    assertEquals(Instant.fromEpochMilliseconds(6_000), updated.markedCompletedAt)
+    assertEquals(true, updated.startedBeforeMark)
   }
 
   @Test

@@ -114,6 +114,8 @@ internal fun AbsLibraryItem.toBookContent(
         fileLastModified = null,
       ),
     serverLibraryId = libraryId,
+    markedCompletedAt = existing?.markedCompletedAt,
+    startedBeforeMark = existing?.startedBeforeMark ?: false,
   )
 }
 

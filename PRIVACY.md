@@ -44,9 +44,10 @@ When you set up Voice, it asks if it may collect anonymous usage data. Analytics
 turn it off anytime in the settings.
 
 With analytics on, Voice sends Google Analytics for Firebase which screens you open and which features you use, like
-play and pause, the sleep timer or adding a folder. It never sends the names of your books or files. Google adds your
-device model, your Android and app version, your language and an approximate location, like your country, taken from
-your IP address. Google keeps this data for at most 14 months.
+play and pause, the sleep timer or adding a folder. It also sends how long and how fast you listened in the last 30
+days. Each is a rough range, like "2 to 5 hours" or "up to 1.5 times the speed", never the exact number. It never sends
+the names of your books or files. Google adds your device model, your Android and app version, your language and an
+approximate location, like your country, taken from your IP address. Google keeps this data for at most 14 months.
 
 ### Remote settings
 
@@ -78,4 +79,4 @@ Paul Woitaschek, [woitaschek@gmail.com](mailto:woitaschek@gmail.com)
 
 When Voice starts sending a new kind of data, this page changes with that release.
 
-Last updated: 2026-11-18
+Last updated: 2026-11-19

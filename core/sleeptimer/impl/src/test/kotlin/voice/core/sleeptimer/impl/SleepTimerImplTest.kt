@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -114,6 +115,42 @@ class SleepTimerImplTest {
     advanceTimeBy(2.seconds)
     assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
     coVerify(exactly = 1) { playerController.pauseWithRewind(any()) }
+  }
+
+  @Test
+  fun `a shake after the stop goes into the history between the two stops`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(5.seconds))
+    advanceTimeBy(6.seconds)
+    runCurrent()
+
+    shakeDetector.shake()
+    advanceTimeBy(6.seconds)
+    runCurrent()
+
+    verifyOrder {
+      playerController.record(ListeningEvent.Type.SleepTimerStarted, ListeningEvent.Source.App)
+      playerController.record(ListeningEvent.Type.SleepTimerEnded, ListeningEvent.Source.SleepTimer)
+      playerController.record(
+        ListeningEvent.Type.SleepTimerExtended,
+        ListeningEvent.Source.SleepTimer,
+      )
+      playerController.record(ListeningEvent.Type.SleepTimerEnded, ListeningEvent.Source.SleepTimer)
+    }
+    // a second start would make the stop after the shake a new night
+    verify(exactly = 1) { playerController.record(ListeningEvent.Type.SleepTimerStarted, any()) }
+    verify(exactly = 2) { playerController.record(ListeningEvent.Type.SleepTimerEnded, any()) }
+  }
+
+  @Test
+  fun `a running sleep timer, turn it off, no night`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(5.seconds))
+    advanceTimeBy(1.seconds)
+
+    sleepTimer.disable()
+    advanceTimeBy(1.minutes)
+    runCurrent()
+
+    verify(exactly = 0) { playerController.record(ListeningEvent.Type.SleepTimerEnded, any()) }
   }
 
   @Test

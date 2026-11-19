@@ -10,6 +10,7 @@ import voice.core.data.Chapter
 import voice.core.data.CustomMetadata
 import voice.core.data.ListeningEvent
 import voice.core.data.ListeningSession
+import voice.core.data.ListeningTally
 import voice.core.data.RecentBookSearch
 import voice.core.data.repo.internals.dao.BookContentDao
 import voice.core.data.repo.internals.dao.BookmarkDao
@@ -17,6 +18,7 @@ import voice.core.data.repo.internals.dao.ChapterDao
 import voice.core.data.repo.internals.dao.CustomMetadataDao
 import voice.core.data.repo.internals.dao.ListeningEventDao
 import voice.core.data.repo.internals.dao.ListeningSessionDao
+import voice.core.data.repo.internals.dao.ListeningTallyDao
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 import voice.core.data.repo.internals.migrations.Migration56
 import voice.core.data.repo.internals.migrations.Migration62
@@ -32,6 +34,7 @@ import voice.core.data.repo.internals.migrations.Migration66
       RecentBookSearch::class,
       ListeningEvent::class,
       ListeningSession::class,
+      ListeningTally::class,
       CustomMetadata::class,
     ],
   version = AppDb.VERSION,
@@ -47,6 +50,7 @@ import voice.core.data.repo.internals.migrations.Migration66
       AutoMigration(from = 66, to = 67, spec = Migration66::class),
       AutoMigration(from = 68, to = 69),
       AutoMigration(from = 69, to = 70),
+      AutoMigration(from = 70, to = 71),
     ],
 )
 @TypeConverters(Converters::class)
@@ -66,8 +70,10 @@ public abstract class AppDb : RoomDatabase() {
 
   public abstract fun listeningSessionDao(): ListeningSessionDao
 
+  public abstract fun listeningTallyDao(): ListeningTallyDao
+
   internal companion object {
-    const val VERSION = 70
+    const val VERSION = 71
     const val DATABASE_NAME = "autoBookDB"
 
     // the last app with an older database shipped in September 2022
