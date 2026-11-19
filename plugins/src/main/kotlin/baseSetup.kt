@@ -69,7 +69,13 @@ fun Project.baseSetup() {
       }
       minSdk = libs.findVersion("sdk-min").get().requiredVersion.toInt()
     }
-    compileSdk = libs.findVersion("sdk-compile").get().requiredVersion.toInt()
+    val compileSdkVersion = libs.findVersion("sdk-compile").get().requiredVersion.split(".")
+    compileSdk {
+      version =
+        release(compileSdkVersion[0].toInt()) {
+          minorApiLevel = compileSdkVersion.getOrNull(1)?.toInt()
+        }
+    }
     testOptions.apply {
       unitTests.isReturnDefaultValues = true
       unitTests.isIncludeAndroidResources = true
