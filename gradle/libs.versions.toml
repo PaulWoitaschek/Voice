@@ -17,7 +17,7 @@ spotless = "8.11.0"
 retrofit = "3.0.0"
 metro = "1.6.0"
 navigation3 = "1.2.1"
-androidx-lifecycle = "2.11.0"
+androidx-lifecycle = "2.11.1"
 benchmark = "1.5.0"
 coil = "3.6.3"
 
