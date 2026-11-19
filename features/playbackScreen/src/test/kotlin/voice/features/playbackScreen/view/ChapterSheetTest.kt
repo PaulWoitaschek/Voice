@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.SemanticsNodeInteraction
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.v2.createComposeRule
@@ -18,7 +17,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import org.junit.Rule
 import org.junit.runner.RunWith
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import voice.core.ui.VoiceTheme
@@ -77,60 +75,6 @@ class ChapterSheetTest {
 
     val layout = compose.onNodeWithText("Arrival", useUnmergedTree = true).textLayout()
     assertEquals(1, layout.lineCount)
-  }
-
-  @Test
-  @Config(qualifiers = "w360dp-h640dp")
-  fun `the current chapter shows when the chapter before it has a very long name`() {
-    RuntimeEnvironment.setFontScale(2F)
-    compose.setContent {
-      VoiceTheme {
-        ChapterSheet(
-          dialogState =
-            SelectChapterDialog(
-              listOf(
-                SelectChapterDialog.ItemViewState(
-                  number = 1,
-                  name = LONG_NAME,
-                  time = "0:00",
-                ),
-                SelectChapterDialog.ItemViewState(number = 2, name = "Arrival", time = "2:00"),
-              ),
-            ),
-          currentChapterNumber = 2,
-          playing = false,
-          onChapterClick = {},
-          onDismiss = {},
-        )
-      }
-    }
-
-    compose.onNodeWithText("Arrival").assertIsDisplayed()
-  }
-
-  @Test
-  fun `the chapter before the current one shows above it`() {
-    compose.setContent {
-      VoiceTheme {
-        ChapterSheet(
-          dialogState =
-            SelectChapterDialog(
-              (1..40).map {
-                SelectChapterDialog.ItemViewState(number = it, name = "Part $it", time = "0:00")
-              },
-            ),
-          currentChapterNumber = 20,
-          playing = false,
-          onChapterClick = {},
-          onDismiss = {},
-        )
-      }
-    }
-
-    val previous = compose.onNodeWithText("Part 19").fetchSemanticsNode().boundsInWindow
-    val current = compose.onNodeWithText("Part 20").fetchSemanticsNode().boundsInWindow
-    assertEquals(current.height, previous.height)
-    assertTrue(previous.bottom <= current.top)
   }
 
   private fun showChapter(name: String) {

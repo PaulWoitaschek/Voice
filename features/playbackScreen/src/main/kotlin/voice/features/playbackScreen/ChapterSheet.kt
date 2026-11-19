@@ -27,8 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,7 +36,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.flow.first
 import voice.core.strings.R as StringsR
 import voice.core.ui.NowPlayingBars
 import voice.core.ui.bookText
@@ -79,21 +76,10 @@ internal fun ChapterSheet(
         )
       }
     }
-    // the previous chapter shows above the current one, unless it pushes the current one out
-    val listState =
-      rememberLazyListState(initialFirstVisibleItemIndex = (selectedIndex - 1).coerceAtLeast(0))
-    LaunchedEffect(listState) {
-      val layout = snapshotFlow { listState.layoutInfo }.first { it.visibleItemsInfo.isNotEmpty() }
-      val current = layout.visibleItemsInfo.find { it.index == selectedIndex }
-      if (
-        selectedIndex > 0 &&
-          (current == null || current.offset + current.size > layout.viewportEndOffset)
-      ) {
-        listState.scrollToItem(selectedIndex)
-      }
-    }
+    // -1 because we want to show the previous chapter on the screen
+    val initialFirstVisibleItemIndex = (selectedIndex - 1).coerceAtLeast(0)
     LazyColumn(
-      state = listState,
+      state = rememberLazyListState(initialFirstVisibleItemIndex = initialFirstVisibleItemIndex),
       contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
       verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
