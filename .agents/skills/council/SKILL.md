@@ -25,9 +25,8 @@ You decide which seats run, from what the diff can break. A small fix with tests
 screen, stored data or a change for the car needs all of them. Say in the report which seats ran and why.
 
 Give each seat to its own subagent, all at the same time, except the Simplicity seat: it runs [last](#5-repeat). A
-seat gets the brief, the diff against `origin/main`, the
-ledger and its task below. It doesn't get this chat or your reasons. Without subagents, do the seats yourself, one
-after another.
+seat gets the brief, the diff against `origin/main`, the ledger and its task below. It doesn't get this chat or your
+reasons. Without subagents, do the seats yourself, one after another.
 
 Where the tool lets you set the model of a subagent, run the Rules seat on Sonnet. It compares the diff with written
 rules, and you check each finding in step 3. The other seats keep your model.
