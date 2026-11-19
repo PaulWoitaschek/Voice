@@ -156,14 +156,14 @@ F-Droid builds Voice from the source code and signs it with its own key, so its 
 
 Each release has two APKs:
 
-- **app-play.apk** is the build from Google Play. It sends crash reports, and anonymous usage data if you agree,
+- **voice-release.apk** is the build from Google Play. It sends crash reports, and anonymous usage data if you agree,
   so I can fix bugs faster and see which features listeners use. Pick this one to help Voice.
-- **app-free-release.apk** has no Google libraries and sends nothing.
+- **voice-foss-release.apk** has no Google libraries and sends nothing.
 
 Both are signed with the same key. You can install one over the other, or switch to Google Play, and keep your
-library. If you switch to app-play.apk, usage data stays off until you turn on Settings › Analytics.
+library. If you switch to voice-release.apk, usage data stays off until you turn on Settings › Analytics.
 
-Obtainium suggests app-play.apk when you add Voice. IzzyOnDroid has the free APK.
+Obtainium suggests voice-release.apk when you add Voice. IzzyOnDroid has the FOSS APK.
 
 ## How do I resume playback after the sleep timer stops?
 

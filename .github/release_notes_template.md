@@ -2,8 +2,8 @@
 
 ## Which APK? 📦
 
-- **app-play.apk** helps me make Voice better. It sends crash reports, and anonymous usage data if you agree. If you switch from the free APK, turn on Settings › Analytics. It is the same build as on Google Play.
-- **app-free-release.apk** has no Google libraries and sends nothing.
+- **voice-release.apk** helps me make Voice better. It sends crash reports, and anonymous usage data if you agree. If you switch from the FOSS APK, turn on Settings › Analytics. It is the same build as on Google Play.
+- **voice-foss-release.apk** has no Google libraries and sends nothing.
 
 Both have the same signature. You can switch between them, or to Google Play, and keep your library.
 

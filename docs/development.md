@@ -88,7 +88,7 @@ Compose rules come from Slack's [compose-lints](https://slackhq.github.io/compos
 
 To release a new version, trigger the [Release Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/release.yml)
 
-This creates a draft GitHub release with the free and the Play APK. It also uploads the Play AAB to the Play Store's
+This creates a draft GitHub release with the FOSS and the Play APK. It also uploads the Play AAB to the Play Store's
 internal track. Publishing the draft creates the tag, and F-Droid builds from the tag.
 
 Google Play has its own pace, because its review takes days. To send the latest published release to review, trigger the
@@ -128,7 +128,7 @@ The `release` environment requires these secrets:
 ### Releasing to F-Droid, IzzyDroid and GitHub
 
 The draft gets its git tag only when it's published. F-Droid builds every tag that matches `^[\d.]+-\d+$`, usually a few
-days later, and IzzyDroid picks up the free APK from the published release. Neither has a staged rollout, so publish the
+days later, and IzzyDroid picks up the FOSS APK from the published release. Neither has a staged rollout, so publish the
 draft only once the Play rollout has reached 100%.
 
 A version that turns out broken on Play is never published. Keep its draft until the next release is published: the
