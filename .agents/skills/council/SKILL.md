@@ -24,7 +24,8 @@ finding.
 You decide which seats run, from what the diff can break. A small fix with tests can need one or two seats. A new
 screen, stored data or a change for the car needs all of them. Say in the report which seats ran and why.
 
-Give each seat to its own subagent, all at the same time. A seat gets the brief, the diff against `origin/main`, the
+Give each seat to its own subagent, all at the same time, except the Simplicity seat: it runs [last](#5-repeat). A
+seat gets the brief, the diff against `origin/main`, the
 ledger and its task below. It doesn't get this chat or your reasons. Without subagents, do the seats yourself, one
 after another.
 
@@ -35,7 +36,7 @@ rules, and you check each finding in step 3. The other seats keep your model.
 |---|---|---|
 | Bugs | Most diffs | Find what breaks: crashes, lost data, wrong behavior, races, broken tests. Run `/code-review high origin/main` where the tool has it. |
 | Brief | Most diffs | Each rule and example of the brief has a test that checks it. The diff builds nothing that the brief leaves out, and nothing it doesn't ask for. |
-| Simplicity | When the diff adds logic | Find what can go, by the complexity rule in `AGENTS.md`: stored data, a migration, a setting, a library, an abstraction with one user, code for a case that can't happen. Name the smaller version. |
+| Simplicity | Last, when the diff adds logic | Find what can go, by the complexity rule in `AGENTS.md`: stored data, a migration, a setting, a library, an abstraction with one user, code for a case that can't happen. Name the smaller version. |
 | Rules | When the diff adds code, comments or strings | Find breaks of `AGENTS.md` and the skills that apply to the changed files: architecture, logging, comments, format-and-test, translate-strings. |
 | Listener | Only with a [reason](#the-listener-seat) | Check what its reasons name. |
 
@@ -95,6 +96,9 @@ You decide if another round is worth it. Run one when a fix changed something th
 logic or a fix you are not sure of. Pick the seats for it the same way as in step 2. Stop when the ledger has no open
 row and no fix needs another look. Run at most four rounds. If round four still has an open high or medium row, stop,
 show it and ask.
+
+Then run the Simplicity seat on the final diff, so that it also sees the code that the fixes added. Its fixes only
+remove code. When one changes behavior, run the seat that checks it again.
 
 ## 6. Report
 
