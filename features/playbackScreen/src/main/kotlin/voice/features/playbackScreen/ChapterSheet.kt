@@ -154,7 +154,6 @@ private fun ChapterItem(
           chapter.name ?: stringResource(StringsR.string.playback_chapter_unnamed, chapter.number),
         style = if (chapter.name != null) nameStyle.bookText() else nameStyle,
         color = if (played) colors.onSurfaceVariant else Color.Unspecified,
-        maxLines = 2,
       )
       Spacer(Modifier.width(12.dp))
       Text(
