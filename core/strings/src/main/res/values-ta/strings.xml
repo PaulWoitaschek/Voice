@@ -271,6 +271,7 @@
         <item quantity="one">%d புத்தகம் கேட்கப்படுகிறது</item>
         <item quantity="other">%d புத்தகங்கள் கேட்கப்படுகின்றன</item>
     </plurals>
+    <string name="library.header.listened_this_week">இந்த வாரம் %s</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d மறைக்கப்பட்ட புத்தகம்</item>
         <item quantity="other">%d மறைக்கப்பட்ட புத்தகங்கள்</item>
@@ -340,6 +341,29 @@
     <string name="library.survey.message">சில சிறு கேள்விகள் அடுத்து என்ன வர வேண்டும் என்பதைத் தீர்மானிக்க உதவும்.</string>
     <string name="library.survey.open">கருத்துக்கணிப்பில் பங்கேற்கவும்</string>
     <string name="library.survey.title">Voice-ஐ வடிவமைக்க உதவுங்கள்</string>
+    <string name="listening_stats.all_time">இதுவரை</string>
+    <string name="listening_stats.books_finished">முடித்த புத்தகங்கள்</string>
+    <string name="listening_stats.counts_since">Voice %s முதல் கணக்கிடுகிறது.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">%d நாளில்</item>
+        <item quantity="other">%d நாட்களில்</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">%2$d நாளில் %1$d நாள்</item>
+        <item quantity="other">%2$d நாட்களில் %1$d நாள்</item>
+    </plurals>
+    <string name="listening_stats.earlier">முந்தையது</string>
+    <string name="listening_stats.empty">இங்கே இன்னும் எதுவும் இல்லை. இயக்கத் தொடங்கினால், இது நிரம்பும்.</string>
+    <string name="listening_stats.finished">முடித்தவை</string>
+    <string name="listening_stats.later">அடுத்தது</string>
+    <string name="listening_stats.month">மாதம்</string>
+    <string name="listening_stats.saved">வேகமாகக் கேட்டதால் மிச்சமானது</string>
+    <string name="listening_stats.this_month">இந்த மாதம்</string>
+    <string name="listening_stats.this_week">இந்த வாரம்</string>
+    <string name="listening_stats.this_year">இந்த ஆண்டு</string>
+    <string name="listening_stats.title">நீங்கள் கேட்டவை</string>
+    <string name="listening_stats.week">வாரம்</string>
+    <string name="listening_stats.year">ஆண்டு</string>
     <string name="media_session.library.recent">அண்மையவை</string>
     <string name="media_session.library.root">அனைத்து ஆடியோபுக்குகள்</string>
     <string name="onboarding.action.next">அடுத்து</string>

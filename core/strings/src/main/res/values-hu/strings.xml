@@ -271,6 +271,7 @@
         <item quantity="one">%d könyv folyamatban</item>
         <item quantity="other">%d könyv folyamatban</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s ezen a héten</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d rejtett könyv</item>
         <item quantity="other">%d rejtett könyv</item>
@@ -340,6 +341,29 @@
     <string name="library.survey.message">Néhány gyors kérdés segít eldönteni, mi jöjjön ezután.</string>
     <string name="library.survey.open">Kérdőív kitöltése</string>
     <string name="library.survey.title">Segítsen alakítani a Voice-t</string>
+    <string name="listening_stats.all_time">Összesen</string>
+    <string name="listening_stats.books_finished">Befejezett könyvek</string>
+    <string name="listening_stats.counts_since">A Voice %s óta számolja a hallgatást.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">%d napon</item>
+        <item quantity="other">%d napon</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">%2$d napból %1$d napon</item>
+        <item quantity="other">%2$d napból %1$d napon</item>
+    </plurals>
+    <string name="listening_stats.earlier">Korábban</string>
+    <string name="listening_stats.empty">Még nincs itt semmi. Indítsa el a lejátszást, és megtelik.</string>
+    <string name="listening_stats.finished">Befejezett</string>
+    <string name="listening_stats.later">Később</string>
+    <string name="listening_stats.month">Hónap</string>
+    <string name="listening_stats.saved">Gyorsabb hallgatással megtakarítva</string>
+    <string name="listening_stats.this_month">Ebben a hónapban</string>
+    <string name="listening_stats.this_week">Ezen a héten</string>
+    <string name="listening_stats.this_year">Idén</string>
+    <string name="listening_stats.title">Amit meghallgatott</string>
+    <string name="listening_stats.week">Hét</string>
+    <string name="listening_stats.year">Év</string>
     <string name="media_session.library.recent">Legutóbbiak</string>
     <string name="media_session.library.root">Összes hangoskönyv</string>
     <string name="onboarding.action.next">Tovább</string>

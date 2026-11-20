@@ -286,6 +286,7 @@
         <item quantity="many">%d llibres en curs</item>
         <item quantity="other">%d llibres en curs</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s aquesta setmana</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d llibre amagat</item>
         <item quantity="many">%d llibres amagats</item>
@@ -364,6 +365,31 @@
     <string name="library.survey.message">Unes quantes preguntes ràpides ajuden a decidir els pròxims passos.</string>
     <string name="library.survey.open">Respon l\'enquesta</string>
     <string name="library.survey.title">Ajudeu a donar forma a Voice</string>
+    <string name="listening_stats.all_time">Total</string>
+    <string name="listening_stats.books_finished">Llibres acabats</string>
+    <string name="listening_stats.counts_since">Voice compta des del %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">en %d dia</item>
+        <item quantity="many">en %d de dies</item>
+        <item quantity="other">en %d dies</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">en %1$d de %2$d dia</item>
+        <item quantity="many">en %1$d de %2$d de dies</item>
+        <item quantity="other">en %1$d de %2$d dies</item>
+    </plurals>
+    <string name="listening_stats.earlier">Abans</string>
+    <string name="listening_stats.empty">Encara no hi ha res. Premeu reproduir i això s\'anirà omplint.</string>
+    <string name="listening_stats.finished">Acabats</string>
+    <string name="listening_stats.later">Després</string>
+    <string name="listening_stats.month">Mes</string>
+    <string name="listening_stats.saved">Estalviat escoltant més de pressa</string>
+    <string name="listening_stats.this_month">Aquest mes</string>
+    <string name="listening_stats.this_week">Aquesta setmana</string>
+    <string name="listening_stats.this_year">Aquest any</string>
+    <string name="listening_stats.title">El vostre temps d\'escolta</string>
+    <string name="listening_stats.week">Setmana</string>
+    <string name="listening_stats.year">Any</string>
     <string name="media_session.library.recent">Recents</string>
     <string name="media_session.library.root">Tots els audiollibres</string>
     <string name="onboarding.action.next">Següent</string>

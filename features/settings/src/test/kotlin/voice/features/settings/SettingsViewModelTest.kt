@@ -30,6 +30,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import voice.core.analytics.api.Analytics
 import voice.core.analytics.api.AnalyticsConsentStore
 import voice.core.audiobookshelf.AudiobookshelfFeatureFlag
 import voice.core.audiobookshelf.ServerAccount
@@ -99,6 +100,7 @@ class SettingsViewModelTest {
       every { serverName } returns this@SettingsViewModelTest.serverName
     }
   private val supporterStatusStore = MemoryDataStore(SupporterStatus())
+  private val analytics = mockk<Analytics>(relaxUnitFun = true)
   private val dynamicColorAvailability =
     mockk<DynamicColorAvailability> {
       every { isSupported() } returns true
@@ -134,6 +136,7 @@ class SettingsViewModelTest {
         DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
       serverAccount = serverAccount,
       audiobookshelfFeatureFlag = AudiobookshelfFeatureFlag(audiobookshelfFeatureFlag),
+      analytics = analytics,
     )
 
   @Test
@@ -255,11 +258,12 @@ class SettingsViewModelTest {
   }
 
   @Test
-  fun `openSupportVoice navigates to support screen`() {
+  fun `settings, with analytics on, tap the support card, the support screen is reported as opened from the settings`() {
     viewModel.openSupportVoice()
 
     verify(exactly = 1) {
       navigator.goTo(Destination.SupportVoice)
+      analytics.event("support_open", mapOf("from" to "settings"))
     }
   }
 

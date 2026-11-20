@@ -271,6 +271,7 @@
         <item quantity="one">%d boek begonnen</item>
         <item quantity="other">%d boeken begonnen</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s deze week</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d verborgen boek</item>
         <item quantity="other">%d verborgen boeken</item>
@@ -340,6 +341,29 @@
     <string name="library.survey.message">Een paar korte vragen helpen bepalen wat er hierna komt.</string>
     <string name="library.survey.open">Enquête invullen</string>
     <string name="library.survey.title">Denk mee over Voice</string>
+    <string name="listening_stats.all_time">Totaal</string>
+    <string name="listening_stats.books_finished">Boeken uitgeluisterd</string>
+    <string name="listening_stats.counts_since">Voice telt sinds %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">op %d dag</item>
+        <item quantity="other">op %d dagen</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">op %1$d van %2$d dag</item>
+        <item quantity="other">op %1$d van %2$d dagen</item>
+    </plurals>
+    <string name="listening_stats.earlier">Eerder</string>
+    <string name="listening_stats.empty">Nog niets te zien. Druk op afspelen, dan vult dit zich vanzelf.</string>
+    <string name="listening_stats.finished">Uitgeluisterd</string>
+    <string name="listening_stats.later">Later</string>
+    <string name="listening_stats.month">Maand</string>
+    <string name="listening_stats.saved">Bespaard door sneller luisteren</string>
+    <string name="listening_stats.this_month">Deze maand</string>
+    <string name="listening_stats.this_week">Deze week</string>
+    <string name="listening_stats.this_year">Dit jaar</string>
+    <string name="listening_stats.title">Je luistertijd</string>
+    <string name="listening_stats.week">Week</string>
+    <string name="listening_stats.year">Jaar</string>
     <string name="media_session.library.recent">Recent</string>
     <string name="media_session.library.root">Alle luisterboeken</string>
     <string name="onboarding.action.next">Volgende</string>

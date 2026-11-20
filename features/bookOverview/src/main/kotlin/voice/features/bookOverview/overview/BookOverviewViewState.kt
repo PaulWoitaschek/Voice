@@ -2,6 +2,7 @@ package voice.features.bookOverview.overview
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
+import kotlin.time.Duration
 import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.features.bookOverview.select.SelectionEditViewState
@@ -31,6 +32,8 @@ data class BookOverviewViewState(
   val selection: SelectionViewState? = null,
   val selectionEdit: SelectionEditViewState? = null,
   val upNext: Boolean = false,
+  // null while Voice never counted any listening
+  val listenedThisWeek: Duration? = null,
 ) {
 
   // a switch only shows once it has something to filter, so a library without it stays as it was

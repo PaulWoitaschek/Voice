@@ -301,6 +301,7 @@
         <item quantity="many">%d rozpočúvaných kníh</item>
         <item quantity="other">%d rozpočúvaných kníh</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s tento týždeň</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d skrytá kniha</item>
         <item quantity="few">%d skryté knihy</item>
@@ -388,6 +389,33 @@
     <string name="library.survey.message">Pár rýchlych otázok pomôže rozhodnúť, čo príde na rad.</string>
     <string name="library.survey.open">Vyplniť dotazník</string>
     <string name="library.survey.title">Pomôžte utvárať Voice</string>
+    <string name="listening_stats.all_time">Celkovo</string>
+    <string name="listening_stats.books_finished">Dokončené knihy</string>
+    <string name="listening_stats.counts_since">Voice počíta počúvanie od %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">počas %d dňa</item>
+        <item quantity="few">počas %d dní</item>
+        <item quantity="many">počas %d dňa</item>
+        <item quantity="other">počas %d dní</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">počas %1$d z %2$d dňa</item>
+        <item quantity="few">počas %1$d z %2$d dní</item>
+        <item quantity="many">počas %1$d z %2$d dňa</item>
+        <item quantity="other">počas %1$d z %2$d dní</item>
+    </plurals>
+    <string name="listening_stats.earlier">Skôr</string>
+    <string name="listening_stats.empty">Zatiaľ tu nič nie je. Spustite prehrávanie a začne sa to plniť.</string>
+    <string name="listening_stats.finished">Dokončené</string>
+    <string name="listening_stats.later">Neskôr</string>
+    <string name="listening_stats.month">Mesiac</string>
+    <string name="listening_stats.saved">Ušetrené rýchlejším počúvaním</string>
+    <string name="listening_stats.this_month">Tento mesiac</string>
+    <string name="listening_stats.this_week">Tento týždeň</string>
+    <string name="listening_stats.this_year">Tento rok</string>
+    <string name="listening_stats.title">Vaše počúvanie</string>
+    <string name="listening_stats.week">Týždeň</string>
+    <string name="listening_stats.year">Rok</string>
     <string name="media_session.library.recent">Nedávne</string>
     <string name="media_session.library.root">Všetky zvukové knihy</string>
     <string name="onboarding.action.next">Ďalej</string>

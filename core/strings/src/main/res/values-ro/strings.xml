@@ -286,6 +286,7 @@
         <item quantity="few">%d cărți în curs</item>
         <item quantity="other">%d de cărți în curs</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s săptămâna aceasta</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d carte ascunsă</item>
         <item quantity="few">%d cărți ascunse</item>
@@ -364,6 +365,31 @@
     <string name="library.survey.message">Câteva întrebări rapide ne ajută să decidem ce urmează.</string>
     <string name="library.survey.open">Completează sondajul</string>
     <string name="library.survey.title">Ajută-ne să îmbunătățim Voice</string>
+    <string name="listening_stats.all_time">Total</string>
+    <string name="listening_stats.books_finished">Cărți terminate</string>
+    <string name="listening_stats.counts_since">Voice ține evidența din %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">în %d zi</item>
+        <item quantity="few">în %d zile</item>
+        <item quantity="other">în %d de zile</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">în %1$d din %2$d zi</item>
+        <item quantity="few">în %1$d din %2$d zile</item>
+        <item quantity="other">în %1$d din %2$d de zile</item>
+    </plurals>
+    <string name="listening_stats.earlier">Mai devreme</string>
+    <string name="listening_stats.empty">Încă nimic aici. Apasă pe redare și se va umple.</string>
+    <string name="listening_stats.finished">Terminate</string>
+    <string name="listening_stats.later">Mai târziu</string>
+    <string name="listening_stats.month">Lună</string>
+    <string name="listening_stats.saved">Economisit ascultând mai repede</string>
+    <string name="listening_stats.this_month">Luna aceasta</string>
+    <string name="listening_stats.this_week">Săptămâna aceasta</string>
+    <string name="listening_stats.this_year">Anul acesta</string>
+    <string name="listening_stats.title">Ascultarea ta</string>
+    <string name="listening_stats.week">Săptămână</string>
+    <string name="listening_stats.year">An</string>
     <string name="media_session.library.recent">Recente</string>
     <string name="media_session.library.root">Toate cărțile audio</string>
     <string name="onboarding.action.next">Mai departe</string>

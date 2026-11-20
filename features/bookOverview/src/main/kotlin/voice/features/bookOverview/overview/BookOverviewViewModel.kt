@@ -66,6 +66,7 @@ import voice.features.bookOverview.select.SelectedBooksEditor
 import voice.features.bookOverview.select.SelectionEditViewState
 import voice.features.bookOverview.select.SelectionViewState
 import voice.features.bookOverview.select.of
+import voice.features.bookOverview.stats.WeekListening
 import voice.features.bookOverview.survey.Survey
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -98,6 +99,7 @@ class BookOverviewViewModel(
   private val bookHider: BookHider,
   private val bookSelectionRequests: BookSelectionRequests,
   private val selectedBooksEditor: SelectedBooksEditor,
+  private val weekListening: WeekListening,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -171,6 +173,12 @@ class BookOverviewViewModel(
       .collectAsState(initial = null)
       .value
     val grouping = remember { libraryGroupingStore.data }.collectAsState(initial = null).value
+    // not loaded yet shows like no time, so the library doesn't wait for it
+    val listenedThisWeek = remember {
+      weekListening.listened()
+    }
+      .collectAsState(initial = null)
+      .value
     if (
       library == null ||
         currentBook == null ||
@@ -331,6 +339,7 @@ class BookOverviewViewModel(
           )
         },
       selectionEdit = selectionEdit,
+      listenedThisWeek = listenedThisWeek,
     )
   }
 
@@ -397,6 +406,10 @@ class BookOverviewViewModel(
 
   fun onSettingsClick() {
     navigator.goTo(Destination.Settings)
+  }
+
+  fun onListeningClick() {
+    navigator.goTo(Destination.ListeningStats)
   }
 
   fun onSearchClick() {

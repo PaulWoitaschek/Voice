@@ -1,7 +1,9 @@
 package voice.core.data.repo
 
+import java.time.LocalDate
 import kotlin.time.Duration
 import kotlin.time.Instant
+import kotlinx.coroutines.flow.Flow
 import voice.core.data.BookId
 import voice.core.data.ListeningSession
 import voice.core.data.ListeningTally
@@ -17,6 +19,14 @@ public interface ListeningStatsRepo {
     from: Instant = Instant.DISTANT_PAST,
     to: Instant = Instant.DISTANT_FUTURE,
   ): ListeningSummary
+
+  public fun sessions(): Flow<List<ListeningSession>>
+
+  // on the local days from [from] until [to], or null while Voice never counted any listening
+  public fun listened(
+    from: LocalDate,
+    to: LocalDate,
+  ): Flow<Duration?>
 
   public suspend fun add(tally: ListeningTally)
 

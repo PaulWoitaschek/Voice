@@ -331,6 +331,7 @@
         <item quantity="many">%d كتابًا قيد الاستماع</item>
         <item quantity="other">%d كتاب قيد الاستماع</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s هذا الأسبوع</string>
     <plurals name="library.hidden_books">
         <item quantity="zero">%d كتاب مخفي</item>
         <item quantity="one">%d كتاب مخفي</item>
@@ -436,6 +437,37 @@
     <string name="library.survey.message">بضعة أسئلة سريعة تساعد في تحديد الخطوة التالية.</string>
     <string name="library.survey.open">المشاركة في الاستبيان</string>
     <string name="library.survey.title">رأيك يصنع مستقبل Voice</string>
+    <string name="listening_stats.all_time">منذ البداية</string>
+    <string name="listening_stats.books_finished">كتب مكتملة</string>
+    <string name="listening_stats.counts_since">يحسب Voice الاستماع منذ %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="zero">في %d يوم</item>
+        <item quantity="one">في %d يوم</item>
+        <item quantity="two">في %d يوم</item>
+        <item quantity="few">في %d أيام</item>
+        <item quantity="many">في %d يومًا</item>
+        <item quantity="other">في %d يوم</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="zero">في %1$d من %2$d يوم</item>
+        <item quantity="one">في %1$d من %2$d يوم</item>
+        <item quantity="two">في %1$d من %2$d يوم</item>
+        <item quantity="few">في %1$d من %2$d أيام</item>
+        <item quantity="many">في %1$d من %2$d يومًا</item>
+        <item quantity="other">في %1$d من %2$d يوم</item>
+    </plurals>
+    <string name="listening_stats.earlier">السابق</string>
+    <string name="listening_stats.empty">لا شيء هنا بعد. بمجرد التشغيل، تمتلئ هذه الصفحة.</string>
+    <string name="listening_stats.finished">المكتملة</string>
+    <string name="listening_stats.later">التالي</string>
+    <string name="listening_stats.month">شهر</string>
+    <string name="listening_stats.saved">وقت موفَّر بالاستماع الأسرع</string>
+    <string name="listening_stats.this_month">هذا الشهر</string>
+    <string name="listening_stats.this_week">هذا الأسبوع</string>
+    <string name="listening_stats.this_year">هذا العام</string>
+    <string name="listening_stats.title">استماعك</string>
+    <string name="listening_stats.week">أسبوع</string>
+    <string name="listening_stats.year">سنة</string>
     <string name="media_session.library.recent">الحديثة</string>
     <string name="media_session.library.root">كل الكتب الصوتية</string>
     <string name="onboarding.action.next">التالي</string>

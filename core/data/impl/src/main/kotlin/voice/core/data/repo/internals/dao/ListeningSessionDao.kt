@@ -3,6 +3,7 @@ package voice.core.data.repo.internals.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 import voice.core.data.BookId
 import voice.core.data.ListeningSession
 
@@ -10,6 +11,23 @@ import voice.core.data.ListeningSession
 public interface ListeningSessionDao {
 
   @Upsert public suspend fun upsert(session: ListeningSession): Long
+
+  @Query("SELECT * FROM listening_session") public fun all(): Flow<List<ListeningSession>>
+
+  // SUM of no rows is null
+  @Query(
+    """
+    SELECT SUM(
+      CASE WHEN (startedAtMillis / 1000 + utcOffsetSeconds) / 86400 >= :fromDay
+        AND (startedAtMillis / 1000 + utcOffsetSeconds) / 86400 < :toDay
+      THEN listenedMillis ELSE 0 END
+    ) FROM listening_session
+    """,
+  )
+  public fun listenedMillisOnDays(
+    fromDay: Long,
+    toDay: Long,
+  ): Flow<Long?>
 
   @Query(
     "SELECT COALESCE(SUM(listenedMillis), 0) FROM listening_session WHERE startedAtMillis >= :from AND startedAtMillis < :to",

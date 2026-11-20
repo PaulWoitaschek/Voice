@@ -10,6 +10,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Instant
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.runner.RunWith
@@ -94,6 +95,25 @@ class ListeningStatsRepoImplTest {
             ),
         ),
       actual = repo.summary(),
+    )
+  }
+
+  @Test
+  fun `the time listened on some days counts each session on its local day`() = runTest {
+    assertEquals(expected = null, actual = repo.listened(day, day.plusDays(1)).first())
+
+    // still the 6th in UTC, but 00:30 on the 7th in Berlin
+    insert(session("2026-10-06T22:30:00Z", listened = 1.hours))
+    insert(session("2026-10-07T10:00:00Z", listened = 30.minutes))
+    insert(session("2026-10-08T10:00:00Z", listened = 2.hours))
+
+    assertEquals(
+      expected = 1.hours + 30.minutes,
+      actual = repo.listened(day, day.plusDays(1)).first(),
+    )
+    assertEquals(
+      expected = Duration.ZERO,
+      actual = repo.listened(day.plusDays(5), day.plusDays(6)).first(),
     )
   }
 

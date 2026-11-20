@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import voice.core.analytics.api.Analytics
 import voice.core.analytics.api.AnalyticsConsentStore
 import voice.core.audiobookshelf.AudiobookshelfFeatureFlag
 import voice.core.audiobookshelf.ServerAccount
@@ -71,6 +72,7 @@ class SettingsViewModel(
   private val dispatcherProvider: DispatcherProvider,
   private val serverAccount: ServerAccount,
   private val audiobookshelfFeatureFlag: AudiobookshelfFeatureFlag,
+  private val analytics: Analytics,
 ) : SettingsListener {
 
   private val mainScope = MainScope(dispatcherProvider)
@@ -314,6 +316,7 @@ class SettingsViewModel(
   }
 
   override fun openSupportVoice() {
+    analytics.event("support_open", mapOf("from" to "settings"))
     navigator.goTo(Destination.SupportVoice)
   }
 

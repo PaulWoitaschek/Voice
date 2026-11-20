@@ -271,6 +271,7 @@
         <item quantity="one">%d kirja kesken</item>
         <item quantity="other">%d kirjaa kesken</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s tällä viikolla</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d piilotettu kirja</item>
         <item quantity="other">%d piilotettua kirjaa</item>
@@ -340,6 +341,29 @@
     <string name="library.survey.message">Muutama nopea kysymys auttaa päättämään, mitä tehdään seuraavaksi.</string>
     <string name="library.survey.open">Vastaa kyselyyn</string>
     <string name="library.survey.title">Auta kehittämään Voicea</string>
+    <string name="listening_stats.all_time">Kaikki</string>
+    <string name="listening_stats.books_finished">Kuunnellut kirjat</string>
+    <string name="listening_stats.counts_since">Voice on laskenut kuuntelua %s alkaen.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">%d päivänä</item>
+        <item quantity="other">%d päivänä</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">%1$d päivänä %2$d päivästä</item>
+        <item quantity="other">%1$d päivänä %2$d päivästä</item>
+    </plurals>
+    <string name="listening_stats.earlier">Aiemmin</string>
+    <string name="listening_stats.empty">Täällä ei ole vielä mitään. Paina toistoa, niin tämä täyttyy.</string>
+    <string name="listening_stats.finished">Kuunnellut</string>
+    <string name="listening_stats.later">Myöhemmin</string>
+    <string name="listening_stats.month">Kuukausi</string>
+    <string name="listening_stats.saved">Säästetty nopeammalla kuuntelulla</string>
+    <string name="listening_stats.this_month">Tämä kuukausi</string>
+    <string name="listening_stats.this_week">Tämä viikko</string>
+    <string name="listening_stats.this_year">Tämä vuosi</string>
+    <string name="listening_stats.title">Kuuntelusi</string>
+    <string name="listening_stats.week">Viikko</string>
+    <string name="listening_stats.year">Vuosi</string>
     <string name="media_session.library.recent">Viimeksi kuunnellut</string>
     <string name="media_session.library.root">Kaikki äänikirjat</string>
     <string name="onboarding.action.next">Seuraava</string>

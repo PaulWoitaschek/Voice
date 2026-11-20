@@ -271,6 +271,7 @@
         <item quantity="one">%d angefangenes Buch</item>
         <item quantity="other">%d angefangene Bücher</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s diese Woche</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d ausgeblendetes Buch</item>
         <item quantity="other">%d ausgeblendete Bücher</item>
@@ -340,6 +341,29 @@
     <string name="library.survey.message">Ein paar kurze Fragen helfen bei der Entscheidung, was als Nächstes kommt.</string>
     <string name="library.survey.open">Umfrage starten</string>
     <string name="library.survey.title">Gestalte Voice mit</string>
+    <string name="listening_stats.all_time">Gesamt</string>
+    <string name="listening_stats.books_finished">Bücher beendet</string>
+    <string name="listening_stats.counts_since">Voice zählt seit dem %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">an %d Tag</item>
+        <item quantity="other">an %d Tagen</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">an %1$d von %2$d Tag</item>
+        <item quantity="other">an %1$d von %2$d Tagen</item>
+    </plurals>
+    <string name="listening_stats.earlier">Früher</string>
+    <string name="listening_stats.empty">Noch nichts da. Sobald Du hörst, füllt sich das hier.</string>
+    <string name="listening_stats.finished">Beendet</string>
+    <string name="listening_stats.later">Später</string>
+    <string name="listening_stats.month">Monat</string>
+    <string name="listening_stats.saved">Durch schnelleres Hören gespart</string>
+    <string name="listening_stats.this_month">Dieser Monat</string>
+    <string name="listening_stats.this_week">Diese Woche</string>
+    <string name="listening_stats.this_year">Dieses Jahr</string>
+    <string name="listening_stats.title">Deine Hörzeit</string>
+    <string name="listening_stats.week">Woche</string>
+    <string name="listening_stats.year">Jahr</string>
     <string name="media_session.library.recent">Kürzlich</string>
     <string name="media_session.library.root">Alle Hörbücher</string>
     <string name="onboarding.action.next">Weiter</string>

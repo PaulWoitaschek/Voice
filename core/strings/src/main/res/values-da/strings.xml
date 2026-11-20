@@ -271,6 +271,7 @@
         <item quantity="one">%d bog i gang</item>
         <item quantity="other">%d bøger i gang</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s denne uge</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d skjult bog</item>
         <item quantity="other">%d skjulte bøger</item>
@@ -340,6 +341,29 @@
     <string name="library.survey.message">Et par hurtige spørgsmål hjælper med at bestemme, hvad der kommer som det næste.</string>
     <string name="library.survey.open">Deltag i undersøgelsen</string>
     <string name="library.survey.title">Vær med til at forme Voice</string>
+    <string name="listening_stats.all_time">I alt</string>
+    <string name="listening_stats.books_finished">Færdige bøger</string>
+    <string name="listening_stats.counts_since">Voice har talt med siden %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">på %d dag</item>
+        <item quantity="other">på %d dage</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">på %1$d af %2$d dag</item>
+        <item quantity="other">på %1$d af %2$d dage</item>
+    </plurals>
+    <string name="listening_stats.earlier">Tidligere</string>
+    <string name="listening_stats.empty">Intet her endnu. Tryk på afspil, så fyldes det op.</string>
+    <string name="listening_stats.finished">Færdige</string>
+    <string name="listening_stats.later">Senere</string>
+    <string name="listening_stats.month">Måned</string>
+    <string name="listening_stats.saved">Sparet ved at lytte hurtigere</string>
+    <string name="listening_stats.this_month">Denne måned</string>
+    <string name="listening_stats.this_week">Denne uge</string>
+    <string name="listening_stats.this_year">I år</string>
+    <string name="listening_stats.title">Din lytning</string>
+    <string name="listening_stats.week">Uge</string>
+    <string name="listening_stats.year">År</string>
     <string name="media_session.library.recent">Seneste</string>
     <string name="media_session.library.root">Alle lydbøger</string>
     <string name="onboarding.action.next">Næste</string>

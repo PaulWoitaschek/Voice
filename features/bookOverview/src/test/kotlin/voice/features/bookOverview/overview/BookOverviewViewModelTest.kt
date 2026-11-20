@@ -14,11 +14,15 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.mockk.verifyOrder
+import java.time.DayOfWeek
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.time.Clock
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.CoroutineScope
@@ -26,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -47,6 +52,7 @@ import voice.core.data.CustomMetadata
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
+import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
@@ -69,6 +75,7 @@ import voice.features.bookOverview.select.BookField
 import voice.features.bookOverview.select.BookSelectionRequests
 import voice.features.bookOverview.select.BooksEdited
 import voice.features.bookOverview.select.SelectedBooksEditor
+import voice.features.bookOverview.stats.WeekListening
 import voice.features.bookOverview.survey.HandledSurveysStore
 import voice.features.bookOverview.survey.Survey
 import voice.features.bookOverview.survey.SurveyUrlFeatureFlag
@@ -150,6 +157,7 @@ class BookOverviewViewModelTest {
         bookHider = BookHider(mockk()),
         bookSelectionRequests = BookSelectionRequests(),
         selectedBooksEditor = SelectedBooksEditor(mockk(), serverLibrary),
+        weekListening = weekListening(),
       )
 
     backgroundScope
@@ -231,6 +239,7 @@ class BookOverviewViewModelTest {
         bookHider = BookHider(mockk()),
         bookSelectionRequests = BookSelectionRequests(),
         selectedBooksEditor = SelectedBooksEditor(mockk(), serverLibrary),
+        weekListening = weekListening(),
       )
 
     backgroundScope
@@ -291,6 +300,60 @@ class BookOverviewViewModelTest {
         assertEquals(expected = 1, actual = stack.series.finishedCount)
         assertEquals(expected = 2, actual = state.inProgressCount)
       }
+  }
+
+  @Test
+  fun `the library has the time listened this week`() = runTest {
+    val viewModel = viewModel(listenedThisWeek = flowOf(6.hours + 40.minutes))
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = 6.hours + 40.minutes, actual = awaitItem().listenedThisWeek)
+      }
+  }
+
+  @Test
+  fun `the time of this week not loaded yet, open the library, the library shows without it`() =
+    runTest {
+      val viewModel = viewModel(listenedThisWeek = emptyFlow())
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.state()
+        }
+        .test {
+          assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+          val state = awaitItem()
+          assertEquals(expected = null, actual = state.listenedThisWeek)
+          assert(state != BookOverviewViewState.Loading)
+        }
+    }
+
+  @Test
+  fun `library, Voice never counted any listening, the line doesn't open the screen`() = runTest {
+    val viewModel = viewModel()
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = null, actual = awaitItem().listenedThisWeek)
+      }
+  }
+
+  @Test
+  fun `library, tap the line, the screen opens`() {
+    val navigator = mockk<Navigator>(relaxUnitFun = true)
+
+    viewModel(navigator = navigator).onListeningClick()
+
+    verify(exactly = 1) { navigator.goTo(Destination.ListeningStats) }
   }
 
   @Test
@@ -1608,6 +1671,7 @@ class BookOverviewViewModelTest {
       every { flow() } returns MutableStateFlow(books)
     },
     bookSelectionRequests: BookSelectionRequests = BookSelectionRequests(),
+    listenedThisWeek: Flow<Duration?> = flowOf(null),
   ): BookOverviewViewModel {
     return BookOverviewViewModel(
       repo = repo,
@@ -1648,8 +1712,23 @@ class BookOverviewViewModelTest {
       bookHider = BookHider(repo),
       bookSelectionRequests = bookSelectionRequests,
       selectedBooksEditor = SelectedBooksEditor(repo, serverLibrary),
+      weekListening = weekListening(listenedThisWeek),
     )
   }
+
+  private fun weekListening(listenedThisWeek: Flow<Duration?> = flowOf(null)) =
+    WeekListening(
+      repo =
+        mockk<ListeningStatsRepo> {
+          every { listened(any(), any()) } returns listenedThisWeek
+        },
+      clock =
+        object : Clock {
+          override fun now() = Instant.parse("2026-11-20T12:00:00Z")
+        },
+      zone = { ZoneOffset.UTC },
+      firstDayOfWeek = { DayOfWeek.MONDAY },
+    )
 
   private fun survey(remoteUrl: String = ""): Survey {
     return Survey(

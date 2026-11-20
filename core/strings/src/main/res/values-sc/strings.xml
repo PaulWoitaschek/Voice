@@ -271,6 +271,7 @@
         <item quantity="one">%d libru in cursu</item>
         <item quantity="other">%d libros in cursu</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s custa chida</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d libru cuadu</item>
         <item quantity="other">%d libros cuados</item>
@@ -340,6 +341,29 @@
     <string name="library.survey.message">Unas cantas preguntas lestras agiudant a detzìdere ite fàghere a pustis.</string>
     <string name="library.survey.open">Faghe su sondàgiu</string>
     <string name="library.survey.title">Agiuda a dare forma a Voice</string>
+    <string name="listening_stats.all_time">Totale</string>
+    <string name="listening_stats.books_finished">Libros acabbados</string>
+    <string name="listening_stats.counts_since">Voice contat dae su %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">in %d die</item>
+        <item quantity="other">in %d dies</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">in %1$d de %2$d die</item>
+        <item quantity="other">in %1$d de %2$d dies</item>
+    </plurals>
+    <string name="listening_stats.earlier">In antis</string>
+    <string name="listening_stats.empty">Galu nudda inoghe. Cando ascurtas, custu s\'at a prenare.</string>
+    <string name="listening_stats.finished">Acabbados</string>
+    <string name="listening_stats.later">A pustis</string>
+    <string name="listening_stats.month">Mese</string>
+    <string name="listening_stats.saved">Aorradu ascurtende prus lestru</string>
+    <string name="listening_stats.this_month">Custu mese</string>
+    <string name="listening_stats.this_week">Custa chida</string>
+    <string name="listening_stats.this_year">Custu annu</string>
+    <string name="listening_stats.title">Su chi as ascurtadu</string>
+    <string name="listening_stats.week">Chida</string>
+    <string name="listening_stats.year">Annu</string>
     <string name="media_session.library.recent">Reghentes</string>
     <string name="media_session.library.root">Totu sos audiolibros</string>
     <string name="onboarding.action.next">Sighi</string>

@@ -286,6 +286,7 @@
         <item quantity="many">%d livros em curso</item>
         <item quantity="other">%d livros em curso</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s esta semana</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d livro oculto</item>
         <item quantity="many">%d livros ocultos</item>
@@ -364,6 +365,31 @@
     <string name="library.survey.message">Algumas perguntas rápidas ajudam a decidir os próximos passos.</string>
     <string name="library.survey.open">Responder ao inquérito</string>
     <string name="library.survey.title">Ajude a moldar o Voice</string>
+    <string name="listening_stats.all_time">Total</string>
+    <string name="listening_stats.books_finished">Livros terminados</string>
+    <string name="listening_stats.counts_since">O Voice conta desde %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">em %d dia</item>
+        <item quantity="many">em %d de dias</item>
+        <item quantity="other">em %d dias</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">em %1$d de %2$d dia</item>
+        <item quantity="many">em %1$d de %2$d de dias</item>
+        <item quantity="other">em %1$d de %2$d dias</item>
+    </plurals>
+    <string name="listening_stats.earlier">Antes</string>
+    <string name="listening_stats.empty">Ainda não há nada aqui. Ao ouvir, isto vai-se preenchendo.</string>
+    <string name="listening_stats.finished">Terminados</string>
+    <string name="listening_stats.later">Depois</string>
+    <string name="listening_stats.month">Mês</string>
+    <string name="listening_stats.saved">Poupado ao ouvir mais depressa</string>
+    <string name="listening_stats.this_month">Este mês</string>
+    <string name="listening_stats.this_week">Esta semana</string>
+    <string name="listening_stats.this_year">Este ano</string>
+    <string name="listening_stats.title">Tempo de audição</string>
+    <string name="listening_stats.week">Semana</string>
+    <string name="listening_stats.year">Ano</string>
     <string name="media_session.library.recent">Recentes</string>
     <string name="media_session.library.root">Todos os audiolivros</string>
     <string name="onboarding.action.next">Seguinte</string>

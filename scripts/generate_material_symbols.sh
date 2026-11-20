@@ -68,6 +68,7 @@ icon bookmark_add
 icon bug_report
 icon check
 icon check_circle
+icon chevron_left mirrored
 icon chevron_right mirrored
 icon close
 icon cloud
