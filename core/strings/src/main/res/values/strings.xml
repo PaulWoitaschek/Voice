@@ -559,7 +559,7 @@
     <string name="library.storage_permission_bug.message">For certain devices, a system app is missing the necessary permission to access the external storage. This access is essential for Voice to read your audiobooks.</string>
     <!-- Title for the card explaining a required storage permission workaround. -->
     <string name="library.storage_permission_bug.title">Permission required</string>
-    <!-- Button on the card in the library that invites to a short survey. Hides the card for good, the survey isn't offered again. -->
+    <!-- Button on the card in the library that invites to a short survey, and on the card that asks for support after a finished book. Hides the card for good, it isn't offered again. -->
     <string name="library.survey.dismiss">No thanks</string>
     <!-- Message on the card in the library that invites to a short survey on a website. Fits any survey, so it doesn't name a topic. -->
     <string name="library.survey.message">A few quick questions help decide what comes next.</string>
@@ -701,8 +701,8 @@
     <string name="review.prompt.feedback.idea.title" tools:ignore="UnusedResources">Suggest an idea</string>
     <!-- Title of the ways to share feedback in the rating prompt. -->
     <string name="review.prompt.feedback.title" tools:ignore="UnusedResources">What\'s on your mind?</string>
-    <!-- Title of the rating prompt after a book was finished. The name of the book is shown above it. -->
-    <string name="review.prompt.finished.title" tools:ignore="UnusedResources">Book finished!</string>
+    <!-- Title of the rating prompt after a book was finished. The name of the book is shown above it. Also the title of the card in the library that asks for support after a finished book. -->
+    <string name="review.prompt.finished.title">Book finished!</string>
     <!-- Message of the rating prompt. Everyone sees it, so it must not take for granted that the listener likes Voice. -->
     <string name="review.prompt.message" tools:ignore="UnusedResources">Thanks for listening with Voice! If you like it, a rating on Google Play helps other listeners find it.</string>
     <!-- Title of the rating prompt that celebrates the hours of audiobooks listened to. -->
@@ -834,7 +834,7 @@
     <string name="settings.support.report_issue.title">Report a problem</string>
     <!-- Description on the settings card that opens the support screen, for subscribing, tipping or donating. -->
     <string name="settings.support.support_voice.summary">Keeps Voice free and ad-free</string>
-    <!-- Settings row for opening the donation/support screen. -->
+    <!-- Settings row for opening the donation/support screen. Also the button on the card in the library that asks for support after a finished book. -->
     <string name="settings.support.support_voice.title">Support development</string>
     <!-- Settings support row for suggesting a product idea. -->
     <string name="settings.support.suggest_idea.title">Suggest an idea</string>
@@ -866,7 +866,7 @@
     <string name="support.badges.title">Your badge grows each month you support</string>
     <!-- Support screen action for donating through Ko-fi. -->
     <string name="support.action.donate_kofi">Donate on Ko-fi</string>
-    <!-- Support screen text explaining why support is useful. -->
+    <!-- Support screen text explaining why support is useful. Also the message on the card in the library that asks for support after a finished book. -->
     <string name="support.description.maintenance">Voice is free, open source, and maintained by one developer.</string>
     <!-- Support screen text under the main description, explaining why monthly support helps more than a one-time tip. Written by the developer in first person. -->
     <string name="support.description.monthly">Monthly support is what lets me plan the next release, not just the next fix.</string>

@@ -85,6 +85,8 @@ internal fun Library(
   onListeningClick: () -> Unit,
   onSurveyClick: () -> Unit,
   onSurveyDismiss: () -> Unit,
+  onSupportCardClick: () -> Unit,
+  onSupportCardDismiss: () -> Unit,
   onShowFoldersClick: () -> Unit,
   onHiddenBooksClick: () -> Unit,
   onSelectionToggle: (List<BookId>) -> Unit,
@@ -172,6 +174,17 @@ internal fun Library(
           SurveyCard(
             onClick = onSurveyClick,
             onDismiss = onSurveyDismiss,
+            modifier =
+              cardWidth.entrance(entrance, index).padding(top = if (hero != null) 16.dp else 0.dp),
+          )
+        }
+      }
+      if (viewState.showSupportCard) {
+        val index = entranceIndex()
+        item(key = "support", span = { GridItemSpan(maxLineSpan) }, contentType = "support") {
+          SupportCard(
+            onClick = onSupportCardClick,
+            onDismiss = onSupportCardDismiss,
             modifier =
               cardWidth.entrance(entrance, index).padding(top = if (hero != null) 16.dp else 0.dp),
           )

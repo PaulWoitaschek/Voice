@@ -34,6 +34,7 @@ data class BookOverviewViewState(
   val upNext: Boolean = false,
   // null while Voice never counted any listening
   val listenedThisWeek: Duration? = null,
+  val showSupportCard: Boolean = false,
 ) {
 
   // a switch only shows once it has something to filter, so a library without it stays as it was
