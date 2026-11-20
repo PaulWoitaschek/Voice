@@ -256,6 +256,7 @@
     <plurals name="library.header.in_progress">
         <item quantity="other">聴きかけの本 %d 冊</item>
     </plurals>
+    <string name="library.header.listened_this_week">今週 %s</string>
     <plurals name="library.hidden_books">
         <item quantity="other">非表示の本 %d 冊</item>
     </plurals>
@@ -316,6 +317,27 @@
     <string name="library.survey.message">簡単な質問にいくつかお答えいただくと、今後の方向性を決める参考になります。</string>
     <string name="library.survey.open">アンケートに回答</string>
     <string name="library.survey.title">Voice づくりにご協力ください</string>
+    <string name="listening_stats.all_time">全期間</string>
+    <string name="listening_stats.books_finished">聴き終えた本</string>
+    <string name="listening_stats.counts_since">Voice は %s から記録しています。</string>
+    <plurals name="listening_stats.days">
+        <item quantity="other">%d 日間</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="other">%2$d 日中 %1$d 日</item>
+    </plurals>
+    <string name="listening_stats.earlier">前へ</string>
+    <string name="listening_stats.empty">まだ何もありません。再生すると、ここに記録されていきます。</string>
+    <string name="listening_stats.finished">聴き終えた本</string>
+    <string name="listening_stats.later">次へ</string>
+    <string name="listening_stats.month">月</string>
+    <string name="listening_stats.saved">速く聴いて節約した時間</string>
+    <string name="listening_stats.this_month">今月</string>
+    <string name="listening_stats.this_week">今週</string>
+    <string name="listening_stats.this_year">今年</string>
+    <string name="listening_stats.title">リスニング記録</string>
+    <string name="listening_stats.week">週</string>
+    <string name="listening_stats.year">年</string>
     <string name="media_session.library.recent">最近</string>
     <string name="media_session.library.root">すべてのオーディオブック</string>
     <string name="onboarding.action.next">次へ</string>

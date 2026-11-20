@@ -256,6 +256,7 @@
     <plurals name="library.header.in_progress">
         <item quantity="other">%d buku sedang didengarkan</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s minggu ini</string>
     <plurals name="library.hidden_books">
         <item quantity="other">%d buku tersembunyi</item>
     </plurals>
@@ -316,6 +317,27 @@
     <string name="library.survey.message">Beberapa pertanyaan singkat membantu menentukan langkah selanjutnya.</string>
     <string name="library.survey.open">Ikuti survei</string>
     <string name="library.survey.title">Bantu kembangkan Voice</string>
+    <string name="listening_stats.all_time">Sepanjang waktu</string>
+    <string name="listening_stats.books_finished">Buku yang selesai</string>
+    <string name="listening_stats.counts_since">Voice menghitung sejak %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="other">dalam %d hari</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="other">dalam %1$d dari %2$d hari</item>
+    </plurals>
+    <string name="listening_stats.earlier">Sebelumnya</string>
+    <string name="listening_stats.empty">Belum ada apa-apa. Tekan putar, dan ini akan terisi.</string>
+    <string name="listening_stats.finished">Selesai</string>
+    <string name="listening_stats.later">Berikutnya</string>
+    <string name="listening_stats.month">Bulan</string>
+    <string name="listening_stats.saved">Dihemat dengan mendengar lebih cepat</string>
+    <string name="listening_stats.this_month">Bulan ini</string>
+    <string name="listening_stats.this_week">Minggu ini</string>
+    <string name="listening_stats.this_year">Tahun ini</string>
+    <string name="listening_stats.title">Aktivitas mendengarkan</string>
+    <string name="listening_stats.week">Minggu</string>
+    <string name="listening_stats.year">Tahun</string>
     <string name="media_session.library.recent">Terbaru</string>
     <string name="media_session.library.root">Semua buku audio</string>
     <string name="onboarding.action.next">Berikutnya</string>

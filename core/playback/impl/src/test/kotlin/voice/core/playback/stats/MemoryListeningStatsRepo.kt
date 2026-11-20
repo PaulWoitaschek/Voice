@@ -1,6 +1,9 @@
 package voice.core.playback.stats
 
+import java.time.LocalDate
+import kotlin.time.Duration
 import kotlin.time.Instant
+import kotlinx.coroutines.flow.Flow
 import voice.core.data.BookId
 import voice.core.data.ListeningSession
 import voice.core.data.ListeningTally
@@ -23,6 +26,13 @@ class MemoryListeningStatsRepo : ListeningStatsRepo {
     from: Instant,
     to: Instant,
   ): ListeningSummary = error("Not used")
+
+  override fun sessions(): Flow<List<ListeningSession>> = error("Not used")
+
+  override fun listened(
+    from: LocalDate,
+    to: LocalDate,
+  ): Flow<Duration?> = error("Not used")
 
   override suspend fun add(tally: ListeningTally) {
     tallies += tally

@@ -301,6 +301,7 @@
         <item quantity="many">%d книг в процессе</item>
         <item quantity="other">%d книг в процессе</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s на этой неделе</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d скрытая книга</item>
         <item quantity="few">%d скрытые книги</item>
@@ -388,6 +389,33 @@
     <string name="library.survey.message">Несколько коротких вопросов помогут решить, что будет дальше.</string>
     <string name="library.survey.open">Пройти опрос</string>
     <string name="library.survey.title">Помогите развивать Voice</string>
+    <string name="listening_stats.all_time">Всё время</string>
+    <string name="listening_stats.books_finished">Прослушано книг</string>
+    <string name="listening_stats.counts_since">Voice ведёт подсчёт с %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">за %d день</item>
+        <item quantity="few">за %d дня</item>
+        <item quantity="many">за %d дней</item>
+        <item quantity="other">за %d дня</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">за %1$d из %2$d дня</item>
+        <item quantity="few">за %1$d из %2$d дней</item>
+        <item quantity="many">за %1$d из %2$d дней</item>
+        <item quantity="other">за %1$d из %2$d дня</item>
+    </plurals>
+    <string name="listening_stats.earlier">Раньше</string>
+    <string name="listening_stats.empty">Здесь пока пусто. Включите воспроизведение, и тут всё заполнится.</string>
+    <string name="listening_stats.finished">Прослушанные</string>
+    <string name="listening_stats.later">Позже</string>
+    <string name="listening_stats.month">Месяц</string>
+    <string name="listening_stats.saved">Сэкономлено ускорением</string>
+    <string name="listening_stats.this_month">Этот месяц</string>
+    <string name="listening_stats.this_week">Эта неделя</string>
+    <string name="listening_stats.this_year">Этот год</string>
+    <string name="listening_stats.title">Ваше прослушивание</string>
+    <string name="listening_stats.week">Неделя</string>
+    <string name="listening_stats.year">Год</string>
     <string name="media_session.library.recent">Недавние</string>
     <string name="media_session.library.root">Все аудиокниги</string>
     <string name="onboarding.action.next">Далее</string>

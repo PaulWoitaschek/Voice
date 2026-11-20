@@ -454,6 +454,8 @@
         <item quantity="one">%d book in progress</item>
         <item quantity="other">%d books in progress</item>
     </plurals>
+    <!-- Below the library greeting: the time listened in this calendar week. %s is a time like "6h 40m". It can follow the number of books in progress, after a "·". A tap opens the listening stats. -->
+    <string name="library.header.listened_this_week">%s this week</string>
     <!-- Quiet button at the end of the library while books are hidden from it. Opens the sheet with the switch that shows them again. -->
     <plurals name="library.hidden_books">
         <item quantity="one">%d hidden book</item>
@@ -565,6 +567,46 @@
     <string name="library.survey.open">Take the survey</string>
     <!-- Title of the card in the library that invites to a short survey about Voice. -->
     <string name="library.survey.title">Help shape Voice</string>
+    <!-- Listening stats: chip for all the listening Voice counted. -->
+    <string name="listening_stats.all_time">All time</string>
+    <!-- Listening stats: tile with the number of books finished in the period. -->
+    <string name="listening_stats.books_finished">Books finished</string>
+    <!-- Listening stats, All time: since when Voice counts the listening. Before that day, it didn't. %s is a date like "8 October 2026". -->
+    <string name="listening_stats.counts_since">Voice counts since %s.</string>
+    <!-- Listening stats: below the time listened in a year or in all time. %d is the number of days with listening. -->
+    <plurals name="listening_stats.days">
+        <item quantity="one">on %d day</item>
+        <item quantity="other">on %d days</item>
+    </plurals>
+    <!-- Listening stats: below the time listened in a week or a month. %1$d is the number of days with listening, %2$d the number of days in the week or month. The plural follows %2$d. -->
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">on %1$d of %2$d day</item>
+        <item quantity="other">on %1$d of %2$d days</item>
+    </plurals>
+    <!-- Listening stats: read out by screen readers for the arrow that goes back one week, month or year. -->
+    <string name="listening_stats.earlier">Earlier</string>
+    <!-- Listening stats: shown for a week, month or year without listening. Calm and friendly, never a push to listen more. -->
+    <string name="listening_stats.empty">Nothing here yet. Press play, and this fills up.</string>
+    <!-- Listening stats: header above the list of books finished in the period, each with its day. -->
+    <string name="listening_stats.finished">Finished</string>
+    <!-- Listening stats: read out by screen readers for the arrow that goes forward one week, month or year. -->
+    <string name="listening_stats.later">Later</string>
+    <!-- Listening stats: chip for calendar months. -->
+    <string name="listening_stats.month">Month</string>
+    <!-- Listening stats: tile with the time that a faster playback speed saved, compared to listening at normal speed. -->
+    <string name="listening_stats.saved">Saved by listening faster</string>
+    <!-- Listening stats: the current calendar month. -->
+    <string name="listening_stats.this_month">This month</string>
+    <!-- Listening stats: the current calendar week. -->
+    <string name="listening_stats.this_week">This week</string>
+    <!-- Listening stats: the current calendar year. -->
+    <string name="listening_stats.this_year">This year</string>
+    <!-- Title of the listening stats screen: how much the listener listened, on how many days, and which books they finished. -->
+    <string name="listening_stats.title">Your listening</string>
+    <!-- Listening stats: chip for calendar weeks. -->
+    <string name="listening_stats.week">Week</string>
+    <!-- Listening stats: chip for calendar years. -->
+    <string name="listening_stats.year">Year</string>
     <!-- Media browser title for recently played audiobooks. -->
     <string name="media_session.library.recent">Recent</string>
     <!-- Media browser root title for all audiobooks. -->

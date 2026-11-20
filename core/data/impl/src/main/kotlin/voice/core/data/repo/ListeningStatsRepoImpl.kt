@@ -2,8 +2,12 @@ package voice.core.data.repo
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import java.time.LocalDate
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Instant
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import voice.core.data.BookId
 import voice.core.data.ListeningSession
 import voice.core.data.ListeningTally
@@ -38,6 +42,14 @@ internal constructor(
         },
     )
   }
+
+  override fun sessions(): Flow<List<ListeningSession>> = dao.all()
+
+  override fun listened(
+    from: LocalDate,
+    to: LocalDate,
+  ): Flow<Duration?> =
+    dao.listenedMillisOnDays(from.toEpochDay(), to.toEpochDay()).map { it?.milliseconds }
 
   override suspend fun add(tally: ListeningTally) {
     tallyDao.add(tally.day, tally.bookId, tally.name, tally.number)

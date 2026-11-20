@@ -271,6 +271,7 @@
         <item quantity="one">%d βιβλίο σε εξέλιξη</item>
         <item quantity="other">%d βιβλία σε εξέλιξη</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s αυτή την εβδομάδα</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d κρυφό βιβλίο</item>
         <item quantity="other">%d κρυφά βιβλία</item>
@@ -340,6 +341,29 @@
     <string name="library.survey.message">Λίγες σύντομες ερωτήσεις βοηθούν να αποφασιστεί τι θα ακολουθήσει.</string>
     <string name="library.survey.open">Συμμετοχή στην έρευνα</string>
     <string name="library.survey.title">Βοηθήστε να διαμορφωθεί το Voice</string>
+    <string name="listening_stats.all_time">Συνολικά</string>
+    <string name="listening_stats.books_finished">Ολοκληρωμένα βιβλία</string>
+    <string name="listening_stats.counts_since">Το Voice μετρά την ακρόαση από τις %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">σε %d ημέρα</item>
+        <item quantity="other">σε %d ημέρες</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">σε %1$d από %2$d ημέρα</item>
+        <item quantity="other">σε %1$d από %2$d ημέρες</item>
+    </plurals>
+    <string name="listening_stats.earlier">Νωρίτερα</string>
+    <string name="listening_stats.empty">Τίποτα εδώ ακόμη. Πατήστε αναπαραγωγή και θα αρχίσει να γεμίζει.</string>
+    <string name="listening_stats.finished">Ολοκληρωμένα</string>
+    <string name="listening_stats.later">Αργότερα</string>
+    <string name="listening_stats.month">Μήνας</string>
+    <string name="listening_stats.saved">Εξοικονόμηση από πιο γρήγορη ακρόαση</string>
+    <string name="listening_stats.this_month">Αυτόν τον μήνα</string>
+    <string name="listening_stats.this_week">Αυτή την εβδομάδα</string>
+    <string name="listening_stats.this_year">Φέτος</string>
+    <string name="listening_stats.title">Η ακρόασή σας</string>
+    <string name="listening_stats.week">Εβδομάδα</string>
+    <string name="listening_stats.year">Έτος</string>
     <string name="media_session.library.recent">Πρόσφατα</string>
     <string name="media_session.library.root">Όλα τα ηχητικά βιβλία</string>
     <string name="onboarding.action.next">Επόμενο</string>

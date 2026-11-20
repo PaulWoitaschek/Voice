@@ -256,6 +256,7 @@
     <plurals name="library.header.in_progress">
         <item quantity="other">正在聽 %d 本書</item>
     </plurals>
+    <string name="library.header.listened_this_week">本週 %s</string>
     <plurals name="library.hidden_books">
         <item quantity="other">已隱藏 %d 本書</item>
     </plurals>
@@ -316,6 +317,27 @@
     <string name="library.survey.message">回答幾個簡單的問題，幫忙決定接下來要做什麼。</string>
     <string name="library.survey.open">填寫問卷</string>
     <string name="library.survey.title">一起打造 Voice</string>
+    <string name="listening_stats.all_time">全部</string>
+    <string name="listening_stats.books_finished">聽完的書</string>
+    <string name="listening_stats.counts_since">Voice 從 %s 開始統計。</string>
+    <plurals name="listening_stats.days">
+        <item quantity="other">共 %d 天</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="other">%2$d 天中有 %1$d 天</item>
+    </plurals>
+    <string name="listening_stats.earlier">更早</string>
+    <string name="listening_stats.empty">這裡還沒有東西。開始播放後，這裡就會慢慢累積起來。</string>
+    <string name="listening_stats.finished">已聽完</string>
+    <string name="listening_stats.later">更晚</string>
+    <string name="listening_stats.month">月</string>
+    <string name="listening_stats.saved">加速收聽省下的時間</string>
+    <string name="listening_stats.this_month">本月</string>
+    <string name="listening_stats.this_week">本週</string>
+    <string name="listening_stats.this_year">今年</string>
+    <string name="listening_stats.title">收聽統計</string>
+    <string name="listening_stats.week">週</string>
+    <string name="listening_stats.year">年</string>
     <string name="media_session.library.recent">最近播放</string>
     <string name="media_session.library.root">所有有聲書</string>
     <string name="onboarding.action.next">下一步</string>

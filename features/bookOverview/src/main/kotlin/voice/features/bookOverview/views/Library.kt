@@ -2,17 +2,21 @@
 
 package voice.features.bookOverview.views
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -34,11 +38,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import java.util.Calendar
+import kotlin.time.Duration
 import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.strings.R
@@ -53,6 +64,7 @@ import voice.features.bookOverview.overview.AuthorEntryViewState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
 import voice.features.bookOverview.overview.LibraryItem
+import voice.features.bookOverview.stats.listenedText
 
 /**
  * Opening the app keeps the splash screen up until the library is loaded, then the sections float
@@ -70,6 +82,7 @@ internal fun Library(
   onAuthorLongClick: (AuthorEntryViewState) -> Unit,
   onPlayClick: (BookId) -> Unit,
   onPermissionBugCardClick: () -> Unit,
+  onListeningClick: () -> Unit,
   onSurveyClick: () -> Unit,
   onSurveyDismiss: () -> Unit,
   onShowFoldersClick: () -> Unit,
@@ -125,6 +138,8 @@ internal fun Library(
       item(key = "greeting", span = { GridItemSpan(maxLineSpan) }, contentType = "greeting") {
         LibraryGreeting(
           inProgressCount = viewState.inProgressCount,
+          listenedThisWeek = viewState.listenedThisWeek,
+          onListeningClick = onListeningClick,
           modifier =
             Modifier.entrance(entrance, greetingIndex)
               .padding(top = 16.dp, bottom = 20.dp, start = 4.dp),
@@ -313,8 +328,10 @@ private const val MAX_ENTRANCE_INDEX = 6
 internal const val HERO_KEY = "hero"
 
 @Composable
-private fun LibraryGreeting(
+internal fun LibraryGreeting(
   inProgressCount: Int,
+  listenedThisWeek: Duration?,
+  onListeningClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val greeting = remember {
@@ -330,16 +347,52 @@ private fun LibraryGreeting(
       text = stringResource(greeting),
       style = MaterialTheme.typography.displaySmallEmphasized,
     )
-    if (inProgressCount > 0) {
+    val inProgress =
+      if (inProgressCount > 0) {
+        pluralStringResource(R.plurals.library_header_in_progress, inProgressCount, inProgressCount)
+      } else {
+        null
+      }
+    if (listenedThisWeek == null) {
+      if (inProgress != null) {
+        // the same height as the row below, so the books don't jump when the time loads
+        Text(
+          text = inProgress,
+          style = MaterialTheme.typography.titleMedium,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          modifier = Modifier.heightIn(min = 48.dp).wrapContentHeight(),
+        )
+      }
+      return@Column
+    }
+    val week =
+      listenedThisWeek
+        .takeIf { it.inWholeMinutes > 0 || inProgress == null }
+        ?.let { stringResource(R.string.library_header_listened_this_week, listenedText(it)) }
+    val emphasis =
+      SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+    Row(
+      Modifier.heightIn(min = 48.dp)
+        .clip(MaterialTheme.shapes.small)
+        .clickable(role = Role.Button, onClick = onListeningClick),
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
       Text(
         text =
-          pluralStringResource(
-            R.plurals.library_header_in_progress,
-            inProgressCount,
-            inProgressCount,
-          ),
+          buildAnnotatedString {
+            if (inProgress != null) append(inProgress)
+            if (inProgress != null && week != null) append(" · ")
+            if (week != null) withStyle(emphasis) { append(week) }
+          },
         style = MaterialTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.weight(1F, fill = false),
+      )
+      Icon(
+        painterResource(UiR.drawable.ic_chevron_right),
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.size(20.dp),
       )
     }
   }

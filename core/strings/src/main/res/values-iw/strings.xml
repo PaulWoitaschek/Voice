@@ -286,6 +286,7 @@
         <item quantity="two">%d ספרים בהאזנה</item>
         <item quantity="other">%d ספרים בהאזנה</item>
     </plurals>
+    <string name="library.header.listened_this_week">%s השבוע</string>
     <plurals name="library.hidden_books">
         <item quantity="one">%d ספר מוסתר</item>
         <item quantity="two">%d ספרים מוסתרים</item>
@@ -364,6 +365,31 @@
     <string name="library.survey.message">כמה שאלות קצרות יעזרו להחליט מה יבוא בהמשך.</string>
     <string name="library.survey.open">מילוי הסקר</string>
     <string name="library.survey.title">עזרו לעצב את Voice</string>
+    <string name="listening_stats.all_time">מההתחלה</string>
+    <string name="listening_stats.books_finished">ספרים שהסתיימו</string>
+    <string name="listening_stats.counts_since">Voice סופרת את ההאזנה מאז %s.</string>
+    <plurals name="listening_stats.days">
+        <item quantity="one">ב-%d יום</item>
+        <item quantity="two">ב-%d ימים</item>
+        <item quantity="other">ב-%d ימים</item>
+    </plurals>
+    <plurals name="listening_stats.days_of">
+        <item quantity="one">ב-%1$d מתוך %2$d יום</item>
+        <item quantity="two">ב-%1$d מתוך %2$d ימים</item>
+        <item quantity="other">ב-%1$d מתוך %2$d ימים</item>
+    </plurals>
+    <string name="listening_stats.earlier">מוקדם יותר</string>
+    <string name="listening_stats.empty">אין כאן עדיין כלום. אחרי הפעלה, המקום הזה יתמלא.</string>
+    <string name="listening_stats.finished">הסתיימו</string>
+    <string name="listening_stats.later">מאוחר יותר</string>
+    <string name="listening_stats.month">חודש</string>
+    <string name="listening_stats.saved">נחסך בזכות האזנה מהירה</string>
+    <string name="listening_stats.this_month">החודש</string>
+    <string name="listening_stats.this_week">השבוע</string>
+    <string name="listening_stats.this_year">השנה</string>
+    <string name="listening_stats.title">ההאזנה שלכם</string>
+    <string name="listening_stats.week">שבוע</string>
+    <string name="listening_stats.year">שנה</string>
     <string name="media_session.library.recent">אחרונים</string>
     <string name="media_session.library.root">כל הקולספרים</string>
     <string name="onboarding.action.next">הבא</string>
