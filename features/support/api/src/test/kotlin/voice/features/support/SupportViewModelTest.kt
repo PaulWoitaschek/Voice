@@ -353,6 +353,14 @@ class SupportViewModelTest {
   }
 
   @Test
+  fun `a supporter count below zero is no count`() = scope.runTest {
+    backend.mutableState.value = SupportBackendState.KoFi
+    supporterCountFeatureFlag.value = -5
+
+    assertNull(viewState().supporterCount)
+  }
+
+  @Test
   fun `a purchase that went through says thank you`() = scope.runTest {
     backend.mutableState.value = SupportBackendState.Play(offers, tips, activeSubscription = null)
 
