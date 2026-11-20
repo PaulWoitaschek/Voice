@@ -20,6 +20,9 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.verify
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -46,6 +49,7 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.ChapterMark
 import voice.core.data.ListeningEvent
+import voice.core.data.ListeningTally
 import voice.core.data.MarkData
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.store.CurrentBookStore
@@ -67,6 +71,9 @@ import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
 import voice.core.playback.session.toMediaIdOrNull
+import voice.core.playback.stats.ListeningSessionRecorder
+import voice.core.playback.stats.ListeningTallyRecorder
+import voice.core.playback.stats.MemoryListeningStatsRepo
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerState
@@ -126,15 +133,29 @@ class VoicePlayerTest {
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer)
   private val commandSourceResolver =
     mockk<CommandSourceResolver> { every { current() } returns null }
+  private val clock =
+    object : Clock {
+      override fun now(): Instant = Instant.parse("2026-10-07T10:00:00Z")
+    }
+  private val statsRepo = MemoryListeningStatsRepo()
   private val historyRecorder =
     ListeningHistoryRecorder(
       repo = historyRepo,
-      clock =
-        object : Clock {
-          override fun now(): Instant = Instant.parse("2026-10-07T10:00:00Z")
-        },
+      clock = clock,
       scope = scope,
+      tally =
+        ListeningTallyRecorder(
+          repo = statsRepo,
+          clock = clock,
+          zone = { ZoneId.of("Europe/Berlin") },
+          scope = scope,
+        ),
     )
+  private val playPlaces = mutableListOf<ListeningEvent.Source?>()
+  private val listeningSessionRecorder =
+    mockk<ListeningSessionRecorder> {
+      every { playPressed(captureNullable(playPlaces)) } just Runs
+    }
   private val player =
     VoicePlayer(
       player = chapterMarkPlayer,
@@ -155,6 +176,7 @@ class VoicePlayerTest {
       analytics = analytics,
       historyRecorder = historyRecorder,
       commandSourceResolver = commandSourceResolver,
+      listeningSessionRecorder = listeningSessionRecorder,
     )
 
   @Test
@@ -892,6 +914,94 @@ class VoicePlayerTest {
 
     assertTrue(player.isPlaying)
     assertEquals(expected = 1, actual = plays.size)
+    assertEquals(
+      expected = listOf<ListeningEvent.Source?>(ListeningEvent.Source.App),
+      actual = playPlaces,
+    )
+  }
+
+  @Test
+  fun `paused, press play, the time after it counts for the place of the press`() = scope.runTest {
+    setMediaItems(oneChapter())
+
+    playFromOutside(ListeningEvent.Source.Headset)
+    player.pause()
+    playFromOutside(ListeningEvent.Source.Bluetooth)
+    player.pause()
+    playFromOutside(ListeningEvent.Source.Car)
+    player.pause()
+    every { commandSourceResolver.current() } returns null
+    playFromTheApp(ListeningEvent.Source.App)
+
+    assertEquals(
+      expected =
+        listOf<ListeningEvent.Source?>(
+          ListeningEvent.Source.Headset,
+          ListeningEvent.Source.Bluetooth,
+          ListeningEvent.Source.Car,
+          ListeningEvent.Source.App,
+        ),
+      actual = playPlaces,
+    )
+  }
+
+  @Test
+  fun `the sleep timer is set to the end of the chapter, the chapter ends, one night`() =
+    scope.runTest {
+      val chapter =
+        chapter(
+          ChapterMark(startMs = 0, endMs = 1_000, name = null),
+          ChapterMark(startMs = 1_000, endMs = 2_000, name = null),
+        )
+      setMediaItems(listOf(chapter))
+      player.prepare()
+      awaitReady()
+      sleepTimer.enable(SleepTimerMode.EndOfChapter)
+
+      TestPlayerRunHelper.play(internalPlayer).untilPlayWhenReadyIs(false)
+      shadowOf(Looper.getMainLooper()).idle()
+      advanceUntilIdle()
+
+      assertEquals(
+        expected =
+          listOf(ListeningTally(LocalDate.parse("2026-10-07"), bookId, "sleep_timer_night", 1)),
+        actual = statsRepo.tallies,
+      )
+    }
+
+  @Test
+  fun `analytics on, any of the above, nothing of it is reported`() = scope.runTest {
+    val events = mutableListOf<String>()
+    val params = mutableListOf<Map<String, String>>()
+    every { analytics.event(capture(events), capture(params)) } just Runs
+    val chapter =
+      chapter(
+        ChapterMark(startMs = 0, endMs = 1_000, name = null),
+        ChapterMark(startMs = 1_000, endMs = 2_000, name = null),
+      )
+    setMediaItems(listOf(chapter))
+    player.prepare()
+    awaitReady()
+    sleepTimer.enable(SleepTimerMode.EndOfChapter)
+
+    playFromOutside(ListeningEvent.Source.Headset)
+    TestPlayerRunHelper.runUntilPlayWhenReady(internalPlayer, false)
+    shadowOf(Looper.getMainLooper()).idle()
+    advanceUntilIdle()
+
+    assertEquals(expected = 1, actual = statsRepo.tallies.size)
+    assertEquals(
+      expected = listOf<ListeningEvent.Source?>(ListeningEvent.Source.Headset),
+      actual = playPlaces,
+    )
+    // the play was reported before the counts came, and nothing else is
+    assertEquals(expected = listOf("play"), actual = events)
+    assertEquals(
+      expected = setOf("volume_boost", "skip_silence", "speed", "source", "book_from"),
+      actual = params.single().keys,
+    )
+    verify(exactly = 0) { analytics.setUserProperty(any(), any()) }
+    verify(exactly = 0) { analytics.screenView(any()) }
   }
 
   @Test

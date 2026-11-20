@@ -6,11 +6,16 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Instant
 import voice.core.data.BookId
 import voice.core.data.ListeningSession
+import voice.core.data.ListeningTally
 import voice.core.data.repo.internals.dao.ListeningSessionDao
+import voice.core.data.repo.internals.dao.ListeningTallyDao
 
 @ContributesBinding(AppScope::class)
-public class ListeningStatsRepoImpl internal constructor(private val dao: ListeningSessionDao) :
-  ListeningStatsRepo {
+public class ListeningStatsRepoImpl
+internal constructor(
+  private val dao: ListeningSessionDao,
+  private val tallyDao: ListeningTallyDao,
+) : ListeningStatsRepo {
 
   override suspend fun save(session: ListeningSession): Long {
     val id = dao.upsert(session)
@@ -34,11 +39,16 @@ public class ListeningStatsRepoImpl internal constructor(private val dao: Listen
     )
   }
 
+  override suspend fun add(tally: ListeningTally) {
+    tallyDao.add(tally.day, tally.bookId, tally.name, tally.number)
+  }
+
   override suspend fun moveToBook(
     from: List<BookId>,
     to: BookId,
   ) {
     if (from.isEmpty()) return
     dao.moveToBook(from = from, to = to)
+    tallyDao.moveToBook(from = from, to = to)
   }
 }

@@ -23,6 +23,9 @@ public data class BookContent(
   @Embedded val metadata: BookMetadata,
   // null for books on the device, and for server books until the next sync
   val serverLibraryId: String? = null,
+  // only set when the listener marked the book as completed, not when playback reached its end
+  val markedCompletedAt: Instant? = null,
+  @ColumnInfo(defaultValue = "0") val startedBeforeMark: Boolean = false,
 ) {
 
   @Ignore val currentChapterIndex: Int = chapters.indexOf(currentChapter)

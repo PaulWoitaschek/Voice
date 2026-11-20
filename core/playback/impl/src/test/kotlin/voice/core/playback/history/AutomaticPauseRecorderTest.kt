@@ -41,6 +41,7 @@ class AutomaticPauseRecorderTest {
               override fun now(): Instant = Instant.parse("2026-10-07T10:00:00Z")
             },
           scope = scope,
+          tally = mockk(),
         ),
       )
       .attachTo(player)

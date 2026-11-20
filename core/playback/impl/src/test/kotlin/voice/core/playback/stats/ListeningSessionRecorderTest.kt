@@ -2,6 +2,8 @@ package voice.core.playback.stats
 
 import androidx.media3.common.Player
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.every
+import io.mockk.mockk
 import java.time.ZoneId
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -19,6 +21,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import voice.core.data.BookId
+import voice.core.data.ListeningEvent
 import voice.core.data.ListeningSession
 import voice.core.playback.FakePlayer
 
@@ -29,8 +32,17 @@ class ListeningSessionRecorderTest {
   private val start = Instant.parse("2026-10-07T18:00:00Z")
   private val clock = SchedulerClock(scope.testScheduler, start)
   private val repo = MemoryListeningStatsRepo()
+  private val zone = { ZoneId.of("Europe/Berlin") }
+  private var output = "speaker"
   private val recorder =
-    ListeningSessionRecorder(repo, clock, { ZoneId.of("Europe/Berlin") }, scope.backgroundScope)
+    ListeningSessionRecorder(
+      repo = repo,
+      clock = clock,
+      zone = zone,
+      scope = scope.backgroundScope,
+      tally = ListeningTallyRecorder(repo, clock, zone, scope.backgroundScope),
+      outputDetector = mockk { every { current() } answers { output } },
+    )
   private val dune = BookId("dune")
   private val hyperion = BookId("hyperion")
 
@@ -254,6 +266,200 @@ class ListeningSessionRecorderTest {
       actual = repo.all,
     )
   }
+
+  @Test
+  fun `paused, press play on a headset, listen 20 minutes, 20 minutes from a headset`() =
+    scope.runTest {
+      output = "wired"
+
+      recorder.playPressed(ListeningEvent.Source.Headset)
+      listen(20.minutes)
+
+      assertEquals(
+        expected = mapOf("listened_from_headset" to 20.minutes, "listened_on_wired" to 20.minutes),
+        actual = counted(),
+      )
+    }
+
+  @Test
+  fun `10 minutes after play in the app, pause, press play in the car, listen 20 minutes, 10 minutes from the app, 20 minutes from the car`() =
+    scope.runTest {
+      recorder.playPressed(ListeningEvent.Source.App)
+      listen(10.minutes)
+
+      recorder.playPressed(ListeningEvent.Source.Car)
+      listen(20.minutes)
+
+      assertEquals(
+        expected =
+          mapOf(
+            "listened_from_app" to 10.minutes,
+            "listened_on_speaker" to 10.minutes,
+            "listened_from_car" to 20.minutes,
+            "listened_on_car" to 20.minutes,
+          ),
+        actual = counted(),
+      )
+    }
+
+  @Test
+  fun `the place of the last press stays when playback stops and carries on by itself`() =
+    scope.runTest {
+      recorder.playPressed(ListeningEvent.Source.Notification)
+      listen(10.minutes)
+
+      // a call ended
+      listen(5.minutes)
+
+      assertEquals(
+        expected =
+          mapOf("listened_from_notification" to 15.minutes, "listened_on_speaker" to 15.minutes),
+        actual = counted(),
+      )
+    }
+
+  @Test
+  fun `the sleep timer stopped, shake, and listen 15 minutes, 15 minutes from the sleep timer`() =
+    scope.runTest {
+      recorder.playPressed(ListeningEvent.Source.SleepTimer)
+      listen(15.minutes)
+
+      assertEquals(
+        expected =
+          mapOf("listened_from_sleep_timer" to 15.minutes, "listened_on_speaker" to 15.minutes),
+        actual = counted(),
+      )
+    }
+
+  @Test
+  fun `paused, press play on a bluetooth device, listen 20 minutes, 20 minutes from bluetooth`() =
+    scope.runTest {
+      output = "bluetooth"
+
+      recorder.playPressed(ListeningEvent.Source.Bluetooth)
+      listen(20.minutes)
+
+      assertEquals(
+        expected =
+          mapOf("listened_from_bluetooth" to 20.minutes, "listened_on_bluetooth" to 20.minutes),
+        actual = counted(),
+      )
+    }
+
+  @Test
+  fun `bluetooth headphones for 30 minutes, turn them off and play on for 10 minutes on the speaker, 30 minutes on bluetooth, 10 minutes on the phone speaker`() =
+    scope.runTest {
+      output = "bluetooth"
+      listen(30.minutes)
+
+      // Voice pauses when the headphones turn off
+      output = "speaker"
+      listen(10.minutes)
+
+      assertEquals(
+        expected =
+          mapOf(
+            "listened_from_app" to 40.minutes,
+            "listened_on_bluetooth" to 30.minutes,
+            "listened_on_speaker" to 10.minutes,
+          ),
+        actual = counted(),
+      )
+    }
+
+  @Test
+  fun `an output that changes while playing counts from the next save on`() = scope.runTest {
+    recorder.playing(dune, speed = 1F)
+    advanceTimeBy(10.minutes + 10.seconds)
+
+    output = "bluetooth"
+    advanceTimeBy(10.minutes)
+    recorder.stopped()
+    runCurrent()
+
+    assertEquals(
+      expected =
+        mapOf(
+          "listened_from_app" to 20.minutes + 10.seconds,
+          "listened_on_speaker" to 10.minutes + 30.seconds,
+          "listened_on_bluetooth" to 9.minutes + 40.seconds,
+        ),
+      actual = counted(),
+    )
+  }
+
+  @Test
+  fun `android auto, listen 40 minutes, 40 minutes in the car`() = scope.runTest {
+    // the sound of Android Auto looks like any Bluetooth device
+    output = "bluetooth"
+
+    recorder.playPressed(ListeningEvent.Source.Car)
+    listen(40.minutes)
+
+    assertEquals(
+      expected = mapOf("listened_from_car" to 40.minutes, "listened_on_car" to 40.minutes),
+      actual = counted(),
+    )
+  }
+
+  @Test
+  fun `an output that voice can't tell, listen 5 minutes, 5 minutes on other`() = scope.runTest {
+    output = "other"
+
+    listen(5.minutes)
+
+    assertEquals(
+      expected = mapOf("listened_from_app" to 5.minutes, "listened_on_other" to 5.minutes),
+      actual = counted(),
+    )
+  }
+
+  @Test
+  fun `the time before another book starts counts for the book that played`() = scope.runTest {
+    recorder.playing(dune, speed = 1F)
+    advanceTimeBy(10.seconds)
+
+    recorder.playing(hyperion, speed = 1F)
+    advanceTimeBy(20.seconds)
+    recorder.stopped()
+    runCurrent()
+
+    assertEquals(
+      expected = mapOf(dune to 10.seconds, hyperion to 20.seconds),
+      actual =
+        repo.tallies
+          .filter { it.name == "listened_on_speaker" }
+          .groupBy { it.bookId }
+          .mapValues { (_, tallies) -> tallies.sumOf { it.number }.milliseconds },
+    )
+  }
+
+  @Test
+  fun `the time is stored while playing, so a stopped app loses little`() = scope.runTest {
+    recorder.playing(dune, speed = 1F)
+
+    advanceTimeBy(65.seconds)
+    runCurrent()
+
+    assertEquals(
+      expected = mapOf("listened_from_app" to 1.minutes, "listened_on_speaker" to 1.minutes),
+      actual = counted(),
+    )
+  }
+
+  private fun TestScope.listen(duration: Duration) {
+    recorder.playing(dune, speed = 1F)
+    advanceTimeBy(duration)
+    recorder.stopped()
+    runCurrent()
+  }
+
+  private fun counted(): Map<String, Duration> =
+    repo.tallies
+      .groupBy { it.name }
+      .mapValues { (_, tallies) ->
+        tallies.sumOf { it.number }.milliseconds
+      }
 
   private class SchedulerClock(
     private val scheduler: TestCoroutineScheduler,

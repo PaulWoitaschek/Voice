@@ -6,6 +6,7 @@ import kotlin.time.Duration
 import kotlinx.coroutines.flow.first
 import voice.core.data.BookCategory
 import voice.core.data.BookId
+import voice.core.data.category
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.playback.LastPlaybackSpeedStore
@@ -37,13 +38,17 @@ class BookCategoryChanger(
       }
 
     val speed = book.withDefaultSpeed { lastPlaybackSpeedStore.data.first() }.content.playbackSpeed
+    val now = Clock.System.now()
+    val completed = category == BookCategory.FINISHED
     repo.updateBook(book.id) {
       it.copy(
         currentChapter = currentChapter,
         positionInChapter = positionInChapter,
         // newer than the place other devices wrote, so their place doesn't undo this
-        lastPlayedAt = Clock.System.now(),
+        lastPlayedAt = now,
         playbackSpeed = speed,
+        markedCompletedAt = now.takeIf { completed },
+        startedBeforeMark = completed && book.category != BookCategory.NOT_STARTED,
       )
     }
     // The player keeps the position of the book it has loaded and would write it back. It seeks in

@@ -14,6 +14,7 @@ import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.isUndoableJump
 import voice.core.data.repo.ListeningHistoryRepo
+import voice.core.playback.stats.ListeningTallyRecorder
 
 data class PlaybackPosition(
   val bookId: BookId,
@@ -35,6 +36,7 @@ class ListeningHistoryRecorder(
   private val repo: ListeningHistoryRepo,
   private val clock: Clock,
   private val scope: CoroutineScope,
+  private val tally: ListeningTallyRecorder,
 ) {
 
   val lastJump: StateFlow<Jump?>
@@ -42,6 +44,9 @@ class ListeningHistoryRecorder(
 
   var lastSource: ListeningEvent.Source? = null
     private set
+
+  // a shake starts the timer again, and its next stop is still the same night
+  private var sleepTimerStopped = false
 
   fun record(
     type: ListeningEvent.Type,
@@ -62,8 +67,24 @@ class ListeningHistoryRecorder(
       )
     lastSource = source
     updateLastJump(event, position, to)
+    countSleepTimer(type, position.bookId)
     scope.launch {
       repo.add(event)
+    }
+  }
+
+  private fun countSleepTimer(
+    type: ListeningEvent.Type,
+    bookId: BookId,
+  ) {
+    when (type) {
+      ListeningEvent.Type.SleepTimerStarted -> sleepTimerStopped = false
+      ListeningEvent.Type.SleepTimerEnded -> {
+        if (!sleepTimerStopped) tally.add(bookId, "sleep_timer_night")
+        sleepTimerStopped = true
+      }
+      ListeningEvent.Type.SleepTimerExtended -> tally.add(bookId, "sleep_timer_shake")
+      else -> Unit
     }
   }
 

@@ -69,7 +69,12 @@ class BookPlayViewModelTest {
   private val scope = TestScope()
   private val clock = TestClock()
   private val historyRecorder =
-    ListeningHistoryRecorder(repo = mockk(relaxed = true), clock = clock, scope = scope)
+    ListeningHistoryRecorder(
+      repo = mockk(relaxed = true),
+      clock = clock,
+      scope = scope,
+      tally = mockk(relaxUnitFun = true),
+    )
   private val sleepTimerDataStore =
     MemoryDataStore(SleepTimerPreference.Default.copy(duration = 5.minutes))
   private val book = book()
