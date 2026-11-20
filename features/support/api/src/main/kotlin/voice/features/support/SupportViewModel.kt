@@ -25,6 +25,7 @@ class SupportViewModel(
   private val navigator: Navigator,
   private val supporterStatusStore: SupporterStatusStore,
   private val supporterNoteFeatureFlag: SupporterNoteFeatureFlag,
+  private val yearlySupportPickFeatureFlag: YearlySupportPickFeatureFlag,
   private val zone: () -> ZoneId,
 ) : SupportListener {
 
@@ -86,6 +87,9 @@ class SupportViewModel(
     val frequency =
       chosenFrequency?.takeIf { it in tiersByFrequency }
         ?: frequencies.firstOrNull { active != null && it.period == active.period }
+        ?: SupportFrequency.Yearly.takeIf {
+          yearlySupportPickFeatureFlag.get() && it in tiersByFrequency
+        }
         ?: frequencies.firstOrNull()
         ?: return null
     val tiers = tiersByFrequency.getValue(frequency)

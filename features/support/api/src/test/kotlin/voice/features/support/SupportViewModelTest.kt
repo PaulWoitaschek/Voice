@@ -46,6 +46,7 @@ class SupportViewModelTest {
     }
   private val supporterStatusStore = MemoryDataStore(SupporterStatus())
   private val supporterNoteFeatureFlag = MemoryFeatureFlag("")
+  private val yearlySupportPickFeatureFlag = MemoryFeatureFlag(false)
   private val activity = mockk<Activity>()
   private val viewModel =
     SupportViewModel(
@@ -53,6 +54,7 @@ class SupportViewModelTest {
       navigator = navigator,
       supporterStatusStore = SupporterStatusStore(supporterStatusStore),
       supporterNoteFeatureFlag = SupporterNoteFeatureFlag(supporterNoteFeatureFlag),
+      yearlySupportPickFeatureFlag = YearlySupportPickFeatureFlag(yearlySupportPickFeatureFlag),
       zone = { ZoneOffset.UTC },
     )
 
@@ -94,6 +96,35 @@ class SupportViewModelTest {
     )
     assertEquals(expected = SupporterTier.HoneyTea, actual = content.selectedTier)
     assertEquals(expected = Action.Subscribe("€3", SupportPeriod.Monthly), actual = content.action)
+  }
+
+  @Test
+  fun `with the yearly pick on, honey tea per year is picked to start with`() = scope.runTest {
+    yearlySupportPickFeatureFlag.overwrite(true)
+    backend.mutableState.value = SupportBackendState.Play(offers, tips, activeSubscription = null)
+
+    val content = assertIs<Content.Play>(viewState().content)
+
+    assertEquals(expected = SupportFrequency.Yearly, actual = content.frequency)
+    assertEquals(expected = SupporterTier.HoneyTea, actual = content.selectedTier)
+    assertEquals(expected = Action.Subscribe("€30", SupportPeriod.Yearly), actual = content.action)
+  }
+
+  @Test
+  fun `with the yearly pick on, a running monthly subscription stays picked`() = scope.runTest {
+    yearlySupportPickFeatureFlag.overwrite(true)
+    backend.mutableState.value =
+      SupportBackendState.Play(
+        offers,
+        tips,
+        activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Monthly),
+      )
+
+    val content = assertIs<Content.Play>(viewState().content)
+
+    assertEquals(expected = SupportFrequency.Monthly, actual = content.frequency)
+    assertEquals(expected = SupporterTier.Tea, actual = content.selectedTier)
+    assertEquals(expected = Action.Manage, actual = content.action)
   }
 
   @Test
