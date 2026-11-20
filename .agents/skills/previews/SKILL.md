@@ -10,15 +10,15 @@ renders its `@Preview`s to PNGs on this machine, private ones included. If `whic
 to install it.
 
 ```bash
-android preview list :app@freeDebug --all        # every preview in the project
+android preview list :app@fossDebug --all        # every preview in the project
 android preview list :features:playbackScreen    # one module's previews
 android preview render :features:playbackScreen \
   --fqn=voice.features.playbackScreen.view.BookPlayViewKt.BookPlayPreview
 ```
 
-- `render` needs at least one `--fqn`. Repeat it to render several previews in one build. Through `:app@freeDebug` it
+- `render` needs at least one `--fqn`. Repeat it to render several previews in one build. Through `:app@fossDebug` it
   renders previews from every module. One module takes a few seconds, every preview about 15.
-- `:app` needs its variant, `@freeDebug`. Library modules don't.
+- `:app` needs its variant, `@fossDebug`. Library modules don't.
 - It prints the path of each PNG, in a temporary directory unless you pass `-o <dir>`. They're named
   `<File>Kt/<Preview>_<n>.png`, one per annotation and `@PreviewParameter` value, numbered in the order of the
   annotations.

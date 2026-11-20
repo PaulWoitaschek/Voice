@@ -2,7 +2,7 @@
 
 Voice is a modular Android audiobook player.
 
-- Build the app: `./gradlew :app:assembleFreeDebug`.
+- Build the app: `./gradlew :app:assembleFossDebug`.
 - If installing a debug build fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, the installed app was signed with a different key. Never uninstall it to get around this, as that wipes the user's library. Ask the user instead.
 - Local builds take a version code from the clock, above every release so far. If an install still fails with `INSTALL_FAILED_VERSION_DOWNGRADE`, `adb install -r -d` works over an installed debug build. Otherwise ask the user, never uninstall.
 - Only write code comments when absolutely necessary, to explain a non-obvious *why*. Don't restate what the code does or describe the change you made. This includes KDoc.

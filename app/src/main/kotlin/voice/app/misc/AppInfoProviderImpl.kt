@@ -14,7 +14,7 @@ class AppInfoProviderImpl(private val application: Application) : AppInfoProvide
   override val versionName: String = BuildConfig.VERSION_NAME
   override val variant: AppVariant =
     when (BuildConfig.FLAVOR) {
-      "free" -> AppVariant.Free
+      "foss" -> AppVariant.Foss
       "play" -> AppVariant.Play
       else -> error("Unknown flavor ${BuildConfig.FLAVOR}")
     }

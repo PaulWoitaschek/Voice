@@ -93,5 +93,5 @@ The listing is how listeners find Voice: Play search ranks the app on these text
    English text and notes, and tell it to follow this skill.
 4. Verify:
    - `.agents/skills/translate-strings/scripts/missing_translations.main.kts` lists none of your keys and no problems.
-   - `./gradlew :app:testFreeDebugUnitTest --tests voice.app.LocaleConfigTest`
-   - `./gradlew :app:lintFreeDebug`, which catches missing plural quantities and broken format strings.
+   - `./gradlew :app:testFossDebugUnitTest --tests voice.app.LocaleConfigTest`
+   - `./gradlew :app:lintFossDebug`, which catches missing plural quantities and broken format strings.

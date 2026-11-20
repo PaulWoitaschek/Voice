@@ -11,7 +11,7 @@ description: Formatting Kotlin and writing or running tests in Voice. Use when a
   fails, it formats the code and stops the commit: stage the changes and commit again.
 - Formatting is ktfmt's Google style, run through Spotless. The style is set in the `voice.ktfmt` convention plugin and
   `plugins/build.gradle.kts`, and the ktfmt version is in `gradle/libs.versions.toml`.
-- Compose rules come from Slack's compose-lints and run with Android Lint: `./gradlew :app:lintFreeDebug`.
+- Compose rules come from Slack's compose-lints and run with Android Lint: `./gradlew :app:lintFossDebug`.
 
 ## Running tests
 
@@ -19,11 +19,11 @@ Start narrow, then broaden:
 
 - One class: `./gradlew :features:settings:testDebugUnitTest --tests "voice.features.settings.SettingsViewModelTest"`
 - One library module: `./gradlew :<module>:testDebugUnitTest`
-- App module: `./gradlew :app:testFreeDebugUnitTest`
+- App module: `./gradlew :app:testFossDebugUnitTest`
 - All unit tests: `./gradlew voiceUnitTest`. Run this when touching shared behavior, cross-module contracts, or broad
   refactors.
 
-CI runs `./gradlew voiceUnitTest spotlessCheck :app:assembleFreeDebug`. If you can't run something, say why and give the
+CI runs `./gradlew voiceUnitTest spotlessCheck :app:assembleFossDebug`. If you can't run something, say why and give the
 command.
 
 ## Writing tests

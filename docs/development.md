@@ -3,7 +3,7 @@
 ## Project Setup
 
 To run the project, open it in the latest Version of Android Studio and build the project as usual.
-The default local development variant is `freeDebug`, which does not require Google services credentials.
+The default local development variant is `fossDebug`, which does not require Google services credentials.
 Play variants include Firebase, Crashlytics, Remote Config, and Play review dependencies.
 Play builds require `app/src/play/google-services.json`; CI writes this file from the release secret.
 

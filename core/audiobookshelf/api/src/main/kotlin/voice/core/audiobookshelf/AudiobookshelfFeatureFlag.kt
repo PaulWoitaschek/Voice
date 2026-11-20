@@ -25,7 +25,7 @@ class AudiobookshelfFeatureFlag(flag: FeatureFlag<Boolean>) : FeatureFlag<Boolea
         "Lets listeners connect an Audiobookshelf server. A server that is connected stays, also when this is off.",
       defaultValue =
         when (appInfoProvider.variant) {
-          AppVariant.Free -> true
+          AppVariant.Foss -> true
           AppVariant.Play -> false
         },
     ),

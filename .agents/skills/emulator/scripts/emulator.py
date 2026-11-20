@@ -173,7 +173,7 @@ def prepare(args=None):
   )
   build = [
     [sys.executable, "scripts/populate_test_files.py", "--skip-adb"],
-    [str(root / "gradlew"), ":app:assembleFreeDebug", "-q"],
+    [str(root / "gradlew"), ":app:assembleFossDebug", "-q"],
   ]
   for command in build:
     result = subprocess.run(command, cwd=root, capture_output=True, text=True)

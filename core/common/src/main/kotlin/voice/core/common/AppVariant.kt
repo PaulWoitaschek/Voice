@@ -1,6 +1,6 @@
 package voice.core.common
 
 enum class AppVariant {
-  Free,
+  Foss,
   Play,
 }

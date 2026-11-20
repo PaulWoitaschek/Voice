@@ -178,7 +178,7 @@ def demo_mode(command, *extras):
 
 
 def set_up_device():
-  subprocess.run([ROOT / "gradlew", ":app:installFreeDebug", "-q"], cwd=ROOT, check=True)
+  subprocess.run([ROOT / "gradlew", ":app:installFossDebug", "-q"], cwd=ROOT, check=True)
   adb("shell", "rm", "-rf", "/sdcard/Audiobooks")
   adb("push", LIBRARY / "Audiobooks", "/sdcard/Audiobooks")
   adb("shell", "pm", "clear", ui.PACKAGE)
