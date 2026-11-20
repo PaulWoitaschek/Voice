@@ -11,7 +11,7 @@ Background and diagram: `docs/architecture.md`. Module inventory: `settings.grad
 
 - `:features:*`: user-facing screens and flows (Compose UI and presentation logic).
 - `:core:*`: reusable services and contracts: data, playback, scanning, search, logging, strings, shared UI.
-- `:app`: DI graph and product flavor wiring (`free` / `play`). `:navigation`: `Destination` and navigation abstractions.
+- `:app`: DI graph and product flavor wiring (`foss` / `play`). `:navigation`: `Destination` and navigation abstractions.
   Keep both thin.
 - New functionality starts in a feature module. Extract to `:core` once a second feature needs it.
 
@@ -21,7 +21,7 @@ Background and diagram: `docs/architecture.md`. Module inventory: `settings.grad
   module (e.g. `:features:support:api`).
 - Core never depends on features.
 - A contract with several implementations is split into `:api` plus implementation modules (`noop`, `firebase`, `play`,
-  `free`, `impl`). Consumers depend on `:api` only; `:app` picks the implementation, often per flavor
+  `foss`, `impl`). Consumers depend on `:api` only; `:app` picks the implementation, often per flavor
   (`playImplementation` / `fossImplementation`).
 - The build fails when a module breaks these rules: `plugins/src/main/kotlin/checkModuleDependencies.kt`. It treats every
   nested module other than `:api` (e.g. `:core:data:impl`) as an implementation. Tests may depend on implementations.

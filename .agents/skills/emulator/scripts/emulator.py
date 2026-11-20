@@ -190,7 +190,7 @@ def prepare(args=None):
   saved = False
   try:
     adb("push", str(root / "build" / "testfiles"), "/sdcard/testfiles")
-    adb("install", "-r", str(root / "app/build/outputs/apk/free/debug/app-free-debug.apk"))
+    adb("install", "-r", str(root / "app/build/outputs/apk/foss/debug/app-foss-debug.apk"))
     agent("open", PACKAGE, "--platform", "android")
     set_up_library()
     agent("close")
