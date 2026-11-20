@@ -413,6 +413,7 @@
     </plurals>
     <string name="series.start">شروع</string>
     <string name="series.start_book">شروع کتاب %s</string>
+    <string name="series.up_next">بعدی</string>
     <string name="settings.about.app_version.title">ورژن اپلیکیشن</string>
     <string name="settings.action.open">تنظیمات</string>
     <string name="settings.analytics_consent.description">اجازه بدهید برای بهبود دادن برنامه اطلاعات استفاده شما به شکل ناشناس گردآوری شود</string>

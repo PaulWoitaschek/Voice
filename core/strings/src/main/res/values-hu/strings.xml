@@ -413,6 +413,7 @@
     </plurals>
     <string name="series.start">Kezdés</string>
     <string name="series.start_book">%s. könyv elkezdése</string>
+    <string name="series.up_next">Következő</string>
     <string name="settings.about.app_version.title">Alkalmazásverzió</string>
     <string name="settings.action.open">Beállítások</string>
     <string name="settings.analytics_consent.description">Névtelen használati adatok gyűjtésének engedélyezése az alkalmazás fejlesztéséhez</string>

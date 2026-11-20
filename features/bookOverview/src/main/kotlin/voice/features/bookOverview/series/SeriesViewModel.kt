@@ -20,6 +20,7 @@ import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.data.category
 import voice.core.data.repo.BookRepository
+import voice.core.data.seriesPart
 import voice.core.data.store.CurrentBookStore
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
@@ -30,7 +31,6 @@ import voice.features.bookOverview.overview.CurrentBook
 import voice.features.bookOverview.overview.inSeries
 import voice.features.bookOverview.overview.rememberServerBookStates
 import voice.features.bookOverview.overview.series
-import voice.features.bookOverview.overview.seriesPart
 import voice.features.bookOverview.overview.toItemViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator

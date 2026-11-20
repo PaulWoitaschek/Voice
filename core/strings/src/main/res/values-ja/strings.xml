@@ -386,6 +386,7 @@
     </plurals>
     <string name="series.start">聴き始める</string>
     <string name="series.start_book">第%s巻を聴き始める</string>
+    <string name="series.up_next">次に聴く</string>
     <string name="settings.about.app_version.title">アプリのバージョン</string>
     <string name="settings.action.open">設定</string>
     <string name="settings.analytics_consent.description">アプリ改善のため、匿名の利用状況データの収集を許可する</string>

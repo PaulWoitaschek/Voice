@@ -386,6 +386,7 @@
     </plurals>
     <string name="series.start">Mulai</string>
     <string name="series.start_book">Mulai buku %s</string>
+    <string name="series.up_next">Berikutnya</string>
     <string name="settings.about.app_version.title">Versi aplikasi</string>
     <string name="settings.action.open">Setelan</string>
     <string name="settings.analytics_consent.description">Izinkan pengumpulan data penggunaan anonim untuk membantu meningkatkan aplikasi</string>

@@ -413,6 +413,7 @@
     </plurals>
     <string name="series.start">Börja lyssna</string>
     <string name="series.start_book">Börja på bok %s</string>
+    <string name="series.up_next">Härnäst</string>
     <string name="settings.about.app_version.title">Appversion</string>
     <string name="settings.action.open">Inställningar</string>
     <string name="settings.analytics_consent.description">Tillåt anonym insamling av användningsdata för att förbättra appen</string>

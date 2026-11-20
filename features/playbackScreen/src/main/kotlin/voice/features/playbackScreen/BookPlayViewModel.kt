@@ -19,6 +19,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -28,14 +30,18 @@ import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.Book
+import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.ListeningEvent
+import voice.core.data.category
 import voice.core.data.displayName
 import voice.core.data.durationMs
 import voice.core.data.markForPosition
+import voice.core.data.nextInSeries
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
+import voice.core.data.seriesLine
 import voice.core.data.store.CurrentBookStore
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
@@ -72,7 +78,7 @@ class BookPlayViewModel(
   private val bookmarkRepository: BookmarkRepo,
   private val volumeGainFormatter: VolumeGainFormatter,
   private val batteryOptimization: BatteryOptimization,
-  dispatcherProvider: DispatcherProvider,
+  private val dispatcherProvider: DispatcherProvider,
   private val sleepTimerPreferenceStore: SleepTimerPreferenceStore,
   private val seekTimeStore: SeekTimeStore,
   private val experimentalPlaybackPersistenceFeatureFlag:
@@ -164,6 +170,21 @@ class BookPlayViewModel(
     }
       .collectAsState(initial = emptySet())
       .value
+    // a book counts as completed in its last seconds, and a pause there would rewind it
+    val nextBook =
+      if (book.category == BookCategory.FINISHED && !isPlaying) {
+        remember {
+            bookRepository
+              .flow()
+              .map { books -> books.find { it.id == bookId }?.let(books::nextInSeries) }
+              .flowOn(dispatcherProvider.io)
+          }
+          .collectAsState(initial = null)
+          .value
+          ?.takeIf { managerPlayState != PlayStateManager.PlayState.Playing(it.id) }
+      } else {
+        null
+      }
     return BookPlayViewState(
       sleepTimerState = sleepTime.toViewState(),
       playing = isPlaying,
@@ -185,6 +206,16 @@ class BookPlayViewModel(
       skipAmount = skipAmount,
       jumpBack = lastJump?.let { jumpBackViewState(book, it, chapterNumber) },
       unavailable = book.id in unavailableBooks,
+      upNext =
+        nextBook?.let { next ->
+          BookPlayViewState.UpNextViewState(
+            id = next.id,
+            title = next.name,
+            series = next.seriesLine,
+            cover = next.coverUrl,
+            unavailable = next.id in unavailableBooks,
+          )
+        },
     )
   }
 
@@ -327,6 +358,16 @@ class BookPlayViewModel(
 
   fun rewind() {
     withSelectedBook { player.rewind() }
+  }
+
+  fun onUpNextClick(id: BookId) {
+    inOrder {
+      player.pauseIfCurrentBookDifferentFrom(id)
+      currentBookStoreId.updateData { id }
+      player.play()
+      navigator.goTo(Destination.Playback(id))
+      navigator.remove(Destination.Playback(bookId))
+    }
   }
 
   fun fastForward() {

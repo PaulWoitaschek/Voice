@@ -521,6 +521,7 @@
     </plurals>
     <string name="series.start">بدء</string>
     <string name="series.start_book">بدء الكتاب %s</string>
+    <string name="series.up_next">التالي</string>
     <string name="settings.about.app_version.title">إصدارة التطبيق</string>
     <string name="settings.action.open">الإعدادات</string>
     <string name="settings.analytics_consent.description">السماح بجمع بيانات استخدام مجهولة الهوية للمساعدة في تحسين التطبيق</string>

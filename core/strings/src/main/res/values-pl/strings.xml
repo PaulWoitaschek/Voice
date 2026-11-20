@@ -467,6 +467,7 @@
     </plurals>
     <string name="series.start">Zacznij</string>
     <string name="series.start_book">Zacznij książkę %s</string>
+    <string name="series.up_next">Następna</string>
     <string name="settings.about.app_version.title">Wersja aplikacji</string>
     <string name="settings.action.open">Ustawienia</string>
     <string name="settings.analytics_consent.description">Zezwól na gromadzenie anonimowych danych dotyczących użytkowania, aby pomóc ulepszyć aplikację</string>

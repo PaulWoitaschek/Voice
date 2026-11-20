@@ -49,6 +49,7 @@ internal fun BookPlayView(
   onCurrentChapterClick: () -> Unit,
   onJumpBack: (id: Long) -> Unit,
   onJumpBackExpire: (id: Long) -> Unit,
+  onUpNextClick: (BookId) -> Unit,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
   val clock = rememberAnimationClock(running = viewState.playing)
@@ -108,6 +109,7 @@ internal fun BookPlayView(
             onAuthorClick = onAuthorClick,
             onJumpBack = onJumpBack,
             onJumpBackExpire = onJumpBackExpire,
+            onUpNextClick = onUpNextClick,
           )
         }
       },
@@ -143,6 +145,7 @@ private fun BookPlayPreview(
         onCurrentChapterClick = {},
         onJumpBack = {},
         onJumpBackExpire = {},
+        onUpNextClick = {},
       )
     }
   }
@@ -197,6 +200,23 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
         chapterNumber = 1,
         chapterSegments = listOf(1F),
         jumpBack = null,
+      ),
+    )
+    yield(
+      initial.copy(
+        playing = false,
+        playedTime = initial.duration,
+        chapterNumber = initial.chapterCount,
+        bookPlayedTime = initial.bookDuration,
+        jumpBack = null,
+        upNext =
+          BookPlayViewState.UpNextViewState(
+            id = BookId("next"),
+            title = "Interference",
+            series = "The Signal Saga 3",
+            cover = null,
+            unavailable = false,
+          ),
       ),
     )
   }

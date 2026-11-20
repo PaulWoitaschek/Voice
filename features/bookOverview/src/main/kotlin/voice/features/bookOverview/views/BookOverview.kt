@@ -180,7 +180,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onSeriesLongClick = bookOverviewViewModel::onSeriesLongClick,
     onAuthorClick = bookOverviewViewModel::onAuthorClick,
     onAuthorLongClick = bookOverviewViewModel::onAuthorLongClick,
-    onPlayButtonClick = bookOverviewViewModel::playPause,
+    onPlayButtonClick = bookOverviewViewModel::onPlayClick,
     onSearchClick = bookOverviewViewModel::onSearchClick,
     onPermissionBugCardClick = bookOverviewViewModel::onPermissionBugCardClick,
     onSurveyClick = bookOverviewViewModel::onSurveyClick,
@@ -218,7 +218,7 @@ internal fun BookOverview(
   onSeriesLongClick: (String) -> Unit,
   onAuthorClick: (String?) -> Unit,
   onAuthorLongClick: (AuthorEntryViewState) -> Unit,
-  onPlayButtonClick: () -> Unit,
+  onPlayButtonClick: (BookId) -> Unit,
   onSearchClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
   onSurveyClick: () -> Unit,
@@ -306,7 +306,7 @@ internal fun BookOverview(
       ) {
         PlayButton(
           playing = playButtonState == BookOverviewViewState.PlayButtonState.Playing,
-          onClick = onPlayButtonClick,
+          onClick = { viewState.hero?.value?.id?.let(onPlayButtonClick) },
           modifier = Modifier.navigationBarsPadding(),
           size = 64.dp,
         )
@@ -515,6 +515,19 @@ internal class BookOverviewPreviewParameterProvider :
         hiddenBookCount = 3,
       ),
       authors,
+      library.copy(
+        hero =
+          mutableStateOf(
+            book()
+              .copy(
+                name = "Interference",
+                series = "The Signal Saga 3",
+                progress = 0F,
+                remainingTime = "08:12:00",
+              ),
+          ),
+        upNext = true,
+      ),
       library.copy(selection = selecting(library)),
       library.copy(layoutMode = BookOverviewLayoutMode.Grid, selection = selecting(library)),
       authors.copy(layoutMode = BookOverviewLayoutMode.Grid, selection = selecting(authors)),

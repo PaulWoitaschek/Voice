@@ -413,6 +413,7 @@
     </plurals>
     <string name="series.start">Почни</string>
     <string name="series.start_book">Почни со книга %s</string>
+    <string name="series.up_next">Следно</string>
     <string name="settings.about.app_version.title">Верзија на апликацијата</string>
     <string name="settings.action.open">Поставки</string>
     <string name="settings.analytics_consent.description">Дозволете анонимно собирање податоци за користење за да се подобри апликацијата</string>

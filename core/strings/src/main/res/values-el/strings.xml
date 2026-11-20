@@ -413,6 +413,7 @@
     </plurals>
     <string name="series.start">Έναρξη</string>
     <string name="series.start_book">Έναρξη βιβλίου %s</string>
+    <string name="series.up_next">Επόμενο</string>
     <string name="settings.about.app_version.title">Έκδοση εφαρμογής</string>
     <string name="settings.action.open">Ρυθμίσεις</string>
     <string name="settings.analytics_consent.description">Επιτρέψτε τη συλλογή ανώνυμων δεδομένων χρήσης για τη βελτίωση της εφαρμογής</string>

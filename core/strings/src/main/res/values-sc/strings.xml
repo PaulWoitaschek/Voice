@@ -413,6 +413,7 @@
     </plurals>
     <string name="series.start">Incumintza</string>
     <string name="series.start_book">Incumintza su libru %s</string>
+    <string name="series.up_next">A pustis</string>
     <string name="settings.about.app_version.title">Versione de s\'aplicatzione</string>
     <string name="settings.action.open">Impostatziones</string>
     <string name="settings.analytics_consent.description">Permite sa regorta de datos anònimos de impreu pro agiudare a megiorare s\'aplicatzione</string>

@@ -4,6 +4,7 @@ import kotlin.time.Instant
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
 import voice.core.data.BookCategory
+import voice.core.data.nameKey
 
 // files often name one of these in place of an empty author tag
 private val PlaceholderAuthors = setOf("unknown", "unknownauthor", "unknownartist")

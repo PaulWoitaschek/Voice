@@ -1,45 +1,13 @@
 package voice.features.bookOverview.overview
 
-import java.text.Normalizer
 import kotlin.time.Instant
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
 import voice.core.data.BookCategory
-import voice.core.data.BookComparator
+import voice.core.data.SeriesOrder
 import voice.core.data.category
-
-internal fun nameKey(name: String): String? {
-  return Normalizer.normalize(name, Normalizer.Form.NFKD)
-    // accents like the one of ä can go, but in scripts like Devanagari the marks are part of the
-    // letters
-    .filter { it.isLetterOrDigit() || (it.category in Marks && it !in Accents) }
-    .lowercase()
-    .takeIf { it.isNotEmpty() }
-}
-
-private val Marks =
-  setOf(
-    CharCategory.NON_SPACING_MARK,
-    CharCategory.COMBINING_SPACING_MARK,
-    CharCategory.ENCLOSING_MARK,
-  )
-private val Accents = '\u0300'..'\u036F'
-
-internal val Book.seriesName: String?
-  get() = series?.trim()?.takeIf { it.isNotEmpty() }
-
-internal val Book.seriesPart: String?
-  get() = part?.trim()?.takeIf { it.isNotEmpty() }
-
-internal val Book.seriesLine: String?
-  get() = seriesName?.let { name -> listOfNotNull(name, seriesPart).joinToString(" ") }
-
-// Voice doesn't store file names, so books without a part follow their names, which mostly come
-// from their files
-internal val SeriesOrder: Comparator<Book> =
-  compareBy<Book, String?>(nullsLast(NaturalOrderComparator.stringComparator)) { it.seriesPart }
-    .then(BookComparator.ByName)
-    .thenBy { it.id.value }
+import voice.core.data.nameKey
+import voice.core.data.seriesName
 
 internal class Series(
   val key: String,

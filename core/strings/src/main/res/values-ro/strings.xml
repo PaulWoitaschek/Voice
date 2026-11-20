@@ -440,6 +440,7 @@
     </plurals>
     <string name="series.start">Începe</string>
     <string name="series.start_book">Începe cartea %s</string>
+    <string name="series.up_next">Urmează</string>
     <string name="settings.about.app_version.title">Versiune aplicație</string>
     <string name="settings.action.open">Setări</string>
     <string name="settings.analytics_consent.description">Permite colectarea de date anonime de utilizare pentru a îmbunătăți aplicația</string>

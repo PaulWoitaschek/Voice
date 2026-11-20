@@ -10,6 +10,7 @@ import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.audiobookshelf.download.WaitingFor
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.seriesLine
 import voice.core.logging.api.Logger
 import voice.core.ui.formatTime
 

@@ -386,6 +386,7 @@
     </plurals>
     <string name="series.start">开始收听</string>
     <string name="series.start_book">开始收听第 %s 卷</string>
+    <string name="series.up_next">接下来</string>
     <string name="settings.about.app_version.title">软件版本</string>
     <string name="settings.action.open">设置</string>
     <string name="settings.analytics_consent.description">允许收集匿名使用数据，以帮助改进应用</string>
