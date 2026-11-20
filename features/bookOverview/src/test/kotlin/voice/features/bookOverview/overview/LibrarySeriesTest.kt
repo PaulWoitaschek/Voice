@@ -240,6 +240,54 @@ class LibrarySeriesTest {
   }
 
   @Test
+  fun `a stack counts the books of its series that the filters hide`() {
+    val first = finished(series = "Saga", part = "1")
+    val second = finished(series = "Saga", part = "2")
+    val third = inProgress(series = "Saga", part = "3")
+    val fourth = notStarted(series = "Saga", part = "4")
+
+    val series =
+      libraryEntries(
+          books = listOf(first, third, fourth),
+          allBooks = listOf(first, second, third, fourth),
+        )
+        .getValue(BookCategory.CURRENT)
+        .stack()
+
+    assertEquals(expected = listOf(first, third, fourth), actual = series.books)
+    assertEquals(expected = 4, actual = series.bookCount)
+    assertEquals(expected = 2, actual = series.finishedCount)
+    assertEquals(expected = listOf(1F, 1F, 0.25F, 0F), actual = series.progress)
+  }
+
+  @Test
+  fun `a stack keeps its section when the filters hide a book that is not started`() {
+    val first = finished(series = "Saga", part = "1")
+    val second = finished(series = "Saga", part = "2")
+    val third = notStarted(series = "Saga", part = "3")
+
+    val entries =
+      libraryEntries(books = listOf(first, second), allBooks = listOf(first, second, third))
+
+    assertEquals(expected = setOf(BookCategory.FINISHED), actual = entries.keys)
+    assertEquals(
+      expected = listOf(1F, 1F, 0F),
+      actual = entries.getValue(BookCategory.FINISHED).stack().progress,
+    )
+  }
+
+  @Test
+  fun `a series with one book left after the filters stays a book`() {
+    val first = notStarted(series = "Saga", part = "1")
+    val second = notStarted(series = "Saga", part = "2")
+
+    assertEquals(
+      expected = mapOf(BookCategory.NOT_STARTED to listOf(LibraryEntry.Single(first))),
+      actual = libraryEntries(books = listOf(first), allBooks = listOf(first, second)),
+    )
+  }
+
+  @Test
   fun `the author is the one most books name`() {
     val series =
       listOf(

@@ -13,15 +13,19 @@ internal class Series(
   val key: String,
   val name: String,
   val books: List<Book>,
+  // with the books the library filters hide, so a stack counts like its series screen
+  allBooks: List<Book> = books,
 ) {
 
   val author: String? = books.mapNotNull { it.author }.mostCommon()
 
-  val finishedCount: Int = books.count { it.category == BookCategory.FINISHED }
+  val bookCount: Int = allBooks.size
+
+  val finishedCount: Int = allBooks.count { it.category == BookCategory.FINISHED }
 
   val category: BookCategory =
     when {
-      finishedCount == books.size -> BookCategory.FINISHED
+      books.all { it.category == BookCategory.FINISHED } -> BookCategory.FINISHED
       books.all { it.category == BookCategory.NOT_STARTED } -> BookCategory.NOT_STARTED
       else -> BookCategory.CURRENT
     }
@@ -43,7 +47,7 @@ internal class Series(
 
   val lastPlayedAt: Instant = books.maxOf { it.content.lastPlayedAt }
 
-  val progress: List<Float> = books.map {
+  val progress: List<Float> = allBooks.map {
     if (it.category == BookCategory.FINISHED) 1F else it.progress()
   }
 
@@ -75,8 +79,16 @@ internal sealed interface LibraryEntry {
 }
 
 // a started series stays one stack too, so none of its books disappears from the library
-internal fun libraryEntries(books: List<Book>): Map<BookCategory, List<LibraryEntry>> {
-  val stacks = books.series().filter { it.books.size >= 2 }
+internal fun libraryEntries(
+  books: List<Book>,
+  allBooks: List<Book> = books,
+): Map<BookCategory, List<LibraryEntry>> {
+  val allSeries = allBooks.series().associateBy { it.key }
+  val stacks =
+    books
+      .series()
+      .filter { it.books.size >= 2 }
+      .map { Series(it.key, it.name, it.books, allSeries.getValue(it.key).books) }
   val stacked = stacks.flatMapTo(HashSet()) { series -> series.books.map { it.id } }
   val entries =
     books.filter { it.id !in stacked }.map { LibraryEntry.Single(it) } +
