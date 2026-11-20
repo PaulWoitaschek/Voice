@@ -1,5 +1,6 @@
 package voice.core.playback.stats
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioDeviceInfo
@@ -43,6 +44,8 @@ class AudioOutputDetector(private val context: Context) {
         .build()
 
     // without the call profile: a watch or a car kit that only does calls plays no book
+    // the newer types are plain numbers that an older Android never reports
+    @SuppressLint("InlinedApi")
     private val bluetooth =
       setOf(
         AudioDeviceInfo.TYPE_BLUETOOTH_A2DP,
