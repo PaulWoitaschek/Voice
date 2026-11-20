@@ -10,6 +10,7 @@ import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.ComposeUiTestConfig
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.hasClickAction
@@ -40,7 +41,7 @@ class SkipButtonTest {
       override var scaleFactor by mutableFloatStateOf(0F)
     }
 
-  @get:Rule val compose = createComposeRule(effectContext = motionScale)
+  @get:Rule val compose = createComposeRule(ComposeUiTestConfig(effectContext = motionScale))
 
   @Test
   fun `pressing skip buttons with animations off keeps both controls in place`() {
