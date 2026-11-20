@@ -574,6 +574,7 @@
     <string name="support.price.monthly">%1$s в месяц</string>
     <string name="support.price.yearly">%1$s в год</string>
     <string name="support.price.once">%1$s разово</string>
+    <string name="support.supporter.count">Более %1$d слушателей уже поддержали Voice</string>
     <string name="support.supporter.since">Начало поддержки: %1$s</string>
     <string name="support.supporter.title">Вы поддерживаете Voice</string>
     <string name="support.thank_you.action">Вернуться к прослушиванию</string>

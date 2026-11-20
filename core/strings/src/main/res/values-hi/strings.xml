@@ -516,6 +516,7 @@
     <string name="support.price.monthly">%1$s प्रति माह</string>
     <string name="support.price.yearly">%1$s प्रति वर्ष</string>
     <string name="support.price.once">%1$s एक बार</string>
+    <string name="support.supporter.count">%1$d से ज़्यादा श्रोताओं ने Voice का समर्थन किया है</string>
     <string name="support.supporter.since">%1$s से समर्थक</string>
     <string name="support.supporter.title">आप एक समर्थक हैं</string>
     <string name="support.thank_you.action">सुनने पर लौटें</string>

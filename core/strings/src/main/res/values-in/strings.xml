@@ -487,6 +487,7 @@
     <string name="support.price.monthly">%1$s per bulan</string>
     <string name="support.price.yearly">%1$s per tahun</string>
     <string name="support.price.once">%1$s sekali</string>
+    <string name="support.supporter.count">Lebih dari %1$d pendengar telah mendukung Voice</string>
     <string name="support.supporter.since">Pendukung sejak %1$s</string>
     <string name="support.supporter.title">Anda seorang pendukung</string>
     <string name="support.thank_you.action">Kembali mendengarkan</string>

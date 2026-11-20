@@ -545,6 +545,7 @@
     <string name="support.price.monthly">%1$s לחודש</string>
     <string name="support.price.yearly">%1$s לשנה</string>
     <string name="support.price.once">%1$s פעם אחת</string>
+    <string name="support.supporter.count">יותר מ-%1$d מאזינים כבר תמכו ב-Voice</string>
     <string name="support.supporter.since">בין התומכים מאז %1$s</string>
     <string name="support.supporter.title">אתם בין התומכים</string>
     <string name="support.thank_you.action">חזרה להאזנה</string>

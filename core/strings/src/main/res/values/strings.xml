@@ -905,6 +905,8 @@
     <!-- Price of a one-time tip. %1$s is the price, for example "€4.99". Shown in the support button, for example "Support for €4.99 once". -->
     <string name="support.price.once">%1$s once</string>
     <!-- Since when someone supports Voice. %1$s is a month and year, for example "March 2026". -->
+    <!-- Line on the support screen that says how many listeners gave money to Voice. %1$d is a number rounded down to a full step, 200 or more, for example 200 or 250. Calm, not a call to action. -->
+    <string name="support.supporter.count">More than %1$d listeners have supported Voice</string>
     <string name="support.supporter.since">Supporter since %1$s</string>
     <!-- Title on the support screen for someone who already supported Voice. -->
     <string name="support.supporter.title">You\'re a supporter</string>

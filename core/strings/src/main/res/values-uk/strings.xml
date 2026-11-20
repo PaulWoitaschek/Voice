@@ -574,6 +574,7 @@
     <string name="support.price.monthly">%1$s на місяць</string>
     <string name="support.price.yearly">%1$s на рік</string>
     <string name="support.price.once">%1$s разово</string>
+    <string name="support.supporter.count">Понад %1$d слухачів уже підтримали Voice</string>
     <string name="support.supporter.since">Початок підтримки: %1$s</string>
     <string name="support.supporter.title">Ви підтримуєте Voice</string>
     <string name="support.thank_you.action">Повернутися до прослуховування</string>

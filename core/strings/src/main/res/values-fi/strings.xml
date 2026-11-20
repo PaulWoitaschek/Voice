@@ -516,6 +516,7 @@
     <string name="support.price.monthly">%1$s kuussa</string>
     <string name="support.price.yearly">%1$s vuodessa</string>
     <string name="support.price.once">%1$s kertamaksuna</string>
+    <string name="support.supporter.count">Yli %1$d kuuntelijaa on tukenut Voicea</string>
     <string name="support.supporter.since">Tukijana alkaen: %1$s</string>
     <string name="support.supporter.title">Olet tukija</string>
     <string name="support.thank_you.action">Takaisin kuuntelemaan</string>

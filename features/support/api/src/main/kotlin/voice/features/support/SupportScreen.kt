@@ -127,6 +127,7 @@ private fun Support(
         SupportHero(
           badge = viewState.badge,
           supporterSince = viewState.supporterSince,
+          supporterCount = viewState.supporterCount,
         )
         when (val content = viewState.content) {
           SupportViewState.Content.KoFi -> KoFiContent(onKoFiClick = listener::openKoFi)

@@ -574,6 +574,7 @@
     <string name="support.price.monthly">%1$s mesačne</string>
     <string name="support.price.yearly">%1$s ročne</string>
     <string name="support.price.once">%1$s jednorazovo</string>
+    <string name="support.supporter.count">Viac ako %1$d poslucháčov už podporilo Voice</string>
     <string name="support.supporter.since">Podporujete od: %1$s</string>
     <string name="support.supporter.title">Patríte medzi podporovateľov</string>
     <string name="support.thank_you.action">Späť k počúvaniu</string>
