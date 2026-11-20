@@ -2,6 +2,12 @@
 
 package voice.features.playbackScreen.view
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,6 +72,7 @@ internal fun BookPlayContent(
   onAuthorClick: (String) -> Unit,
   onJumpBack: (id: Long) -> Unit,
   onJumpBackExpire: (id: Long) -> Unit,
+  onUpNextClick: (BookId) -> Unit,
 ) {
   val entrance = rememberEntranceState()
   val cover: @Composable (Modifier) -> Unit = { modifier ->
@@ -138,6 +145,24 @@ internal fun BookPlayContent(
             modifier = Modifier.fillMaxWidth().entrance(entrance, 3),
           )
         }
+      Control.UpNext -> {
+        val transition = updateTransition(viewState.upNext)
+        transition.AnimatedVisibility(
+          visible = { it != null },
+          enter = fadeIn() + expandVertically(),
+          exit = fadeOut() + shrinkVertically(),
+        ) {
+          // while the card leaves, it keeps the book it showed
+          val upNext = transition.targetState ?: transition.currentState
+          if (upNext != null) {
+            UpNextCard(
+              upNext = upNext,
+              onClick = { onUpNextClick(upNext.id) },
+              modifier = Modifier.fillMaxWidth().entrance(entrance, 3),
+            )
+          }
+        }
+      }
       // ControlsLayout picks the height, and the play button fills it. Reading it with
       // BoxWithConstraints instead
       // would keep the shared play button from flying in when the player opens.
@@ -236,6 +261,7 @@ private enum class Control(
   BookProgress(12.dp, 12.dp),
   Chapter(16.dp, 12.dp),
   Seek(12.dp, 12.dp),
+  UpNext(16.dp, 12.dp),
   Transport(8.dp, 8.dp),
   Toolbar(20.dp, 12.dp),
 }
@@ -245,6 +271,7 @@ private val CONTROL_PRIORITY =
   listOf(
     Control.Transport,
     Control.Title,
+    Control.UpNext,
     Control.Seek,
     Control.Toolbar,
     Control.Chapter,
@@ -292,17 +319,32 @@ private fun ControlsLayout(
       control: Control,
       compact: Boolean,
     ): Int = (if (compact) control.compactGapAbove else control.gapAbove).roundToPx()
+    // the card's height animates, so the choices below take its full height, and only the stack
+    // follows the animation
+    val fullCardHeight = measurables[Control.UpNext]?.maxIntrinsicHeight(width)
     fun heightOf(
       controls: List<Control>,
       compact: Boolean,
+      animated: Boolean = false,
     ): Int =
       2 * verticalPadding(compact) +
         controls.sumOf { control ->
-          val controlHeight = placeables[control]?.height ?: playButtonSize(compact)
+          val controlHeight =
+            (if (control == Control.UpNext && !animated) fullCardHeight else null)
+              ?: placeables[control]?.height
+              ?: playButtonSize(compact)
           controlHeight + if (control == controls.first()) 0 else gapAbove(control, compact)
         }
 
-    val all = measurables.keys.sorted()
+    val cardFits =
+      heightOf(
+        CONTROL_PRIORITY.take(CONTROL_PRIORITY.indexOf(Control.UpNext) + 1)
+          .filter { it in measurables }
+          .sorted(),
+        compact = true,
+      ) <= height
+    // the card is tall, and when it can't show, the other controls stay as they are without it
+    val all = measurables.keys.filter { it != Control.UpNext || cardFits }.sorted()
     val minCover = MIN_COVER_HEIGHT.roundToPx()
     val compact =
       heightOf(all, compact = false) + (if (coverMeasurable != null) minCover else 0) > height
@@ -310,14 +352,14 @@ private fun ControlsLayout(
     var shown = all
     if (!showCover) {
       shown = emptyList()
-      for (control in CONTROL_PRIORITY.filter { it in measurables }) {
+      for (control in CONTROL_PRIORITY.filter { it in all }) {
         val more = (shown + control).sorted()
         // transport stays, even when it doesn't fit
         if (shown.isNotEmpty() && heightOf(more, compact) > height) break
         shown = more
       }
     }
-    val controlsHeight = heightOf(shown, compact)
+    val controlsHeight = heightOf(shown, compact, animated = true)
     val coverPlaceable =
       if (showCover) {
         coverMeasurable.measure(Constraints.fixed(width, height - controlsHeight))

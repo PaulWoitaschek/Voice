@@ -68,7 +68,7 @@ internal fun Library(
   onSeriesLongClick: (String) -> Unit,
   onAuthorClick: (String?) -> Unit,
   onAuthorLongClick: (AuthorEntryViewState) -> Unit,
-  onPlayClick: () -> Unit,
+  onPlayClick: (BookId) -> Unit,
   onPermissionBugCardClick: () -> Unit,
   onSurveyClick: () -> Unit,
   onSurveyDismiss: () -> Unit,
@@ -141,10 +141,11 @@ internal fun Library(
         item(key = HERO_KEY, span = { GridItemSpan(maxLineSpan) }, contentType = "hero") {
           ContinueListeningCard(
             book = hero.value,
+            upNext = viewState.upNext,
             playing = viewState.playButtonState == BookOverviewViewState.PlayButtonState.Playing,
             onClick = { onItemClick(listOf(hero.value.id)) { onBookClick(hero.value.id) } },
             onLongClick = { onBookLongClick(hero.value.id) },
-            onPlayClick = onPlayClick,
+            onPlayClick = { onPlayClick(hero.value.id) },
             selected = selected(listOf(hero.value.id)),
             modifier = cardWidth.entrance(entrance, index),
           )

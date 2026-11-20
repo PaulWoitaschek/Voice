@@ -10,6 +10,9 @@ fun book(
   currentChapter: ChapterId = chapters.first().id,
   lastPlayedAtMillis: Long = 0,
   addedAtMillis: Long = 0,
+  series: String? = null,
+  part: String? = null,
+  hidden: Boolean = false,
 ): Book {
   val id = BookId(Uuid.random().toString())
   return Book(
@@ -33,14 +36,14 @@ fun book(
             title = null,
             genre = null,
             narrator = null,
-            series = null,
-            part = null,
+            series = series,
+            part = part,
             cover = null,
             fileLastModified = null,
           ),
       ),
     chapters = chapters,
-    custom = CustomMetadata(id),
+    custom = CustomMetadata(id, hidden = hidden),
   )
 }
 

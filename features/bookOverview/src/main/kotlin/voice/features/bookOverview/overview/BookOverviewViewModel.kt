@@ -37,6 +37,7 @@ import voice.core.data.category
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.core.data.isRemote
+import voice.core.data.nextInSeries
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.documentfile.nameWithoutExtension
@@ -255,11 +256,26 @@ class BookOverviewViewModel(
         download = downloadStates?.get(id).badge(),
       )
 
+    val currentBookItem = currentBookId?.let { id -> books.find { it.id == id } }
+    // from all books, so the library offers the same book as the player, also once the completed
+    // book is hidden
+    val upNext =
+      remember(library.books, currentBook.id, playState) {
+        library.books
+          .find { it.id == currentBook.id }
+          ?.takeIf {
+            // a book counts as completed in its last seconds, and a pause there would rewind it
+            it.category == BookCategory.FINISHED &&
+              playState != PlayStateManager.PlayState.Playing(it.id)
+          }
+          ?.let(library.books::nextInSeries)
+      }
+    val heroBook = upNext ?: currentBookItem
     val entries =
-      remember(books, currentBookId) {
+      remember(books, heroBook?.id) {
         // the Continue listening card shows it
         libraryEntries(books).mapValues { (_, entries) ->
-          entries.filterNot { it is LibraryEntry.Single && it.book.id == currentBookId }
+          entries.filterNot { it is LibraryEntry.Single && it.book.id == heroBook?.id }
         }
       }
     val authors =
@@ -281,7 +297,8 @@ class BookOverviewViewModel(
               }
           }
           .filterValues { it.isNotEmpty() },
-      hero = currentBookId?.let { id -> books.find { it.id == id } }?.itemState(),
+      hero = heroBook?.itemState(),
+      upNext = upNext != null,
       inProgressCount = inProgressCount,
       currentBookId = currentBookId,
       playButtonState =
@@ -290,7 +307,7 @@ class BookOverviewViewModel(
           } else {
             BookOverviewViewState.PlayButtonState.Paused
           }
-          .takeIf { currentBookId != null },
+          .takeIf { heroBook != null },
       showEmptyLibrary = showEmptyLibrary,
       showSearchIcon = library.books.isNotEmpty(),
       showFilterIcon = library.books.isNotEmpty(),
@@ -528,8 +545,16 @@ class BookOverviewViewModel(
 
   private fun selectedIds(): Set<BookId> = selection.orEmpty() intersect shownBookIds
 
-  fun playPause() {
-    playerController.playPause()
+  internal fun onPlayClick(id: BookId) {
+    scope.launch {
+      if (currentBookStoreDataStore.data.first() == id) {
+        playerController.playPause()
+      } else {
+        playerController.pauseIfCurrentBookDifferentFrom(id)
+        currentBookStoreDataStore.updateData { id }
+        playerController.play()
+      }
+    }
   }
 
   fun onShowFoldersClick() {

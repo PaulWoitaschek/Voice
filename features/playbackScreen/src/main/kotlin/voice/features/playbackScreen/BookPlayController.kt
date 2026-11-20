@@ -90,6 +90,7 @@ fun BookPlayScreen(bookId: BookId) {
       onCurrentChapterClick = viewModel::onCurrentChapterClick,
       onJumpBack = viewModel::onJumpBackClick,
       onJumpBackExpire = viewModel::onJumpBackExpire,
+      onUpNextClick = viewModel::onUpNextClick,
       snackbarHostState = snackbarHostState,
     )
     when (dialogState) {

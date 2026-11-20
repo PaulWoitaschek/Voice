@@ -440,6 +440,7 @@
     </plurals>
     <string name="series.start">התחלה</string>
     <string name="series.start_book">התחלת ספר %s</string>
+    <string name="series.up_next">הבא בתור</string>
     <string name="settings.about.app_version.title">גרסת יישום</string>
     <string name="settings.action.open">הגדרות</string>
     <string name="settings.analytics_consent.description">אפשרו איסוף נתוני שימוש אנונימיים כדי לעזור לשפר את האפליקציה</string>

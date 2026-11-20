@@ -700,6 +700,8 @@
     <string name="series.start">Start</string>
     <!-- Button on the screen of a series, for the first book not finished yet. %s is its number in the series, e.g. "Start book 3". It may also be a number like 2.5 or a word. -->
     <string name="series.start_book">Start book %s</string>
+    <!-- Label above the next book of a series, once the listener completed a book of that series: on a card in the player, and in the library in place of "Continue listening". Keep it short. -->
+    <string name="series.up_next">Up next</string>
     <!-- Settings about row showing the app version. -->
     <string name="settings.about.app_version.title">App version</string>
     <!-- Title and content description for opening settings. -->

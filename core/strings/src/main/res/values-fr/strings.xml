@@ -440,6 +440,7 @@
     </plurals>
     <string name="series.start">Commencer</string>
     <string name="series.start_book">Commencer le livre %s</string>
+    <string name="series.up_next">À suivre</string>
     <string name="settings.about.app_version.title">Version de l\'application</string>
     <string name="settings.action.open">Paramètres</string>
     <string name="settings.analytics_consent.description">Autoriser la collecte de données d\'utilisation anonymes afin d\'améliorer l\'application</string>

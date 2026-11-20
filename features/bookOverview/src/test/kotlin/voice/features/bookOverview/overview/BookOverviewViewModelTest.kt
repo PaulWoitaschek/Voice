@@ -13,6 +13,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import io.mockk.verifyOrder
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -1320,6 +1321,216 @@ class BookOverviewViewModelTest {
     }
   }
 
+  @Test
+  fun `book 2 of 3 completed, open the library, continue listening shows book 3 with up next`() =
+    runTest {
+      val first = book(series = "Saga", part = "1", time = 20_000)
+      val second = book(series = "Saga", part = "2", time = 20_000)
+      val third = book(series = "Saga", part = "3", time = 0)
+      val viewModel = viewModel(books = listOf(first, second, third), currentBookId = second.id)
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.state()
+        }
+        .test {
+          assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+          val state = awaitItem()
+          assertEquals(expected = third.toItemViewState(), actual = state.hero?.value)
+          assertEquals(expected = true, actual = state.upNext)
+          assertEquals(expected = listOf("series:saga"), actual = state.keys(BookCategory.CURRENT))
+        }
+    }
+
+  @Test
+  fun `the last book of a series ends, continue listening keeps it`() = runTest {
+    val first = book(series = "Saga", part = "1", time = 20_000)
+    val second = book(series = "Saga", part = "2", time = 20_000)
+    val viewModel = viewModel(books = listOf(first, second), currentBookId = second.id)
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = second.id, actual = state.hero?.value?.id)
+        assertEquals(expected = false, actual = state.upNext)
+      }
+  }
+
+  @Test
+  fun `up next in the library, hide completed book 2, continue listening still shows book 3`() =
+    runTest {
+      val second = book(series = "Saga", part = "2", time = 20_000, hidden = true)
+      val third = book(series = "Saga", part = "3", time = 0)
+      val viewModel = viewModel(books = listOf(second, third), currentBookId = second.id)
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.state()
+        }
+        .test {
+          assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+          val state = awaitItem()
+          assertEquals(expected = third.id, actual = state.hero?.value?.id)
+          assertEquals(expected = true, actual = state.upNext)
+          assertEquals(
+            expected = BookOverviewViewState.PlayButtonState.Paused,
+            actual = state.playButtonState,
+          )
+        }
+    }
+
+  @Test
+  fun `the completed book shows in completed when only the card shows its next book`() = runTest {
+    val second = book(series = "Saga", part = "2", time = 20_000)
+    val third = book(series = "Saga", part = "3", time = 0, id = BookId("abs://item/third"))
+    val viewModel =
+      viewModel(
+        books = listOf(second, third),
+        currentBookId = second.id,
+        showNotDownloadedBooksStore = MemoryDataStore(false),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = third.id, actual = state.hero?.value?.id)
+        assertEquals(
+          expected = mapOf(BookCategory.FINISHED to listOf(second.id.value)),
+          actual = state.sections.mapValues { (_, items) -> items.map { it.key } },
+        )
+      }
+  }
+
+  @Test
+  fun `up next in the library, tap play, book 3 starts`() = runTest {
+    val second = book(series = "Saga", part = "2", time = 20_000)
+    val third = book(series = "Saga", part = "3", time = 0)
+    val currentBookStore = MemoryDataStore<BookId?>(second.id)
+    val playerController =
+      mockk<PlayerController> {
+        every { pauseIfCurrentBookDifferentFrom(third.id) } just Runs
+        every { play() } just Runs
+      }
+    val viewModel =
+      viewModel(
+        books = listOf(second, third),
+        currentBookStore = currentBookStore,
+        playerController = playerController,
+      )
+
+    viewModel.onPlayClick(third.id)
+
+    verifyOrder {
+      playerController.pauseIfCurrentBookDifferentFrom(third.id)
+      playerController.play()
+    }
+    assertEquals(expected = third.id, actual = currentBookStore.data.first())
+  }
+
+  @Test
+  fun `continue listening, tap play, the current book plays or pauses`() = runTest {
+    val book = book(time = 1_000)
+    val playerController = mockk<PlayerController> { every { playPause() } just Runs }
+    val viewModel =
+      viewModel(books = listOf(book), currentBookId = book.id, playerController = playerController)
+
+    viewModel.onPlayClick(book.id)
+
+    verify { playerController.playPause() }
+  }
+
+  @Test
+  fun `book 2 plays its last seconds, continue listening shows up next once it stops`() = runTest {
+    val second = book(series = "Saga", part = "2", time = 17_000)
+    val third = book(series = "Saga", part = "3", time = 0)
+    val playStateManager =
+      PlayStateManager().apply { playState = PlayStateManager.PlayState.Playing(second.id) }
+    val viewModel =
+      viewModel(
+        books = listOf(second, third),
+        currentBookId = second.id,
+        playStateManager = playStateManager,
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val playing = awaitItem()
+        assertEquals(expected = second.id, actual = playing.hero?.value?.id)
+        assertEquals(expected = false, actual = playing.upNext)
+
+        playStateManager.playState = PlayStateManager.PlayState.Paused
+
+        val stopped = awaitItem()
+        assertEquals(expected = third.id, actual = stopped.hero?.value?.id)
+        assertEquals(expected = true, actual = stopped.upNext)
+      }
+  }
+
+  @Test
+  fun `the current book of a series, mark it as completed, continue listening shows the next book with up next`() =
+    runTest {
+      val second = book(series = "Saga", part = "2", time = 1_000)
+      val third = book(series = "Saga", part = "3", time = 0)
+      val books = MutableStateFlow(listOf(second, third))
+      val viewModel =
+        viewModel(currentBookId = second.id, repo = mockk { every { flow() } returns books })
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.state()
+        }
+        .test {
+          assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+          val current = awaitItem()
+          assertEquals(expected = second.id, actual = current.hero?.value?.id)
+          assertEquals(expected = false, actual = current.upNext)
+
+          books.value =
+            listOf(second.copy(content = second.content.copy(positionInChapter = 20_000)), third)
+
+          val completed = awaitItem()
+          assertEquals(expected = third.id, actual = completed.hero?.value?.id)
+          assertEquals(expected = true, actual = completed.upNext)
+        }
+    }
+
+  @Test
+  fun `up next in the library, start another book, continue listening shows that book`() = runTest {
+    val second = book(series = "Saga", part = "2", time = 20_000)
+    val third = book(series = "Saga", part = "3", time = 0)
+    val other = book(time = 1_000)
+    val currentBookStore = MemoryDataStore<BookId?>(second.id)
+    val viewModel =
+      viewModel(books = listOf(second, third, other), currentBookStore = currentBookStore)
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = third.id, actual = awaitItem().hero?.value?.id)
+
+        currentBookStore.updateData { other.id }
+
+        val state = awaitItem()
+        assertEquals(expected = other.id, actual = state.hero?.value?.id)
+        assertEquals(expected = false, actual = state.upNext)
+      }
+  }
+
   private fun BookOverviewViewModel.stateIn(
     scope: CoroutineScope,
   ): StateFlow<BookOverviewViewState> =
@@ -1383,6 +1594,9 @@ class BookOverviewViewModelTest {
     navigator: Navigator = mockk(),
     books: List<Book> = emptyList(),
     currentBookId: BookId? = null,
+    currentBookStore: MemoryDataStore<BookId?> = MemoryDataStore(currentBookId),
+    playerController: PlayerController = mockk(),
+    playStateManager: PlayStateManager = PlayStateManager(),
     scanning: Flow<Boolean> = MutableStateFlow(false),
     survey: Survey = survey(),
     showHiddenBooksStore: DataStore<Boolean> = MemoryDataStore(false),
@@ -1402,9 +1616,9 @@ class BookOverviewViewModelTest {
           every { scannerActive } returns scanning
           every { scan(any()) } just Runs
         },
-      playStateManager = PlayStateManager(),
-      playerController = mockk(),
-      currentBookStoreDataStore = CurrentBookStore(MemoryDataStore(currentBookId)),
+      playStateManager = playStateManager,
+      playerController = playerController,
+      currentBookStoreDataStore = CurrentBookStore(currentBookStore),
       gridModeStore = GridModeStore(MemoryDataStore(GridMode.LIST)),
       gridCount =
         mockk<GridCount> {

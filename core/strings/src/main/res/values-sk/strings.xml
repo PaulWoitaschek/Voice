@@ -467,6 +467,7 @@
     </plurals>
     <string name="series.start">Začať</string>
     <string name="series.start_book">Začať knihu %s</string>
+    <string name="series.up_next">Nasleduje</string>
     <string name="settings.about.app_version.title">Verzia aplikácie</string>
     <string name="settings.action.open">Nastavenia</string>
     <string name="settings.analytics_consent.description">Povoliť zber anonymných údajov o používaní s cieľom ďalej vylepšovať aplikáciu</string>

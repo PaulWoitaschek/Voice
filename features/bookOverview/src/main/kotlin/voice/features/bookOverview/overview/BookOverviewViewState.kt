@@ -30,6 +30,7 @@ data class BookOverviewViewState(
   val showFilterIcon: Boolean = false,
   val selection: SelectionViewState? = null,
   val selectionEdit: SelectionEditViewState? = null,
+  val upNext: Boolean = false,
 ) {
 
   // a switch only shows once it has something to filter, so a library without it stays as it was

@@ -467,6 +467,7 @@
     </plurals>
     <string name="series.start">Начать</string>
     <string name="series.start_book">Начать книгу %s</string>
+    <string name="series.up_next">Далее</string>
     <string name="settings.about.app_version.title">Версия приложения</string>
     <string name="settings.action.open">Настройки</string>
     <string name="settings.analytics_consent.description">Разрешить анонимный сбор данных об использовании, чтобы улучшить приложение</string>

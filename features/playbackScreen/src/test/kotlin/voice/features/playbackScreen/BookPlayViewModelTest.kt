@@ -21,6 +21,7 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -63,6 +64,8 @@ import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerPreference
 import voice.core.sleeptimer.SleepTimerPreferenceStore
 import voice.core.sleeptimer.SleepTimerState
+import voice.navigation.Destination
+import voice.navigation.Navigator
 
 class BookPlayViewModelTest {
 
@@ -135,6 +138,7 @@ class BookPlayViewModelTest {
         mockk {
           coEvery { get(book.id) } returns book
           every { flow(book.id) } returns MutableStateFlow(book)
+          every { flow() } returns MutableStateFlow(listOf(book))
         },
       currentBookResolver = currentBookResolver,
       player = player,
@@ -816,6 +820,217 @@ class BookPlayViewModelTest {
     assertEquals(expected = book.id, actual = currentBookStore.data.first())
   }
 
+  @Test
+  fun `book 2 of 3 ends and the player shows up next with book 3`() = scope.runTest {
+    val second = book(series = "Saga", part = "2")
+    val third = book(name = "Interference", series = "Saga", part = "3").notStarted()
+    val bookFlow = MutableStateFlow(second)
+    val viewModel = viewModel(book = second, bookFlow = bookFlow, library = listOf(second, third))
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test {
+        assertEquals(expected = null, actual = awaitItem())
+        assertNull(awaitItem()!!.upNext)
+
+        bookFlow.value = second.completed()
+        runCurrent()
+
+        assertEquals(
+          expected =
+            BookPlayViewState.UpNextViewState(
+              id = third.id,
+              title = "Interference",
+              series = "Saga 3",
+              cover = null,
+              unavailable = false,
+            ),
+          actual = expectMostRecentItem()!!.upNext,
+        )
+      }
+  }
+
+  @Test
+  fun `book 2 plays its last seconds, up next shows once it stops`() = scope.runTest {
+    val second =
+      book(series = "Saga", part = "2").completed().update {
+        it.copy(positionInChapter = it.positionInChapter - 3_000)
+      }
+    val third = book(series = "Saga", part = "3").notStarted()
+    val playStateFlow =
+      MutableStateFlow<PlayStateManager.PlayState>(PlayStateManager.PlayState.Playing(second.id))
+    val viewModel =
+      viewModel(book = second, playStateFlow = playStateFlow, library = listOf(second, third))
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test {
+        runCurrent()
+        assertNull(expectMostRecentItem()!!.upNext)
+
+        playStateFlow.value = PlayStateManager.PlayState.Paused
+        runCurrent()
+
+        assertEquals(expected = third.id, actual = expectMostRecentItem()!!.upNext?.id)
+      }
+  }
+
+  @Test
+  fun `a tap on up next starts book 3 and the player shows it`() = scope.runTest {
+    val second = book(series = "Saga", part = "2").completed()
+    val third = book(series = "Saga", part = "3").notStarted()
+    val currentBookStore = MemoryDataStore<BookId?>(second.id)
+    val player =
+      mockk<PlayerController> {
+        every { pauseIfCurrentBookDifferentFrom(third.id) } just Runs
+        every { play() } just Runs
+      }
+    val navigator = mockk<Navigator>(relaxUnitFun = true)
+    val viewModel =
+      viewModel(
+        book = second,
+        player = player,
+        currentBookStore = currentBookStore,
+        library = listOf(second, third),
+        navigator = navigator,
+      )
+
+    viewModel.onUpNextClick(third.id)
+    runCurrent()
+
+    verifyOrder {
+      player.pauseIfCurrentBookDifferentFrom(third.id)
+      player.play()
+    }
+    assertEquals(expected = third.id, actual = currentBookStore.data.first())
+    verifyOrder {
+      navigator.goTo(Destination.Playback(third.id))
+      navigator.remove(Destination.Playback(second.id))
+    }
+  }
+
+  @Test
+  fun `book 3 in progress, book 2 ends, up next is book 3 at its place`() = scope.runTest {
+    val second = book(series = "Saga", part = "2").completed()
+    val third = book(series = "Saga", part = "3")
+    val player =
+      mockk<PlayerController> {
+        every { pauseIfCurrentBookDifferentFrom(third.id) } just Runs
+        every { play() } just Runs
+      }
+    val viewModel =
+      viewModel(
+        book = second,
+        player = player,
+        library = listOf(second, third),
+        navigator = mockk(relaxUnitFun = true),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test {
+        runCurrent()
+        assertEquals(expected = third.id, actual = expectMostRecentItem()!!.upNext?.id)
+      }
+    viewModel.onUpNextClick(third.id)
+    runCurrent()
+
+    verify(exactly = 1) { player.play() }
+    verify(exactly = 0) { player.setPosition(any(), any(), any(), any()) }
+  }
+
+  @Test
+  fun `another book plays, completed book 2 opened, a tap on up next pauses it and starts book 3`() =
+    scope.runTest {
+      val other = BookId("other")
+      val second = book(series = "Saga", part = "2").completed()
+      val third = book(series = "Saga", part = "3").notStarted()
+      val currentBookStore = MemoryDataStore<BookId?>(other)
+      val player =
+        mockk<PlayerController> {
+          every { pauseIfCurrentBookDifferentFrom(third.id) } just Runs
+          every { play() } just Runs
+        }
+      val viewModel =
+        viewModel(
+          book = second,
+          player = player,
+          currentBookStore = currentBookStore,
+          playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing(other)),
+          library = listOf(second, third),
+          navigator = mockk(relaxUnitFun = true),
+        )
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.viewState()
+        }
+        .test {
+          runCurrent()
+          assertEquals(expected = third.id, actual = expectMostRecentItem()!!.upNext?.id)
+        }
+      assertEquals(expected = other, actual = currentBookStore.data.first())
+
+      viewModel.onUpNextClick(third.id)
+      runCurrent()
+
+      verifyOrder {
+        player.pauseIfCurrentBookDifferentFrom(third.id)
+        player.play()
+      }
+      verify(exactly = 0) { player.pauseIfCurrentBookDifferentFrom(second.id) }
+      assertEquals(expected = third.id, actual = currentBookStore.data.first())
+    }
+
+  @Test
+  fun `book 3 plays, completed book 2 opened, no up next`() = scope.runTest {
+    val second = book(series = "Saga", part = "2").completed()
+    val third = book(series = "Saga", part = "3").notStarted()
+    val viewModel =
+      viewModel(
+        book = second,
+        currentBookStore = MemoryDataStore(third.id),
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing(third.id)),
+        library = listOf(second, third),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test {
+        runCurrent()
+        assertNull(expectMostRecentItem()!!.upNext)
+      }
+  }
+
+  @Test
+  fun `book 3 is on the server, not downloaded, and the server can't be reached, up next shows it as not available`() =
+    scope.runTest {
+      val second = book(series = "Saga", part = "2").completed()
+      val third = book(series = "Saga", part = "3").notStarted()
+      val viewModel =
+        viewModel(
+          book = second,
+          library = listOf(second, third),
+          unavailableBooks = setOf(third.id),
+        )
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.viewState()
+        }
+        .test {
+          runCurrent()
+          assertEquals(expected = true, actual = expectMostRecentItem()!!.upNext?.unavailable)
+        }
+    }
+
   private fun viewModel(
     book: Book = this.book,
     player: PlayerController? = null,
@@ -826,12 +1041,17 @@ class BookPlayViewModelTest {
     playStateFlow: MutableStateFlow<PlayStateManager.PlayState> =
       MutableStateFlow(PlayStateManager.PlayState.Paused),
     lastPlaybackSpeed: Float = 1F,
+    bookFlow: MutableStateFlow<Book> = MutableStateFlow(book),
+    library: List<Book> = listOf(book),
+    navigator: Navigator = mockk(),
+    unavailableBooks: Set<BookId> = emptySet(),
   ): BookPlayViewModel {
     return BookPlayViewModel(
       bookRepository =
         mockk {
           coEvery { get(book.id) } returns book
-          every { flow(book.id) } returns MutableStateFlow(book)
+          every { flow(book.id) } returns bookFlow
+          every { flow() } returns MutableStateFlow(library)
         },
       currentBookResolver = currentBookResolver,
       player =
@@ -846,7 +1066,7 @@ class BookPlayViewModelTest {
           every { playState } returns playStateFlow.value
         },
       currentBookStoreId = CurrentBookStore(currentBookStore),
-      navigator = mockk(),
+      navigator = navigator,
       bookmarkRepository = mockk(),
       volumeGainFormatter = mockk(),
       batteryOptimization = mockk { coEvery { shouldRequest() } returns false },
@@ -854,7 +1074,11 @@ class BookPlayViewModelTest {
       seekTimeStore = SeekTimeStore(MemoryDataStore(20.seconds)),
       bookId = book.id,
       dispatcherProvider =
-        DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
+        DispatcherProvider(
+          main = scope.coroutineContext,
+          io = Dispatchers.Unconfined,
+          mainImmediate = scope.coroutineContext,
+        ),
       experimentalPlaybackPersistenceFeatureFlag =
         ExperimentalPlaybackPersistenceFeatureFlag(
           MemoryFeatureFlag(experimentalPlaybackPersistence),
@@ -862,7 +1086,10 @@ class BookPlayViewModelTest {
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(kioskMode)),
       historyRecorder = historyRecorder,
       clock = clock,
-      serverLibrary = serverLibrary,
+      serverLibrary =
+        mockk {
+          every { this@mockk.unavailableBooks } returns flowOf(unavailableBooks)
+        },
       lastPlaybackSpeedStore = LastPlaybackSpeedStore(MemoryDataStore(lastPlaybackSpeed)),
       analytics = analytics,
     )
@@ -884,6 +1111,8 @@ private fun book(
   name: String = "TestBook",
   lastPlayedAtMillis: Long = 0L,
   addedAtMillis: Long = 0L,
+  series: String? = null,
+  part: String? = null,
 ): Book {
   val chapters =
     listOf(
@@ -912,8 +1141,8 @@ private fun book(
             title = null,
             genre = null,
             narrator = null,
-            series = null,
-            part = null,
+            series = series,
+            part = part,
             cover = null,
             fileLastModified = null,
           ),
@@ -921,6 +1150,14 @@ private fun book(
     chapters = chapters,
     custom = CustomMetadata(id),
   )
+}
+
+private fun Book.completed(): Book = update {
+  it.copy(currentChapter = chapters.last().id, positionInChapter = chapters.last().duration)
+}
+
+private fun Book.notStarted(): Book = update {
+  it.copy(currentChapter = chapters.first().id, positionInChapter = 0)
 }
 
 private fun chapter(): Chapter {
