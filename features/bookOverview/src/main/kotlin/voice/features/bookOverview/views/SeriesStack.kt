@@ -297,7 +297,7 @@ private fun SeriesBadge(
 ) {
   CountBadge(
     count = series.bookCount,
-    finished = series.category == BookCategory.FINISHED,
+    finished = series.finishedCount == series.bookCount,
     hidden = hidden,
     description = seriesCounts(series.bookCount, series.finishedCount).takeIf { describe },
     modifier = modifier,

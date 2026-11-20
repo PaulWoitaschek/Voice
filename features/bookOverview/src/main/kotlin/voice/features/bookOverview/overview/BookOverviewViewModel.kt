@@ -272,9 +272,9 @@ class BookOverviewViewModel(
       }
     val heroBook = upNext ?: currentBookItem
     val entries =
-      remember(books, heroBook?.id) {
+      remember(books, library.books, heroBook?.id) {
         // the Continue listening card shows it
-        libraryEntries(books).mapValues { (_, entries) ->
+        libraryEntries(books, library.books).mapValues { (_, entries) ->
           entries.filterNot { it is LibraryEntry.Single && it.book.id == heroBook?.id }
         }
       }

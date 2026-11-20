@@ -318,6 +318,31 @@ class BookOverviewViewModelTest {
   }
 
   @Test
+  fun `a stack counts a hidden book of its series`() = runTest {
+    val books =
+      listOf(
+        book(series = "Saga", part = "1", time = 20_000, hidden = true),
+        book(series = "Saga", part = "2", time = 1_000),
+        book(series = "Saga", part = "3", time = 0),
+      )
+    val viewModel = viewModel(books = books)
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val stack =
+          awaitItem().sections.getValue(BookCategory.CURRENT).single() as LibraryItem.Series
+        assertEquals(expected = 3, actual = stack.series.bookCount)
+        assertEquals(expected = 1, actual = stack.series.finishedCount)
+        assertEquals(expected = listOf(1F, 0.05F, 0F), actual = stack.series.progress)
+        assertEquals(expected = books.drop(1).map { it.id }, actual = stack.series.bookIds)
+      }
+  }
+
+  @Test
   fun `a library with only hidden books isn't empty`() = runTest {
     val viewModel = viewModel(books = listOf(book(hidden = true)))
 
