@@ -57,7 +57,6 @@ android {
   productFlavors {
     register("free") {
       dimension = distributionFlavor
-      buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = "false")
       pluginManager.withPlugin(libs.plugins.crashlytics.get().pluginId) {
         extensions.configure<CrashlyticsExtension>("firebaseCrashlytics") {
           mappingFileUploadEnabled = false
@@ -66,7 +65,6 @@ android {
     }
     register("play") {
       dimension = distributionFlavor
-      buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = "true")
     }
   }
 

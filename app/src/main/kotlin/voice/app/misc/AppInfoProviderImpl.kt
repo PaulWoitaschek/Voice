@@ -7,11 +7,18 @@ import dev.zacsweers.metro.Inject
 import kotlin.time.Instant
 import voice.app.BuildConfig
 import voice.core.common.AppInfoProvider
+import voice.core.common.AppVariant
 
 @Inject
 class AppInfoProviderImpl(private val application: Application) : AppInfoProvider {
   override val versionName: String = BuildConfig.VERSION_NAME
-  override val analyticsIncluded: Boolean = BuildConfig.INCLUDE_ANALYTICS
+  override val variant: AppVariant =
+    when (BuildConfig.FLAVOR) {
+      "free" -> AppVariant.Free
+      "play" -> AppVariant.Play
+      else -> error("Unknown flavor ${BuildConfig.FLAVOR}")
+    }
+  override val analyticsIncluded: Boolean = variant == AppVariant.Play
   override val installTime: Instant by lazy {
     val packageManager = application.packageManager
     val packageInfo =
