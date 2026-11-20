@@ -14,7 +14,7 @@ At a high level:
 
 ### Infrastructure
 
-* `:app` – Application entry point, dependency injection graph, and product flavor wiring (`free` / `play`)
+* `:app` – Application entry point, dependency injection graph, and product flavor wiring (`foss` / `play`)
 * `:navigation` – Navigation abstractions and route definitions
 * `plugins/` – Included Gradle build with convention plugins
 * `scripts/` – Build and utility scripts
@@ -32,7 +32,7 @@ and services.
 ### API / Implementation Splits
 
 When a contract has several implementations, it is split into an `:api` module plus implementation modules (for example `noop`,
-`firebase`, `play`, `free`, or `impl`). Consumers depend only on `:api`; `:app` picks the implementation, often per product flavor.
+`firebase`, `play`, `foss`, or `impl`). Consumers depend only on `:api`; `:app` picks the implementation, often per product flavor.
 
 ## Dependency Flow
 

@@ -45,7 +45,7 @@ car.py send keycode back    # any DHU console command
 - The first time a car connects, an Assistant tip covers the bottom left of the screen for a while.
 - Media keys go to the app that played last, so play something in Voice before you test them.
 - The phone screen still works with agent-device, and `adb shell dumpsys media_session` shows the playback state.
-- `./gradlew :app:installFreeDebug` works while the car is connected. The car picks up the new build within a few
+- `./gradlew :app:installFossDebug` works while the car is connected. The car picks up the new build within a few
   seconds.
 
 Useful commands for `send`, the full list is in the

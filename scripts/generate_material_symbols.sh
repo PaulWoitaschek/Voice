@@ -28,7 +28,7 @@ icon() {
     android:autoMirrored="true"'
         ;;
       play)
-        # Lint only checks the free build, which doesn't show these icons.
+        # Lint only checks the foss build, which doesn't show these icons.
         attributes='
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="UnusedResources"'

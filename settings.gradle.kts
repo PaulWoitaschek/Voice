@@ -125,7 +125,7 @@ include(":features:settings")
 
 include(":features:support:api")
 
-include(":features:support:free")
+include(":features:support:foss")
 
 include(":features:support:play")
 

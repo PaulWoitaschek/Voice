@@ -46,7 +46,7 @@ on the old baseline keep it until they stop.
 ## Install your build
 
 ```sh
-export ANDROID_SERIAL=…; ./gradlew :app:installFreeDebug
+export ANDROID_SERIAL=…; ./gradlew :app:installFossDebug
 ```
 
 It installs over the app in the baseline and keeps the library.

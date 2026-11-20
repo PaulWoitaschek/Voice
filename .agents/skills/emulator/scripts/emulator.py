@@ -173,7 +173,7 @@ def prepare(args=None):
   )
   build = [
     [sys.executable, "scripts/populate_test_files.py", "--skip-adb"],
-    [str(root / "gradlew"), ":app:assembleFreeDebug", "-q"],
+    [str(root / "gradlew"), ":app:assembleFossDebug", "-q"],
   ]
   for command in build:
     result = subprocess.run(command, cwd=root, capture_output=True, text=True)
@@ -190,7 +190,7 @@ def prepare(args=None):
   saved = False
   try:
     adb("push", str(root / "build" / "testfiles"), "/sdcard/testfiles")
-    adb("install", "-r", str(root / "app/build/outputs/apk/free/debug/app-free-debug.apk"))
+    adb("install", "-r", str(root / "app/build/outputs/apk/foss/debug/app-foss-debug.apk"))
     agent("open", PACKAGE, "--platform", "android")
     set_up_library()
     agent("close")

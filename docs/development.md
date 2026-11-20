@@ -3,7 +3,7 @@
 ## Project Setup
 
 To run the project, open it in the latest Version of Android Studio and build the project as usual.
-The default local development variant is `freeDebug`, which does not require Google services credentials.
+The default local development variant is `fossDebug`, which does not require Google services credentials.
 Play variants include Firebase, Crashlytics, Remote Config, and Play review dependencies.
 Play builds require `app/src/play/google-services.json`; CI writes this file from the release secret.
 
@@ -159,7 +159,7 @@ with the commit, then uploads it with the Firebase CLI. It notifies the `beta-te
 `groups` input to only upload.
 The APK is signed with the GitHub key, which is the app signing key Google Play re-signs with, so tester builds install
 over the Play Store version.
-App Distribution is not part of the Gradle build, so the free flavor and F-Droid builds don't depend on it.
+App Distribution is not part of the Gradle build, so the foss flavor and F-Droid builds don't depend on it.
 
 It runs in the `release` environment and needs `FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT`: a service account with the
 Firebase App Distribution Admin role in the Firebase project of the Play `google-services.json`.

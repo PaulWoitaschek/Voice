@@ -84,7 +84,7 @@ jobs:
           GITHUB_SIGNING_KEY_ALIAS: ${{ secrets.GH_SIGNING_KEY_ALIAS }}
           GITHUB_SIGNING_KEY_PASSWORD: ${{ secrets.GH_SIGNING_KEY_PASSWORD }}
         run: |
-          ./gradlew :app:assembleFreeRelease :app:assemblePlayRelease \
+          ./gradlew :app:assembleFossRelease :app:assemblePlayRelease \
             -Pvoice.versionName="${{ steps.tag.outputs.version_name }}" \
             -Pvoice.versionCode="${{ steps.tag.outputs.version_code }}" \
             -Pandroid.injected.signing.store.file="$PWD/signing/free/signing.keystore" \
@@ -92,7 +92,7 @@ jobs:
             -Pandroid.injected.signing.key.alias="$GITHUB_SIGNING_KEY_ALIAS" \
             -Pandroid.injected.signing.key.password="$GITHUB_SIGNING_KEY_PASSWORD"
           mkdir -p artifacts
-          cp app/build/outputs/apk/free/release/app-free-release.apk artifacts/voice-foss-release.apk
+          cp app/build/outputs/apk/foss/release/app-foss-release.apk artifacts/voice-foss-release.apk
           cp app/build/outputs/apk/play/release/app-play-release.apk artifacts/voice-release.apk
 
       # Only the internal track, so the build is on Play. The Promote to Play workflow sends it to review.

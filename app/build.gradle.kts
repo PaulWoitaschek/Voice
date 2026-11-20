@@ -55,7 +55,7 @@ android {
   val distributionFlavor = "distribution"
   flavorDimensions += distributionFlavor
   productFlavors {
-    register("free") {
+    register("foss") {
       dimension = distributionFlavor
       pluginManager.withPlugin(libs.plugins.crashlytics.get().pluginId) {
         extensions.configure<CrashlyticsExtension>("firebaseCrashlytics") {
@@ -134,7 +134,7 @@ val validatePlayGoogleServices =
     doLast {
       check(File(playGoogleServicesJsonPath).canRead()) {
         "app/src/play/google-services.json is required for Play builds. " +
-          "Use the free variant to build without Firebase."
+          "Use the foss variant to build without Firebase."
       }
     }
   }
@@ -222,16 +222,16 @@ dependencies {
   add("playImplementation", projects.core.logging.crashlytics)
   add("playImplementation", projects.features.review.play)
   add("playImplementation", projects.features.support.play)
-  add("freeImplementation", projects.features.review.noop)
-  add("freeImplementation", projects.features.support.free)
+  add("fossImplementation", projects.features.review.noop)
+  add("fossImplementation", projects.features.support.foss)
 
   implementation(projects.core.remoteconfig.api)
   add("playImplementation", projects.core.remoteconfig.firebase)
-  add("freeImplementation", projects.core.remoteconfig.noop)
+  add("fossImplementation", projects.core.remoteconfig.noop)
 
   implementation(projects.core.analytics.api)
   add("playImplementation", projects.core.analytics.firebase)
-  add("freeImplementation", projects.core.analytics.noop)
+  add("fossImplementation", projects.core.analytics.noop)
 
   debugImplementation(projects.core.logging.debug)
 
