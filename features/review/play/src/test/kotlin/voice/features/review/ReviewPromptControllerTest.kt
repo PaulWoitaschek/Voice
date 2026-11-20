@@ -43,12 +43,7 @@ class ReviewPromptControllerTest {
   private val statsRepo =
     mockk<ListeningStatsRepo> {
       coEvery { summary(any(), any()) } returns
-        ListeningSummary(
-          listened = 0.hours,
-          audio = 0.hours,
-          listeningDays = 0,
-          finishedBooks = emptyList(),
-        )
+        ListeningSummary(listened = 0.hours, listeningDays = 0, finishedBooks = emptyList())
     }
   private var books = emptyList<Book>()
   private val bookRepository =
@@ -103,12 +98,7 @@ class ReviewPromptControllerTest {
 
   private fun listenedEnough(finishedBooks: List<FinishedBook> = emptyList()) {
     coEvery { statsRepo.summary(any(), any()) } returns
-      ListeningSummary(
-        listened = 6.hours,
-        audio = 6.hours,
-        listeningDays = 4,
-        finishedBooks = finishedBooks,
-      )
+      ListeningSummary(listened = 6.hours, listeningDays = 4, finishedBooks = finishedBooks)
   }
 
   @Test
@@ -138,12 +128,7 @@ class ReviewPromptControllerTest {
   fun `the counted listening shows when it's more than the library knows`() = runTest {
     books = listOf(hyperion)
     coEvery { statsRepo.summary(any(), any()) } returns
-      ListeningSummary(
-        listened = 26.hours,
-        audio = 26.hours,
-        listeningDays = 9,
-        finishedBooks = emptyList(),
-      )
+      ListeningSummary(listened = 26.hours, listeningDays = 9, finishedBooks = emptyList())
 
     val prompt = controller().prompt()
 
@@ -224,12 +209,7 @@ class ReviewPromptControllerTest {
   fun `the flag forces the prompt once, without counting it`() = runTest {
     books = listOf(hyperion)
     coEvery { statsRepo.summary(any(), any()) } returns
-      ListeningSummary(
-        listened = 1.minutes,
-        audio = 1.minutes,
-        listeningDays = 1,
-        finishedBooks = emptyList(),
-      )
+      ListeningSummary(listened = 1.minutes, listeningDays = 1, finishedBooks = emptyList())
     force.value = true
     val controller = controller()
 

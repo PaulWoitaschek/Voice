@@ -29,7 +29,6 @@ public interface ListeningStatsRepo {
 
 public data class ListeningSummary(
   val listened: Duration,
-  val audio: Duration,
   /** The number of local days with listening. */
   val listeningDays: Int,
   /** Newest first, each book once. */

@@ -44,7 +44,6 @@ class ListeningStatsRepoImplTest {
     listened: Duration,
     bookId: BookId = dune,
     reachedEnd: Boolean = false,
-    speed: Double = 1.0,
     // Berlin in summer
     utcOffset: Duration = 2.hours,
   ): ListeningSession {
@@ -54,7 +53,7 @@ class ListeningStatsRepoImplTest {
       startedAtMillis = started,
       endedAtMillis = started + listened.inWholeMilliseconds,
       listenedMillis = listened.inWholeMilliseconds,
-      audioMillis = (listened * speed).inWholeMilliseconds,
+      audioMillis = listened.inWholeMilliseconds,
       utcOffsetSeconds = utcOffset.inWholeSeconds.toInt(),
       reachedEnd = reachedEnd,
     )
@@ -86,7 +85,6 @@ class ListeningStatsRepoImplTest {
       expected =
         ListeningSummary(
           listened = 3.hours + 30.minutes,
-          audio = 3.hours + 30.minutes,
           listeningDays = 2,
           // newest first, and each book once
           finishedBooks =
@@ -109,9 +107,9 @@ class ListeningStatsRepoImplTest {
 
   @Test
   fun `the summary only covers sessions started in its range`() = runTest {
-    insert(session("2025-12-31T23:00:00Z", listened = 2.hours, speed = 2.0))
+    insert(session("2025-12-31T23:00:00Z", listened = 2.hours))
     insert(session("2026-03-01T10:00:00Z", listened = 1.hours))
-    insert(session("2027-01-01T10:00:00Z", listened = 3.hours, speed = 2.0))
+    insert(session("2027-01-01T10:00:00Z", listened = 3.hours))
 
     val summary =
       repo.summary(
@@ -120,7 +118,6 @@ class ListeningStatsRepoImplTest {
       )
 
     assertEquals(expected = 1.hours, actual = summary.listened)
-    assertEquals(expected = 1.hours, actual = summary.audio)
   }
 
   @Test
@@ -133,17 +130,6 @@ class ListeningStatsRepoImplTest {
 
     assertEquals(expected = listOf(merged), actual = repo.summary().finishedBooks.map { it.bookId })
     assertEquals(expected = 2.hours, actual = repo.summary().listened)
-  }
-
-  @Test
-  fun `the summary adds up how far the books moved on`() = runTest {
-    insert(session("2026-10-06T08:00:00Z", listened = 8.hours))
-    insert(session("2026-10-07T08:00:00Z", listened = 4.hours, speed = 2.0))
-
-    val summary = repo.summary()
-
-    assertEquals(expected = 12.hours, actual = summary.listened)
-    assertEquals(expected = 16.hours, actual = summary.audio)
   }
 
   @Test

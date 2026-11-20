@@ -29,10 +29,8 @@ internal constructor(
   ): ListeningSummary {
     val fromMillis = from.toEpochMilliseconds()
     val toMillis = to.toEpochMilliseconds()
-    val times = dao.times(fromMillis, toMillis)
     return ListeningSummary(
-      listened = times.listenedMillis.milliseconds,
-      audio = times.audioMillis.milliseconds,
+      listened = dao.listenedMillis(fromMillis, toMillis).milliseconds,
       listeningDays = dao.listeningDays(fromMillis, toMillis),
       finishedBooks =
         dao.finishedBooks(fromMillis, toMillis).map {
