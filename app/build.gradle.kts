@@ -166,6 +166,18 @@ tasks
     enabled = false
   }
 
+// LocaleConfigTest reads these files from disk, so a change to them must rerun the tests.
+tasks.withType<Test>().configureEach {
+  inputs
+    .files(
+      file("../core/strings/src/main/res"),
+      file("../fastlane/metadata/android"),
+      file("../fastlane/play_products.json"),
+    )
+    .withPathSensitivity(PathSensitivity.RELATIVE)
+    .withPropertyName("localeConfigTestFiles")
+}
+
 dependencies {
   implementation(projects.core.strings)
   implementation(projects.core.ui)
@@ -229,6 +241,7 @@ dependencies {
   implementation(libs.media3.session)
 
   testImplementation(kotlin("reflect"))
+  testImplementation(libs.serialization.json)
 }
 
 // Git worktrees sign with the main checkout's keys, so the release key isn't copied into every
