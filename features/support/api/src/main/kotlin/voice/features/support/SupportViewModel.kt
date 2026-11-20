@@ -29,6 +29,7 @@ class SupportViewModel(
   private val zone: () -> ZoneId,
 ) : SupportListener {
 
+  private val yearlyPick by lazy { yearlySupportPickFeatureFlag.get() }
   private var chosenFrequency by mutableStateOf<SupportFrequency?>(null)
   private var chosenTier by mutableStateOf<SupporterTier?>(null)
   private var thankYou by mutableStateOf(false)
@@ -87,9 +88,7 @@ class SupportViewModel(
     val frequency =
       chosenFrequency?.takeIf { it in tiersByFrequency }
         ?: frequencies.firstOrNull { active != null && it.period == active.period }
-        ?: SupportFrequency.Yearly.takeIf {
-          yearlySupportPickFeatureFlag.get() && it in tiersByFrequency
-        }
+        ?: SupportFrequency.Yearly.takeIf { yearlyPick && it in tiersByFrequency }
         ?: frequencies.firstOrNull()
         ?: return null
     val tiers = tiersByFrequency.getValue(frequency)
