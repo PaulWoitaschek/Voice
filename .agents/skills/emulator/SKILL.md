@@ -95,23 +95,30 @@ without extra code, as long as they stay `@Serializable`.
 emulator.py smoke
 ```
 
-It replays the flows in `.agents/skills/emulator/flows` on your emulator, without a model, in about 10 seconds per
-flow. Run it after you install your build, when the change touches playback or a screen that a flow goes through.
-The flows expect the fresh library. After a failed run, or when you changed the library, `stop` and `start` first.
+It replays the trails in `.agents/skills/emulator/trails` on your emulator with
+[Trailblaze](https://block.github.io/trailblaze), without a model, in about 45 seconds per trail. Run it after you
+install your build, when the change touches playback or a screen that a trail goes through. If `trailblaze` is
+missing, ask the user to run `brew install block/tap/trailblaze`.
 
-When a flow fails, the output names the line and lists what is on the screen. Then decide:
+When a step fails, the output names the step and what it looked for. Then decide:
 
 - Voice does the wrong thing: your change has a bug. Fix the app.
-- The screen changed on purpose, like a button with a new name: correct the line in the flow in the same pull request.
+- The screen changed on purpose, like a button with a new name: correct the step in the trail in the same pull
+  request.
 
-A flow is an `.ad` file with one agent-device command per line, see `agent-device help scripting`. To add one, do the
-journey by hand first, then write the lines:
+A trail is a YAML file. Each step has its intent in plain words and the recorded tool calls that replay it. To add or
+repair one, do the journey with `trailblaze snapshot` and `trailblaze tool`, then write it with
+`trailblaze session save`. `trailblaze skill show` explains the commands.
 
-- Start with `open "de.ph1b.audiobook" --relaunch` and end with `close`.
-- Target by label or text, never by an `@e` ref.
-- A press doesn't wait. On a new screen, `wait` for something on it before the press.
-- Check each result with `wait` or `wait absent`, like a time that moves.
-- End in a state that the same flow can start from again.
+- Run Trailblaze from `build/smoke`, as it writes its settings into the working directory. Pass
+  `-d android/$ANDROID_SERIAL` to each command.
+- Select by text or content description, never by position.
+- Don't expect a value that the trail changes itself, like the position of a book. Remember it and check that it
+  changes.
+- Don't use `verify` steps, `trailblaze step` or `--self-heal`. They call a model.
+- End in a state that the same trail can start from again.
+- When you're done, run `adb shell am force-stop xyz.block.trailblaze.runner`. agent-device can't read the screen
+  while that app runs.
 
 ## Device settings
 

@@ -22,7 +22,7 @@ Start narrow, then broaden:
 - App module: `./gradlew :app:testFossDebugUnitTest`
 - All unit tests: `./gradlew voiceUnitTest`. Run this when touching shared behavior, cross-module contracts, or broad
   refactors.
-- On an emulator: `emulator.py smoke` replays the smoke test flows, see the emulator skill.
+- On an emulator: `emulator.py smoke` replays the smoke test, see the emulator skill.
 
 CI runs `./gradlew voiceUnitTest spotlessCheck :app:assembleFossDebug`. If you can't run something, say why and give the
 command.
