@@ -30,8 +30,8 @@ no emulator and agent-device may pick another agent's.
 
 - It takes a few seconds and gives you a copy of the `voice` baseline: the debug app past onboarding, and the six books
   from `scripts/populate_test_files.py`, one of them in progress. They cover MP3 folders and single files, an M4B with
-  embedded chapters, and Opus with a `cover.jpg` next to it. Break what you like: `stop`, then `start` gives you a
-  fresh copy.
+  embedded chapters, and Opus with a `cover.jpg` next to it. The books are silent, so no emulator plays sound. Break
+  what you like: `stop`, then `start` gives you a fresh copy.
 - Voice is open in your agent-device session when `start` returns.
 - `start` again returns the emulator you already have and renews the lease for 4 hours. simlock takes the emulator
   back when the lease runs out, so run `start` again in a long task.
