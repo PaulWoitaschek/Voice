@@ -1,6 +1,6 @@
 ---
 name: emulator
-description: Running and driving Voice on an Android emulator to see a change in the real app. Every agent leases its own emulator with a real test library from simlock and drives it with agent-device, so parallel agents don't get in each other's way. Use when asked to run, start, or screenshot the app, to check a UI or behavior change on a device, to open a specific screen, or for the emulator checks in the design skill.
+description: Running and driving Voice on an Android emulator to see a change in the real app. Every agent leases its own emulator with a real test library from simlock and drives it with agent-device, so parallel agents don't get in each other's way. Use when asked to run, start, or screenshot the app, to check a UI or behavior change on a device, to open a specific screen, to run or extend the smoke test, or for the emulator checks in the design skill.
 ---
 
 # Running Voice on an emulator
@@ -88,6 +88,37 @@ emulator.py open BookOverview '{"type":"Playback","bookId":"<id>"}' '{"type":"Bo
 
 `open` force-stops the app first and reports a crash on start, like an unknown destination. New destinations work
 without extra code, as long as they stay `@Serializable`.
+
+## Smoke test
+
+```sh
+emulator.py smoke
+```
+
+It replays the trails in `.agents/skills/emulator/trails` on your emulator with
+[Trailblaze](https://block.github.io/trailblaze), without a model, in about 45 seconds per trail. Run it after you
+install your build, when the change touches playback or a screen that a trail goes through. If `trailblaze` is
+missing, ask the user to run `brew install block/tap/trailblaze`.
+
+When a step fails, the output names the step and what it looked for. Then decide:
+
+- Voice does the wrong thing: your change has a bug. Fix the app.
+- The screen changed on purpose, like a button with a new name: correct the step in the trail in the same pull
+  request.
+
+A trail is a YAML file. Each step has its intent in plain words and the recorded tool calls that replay it. To add or
+repair one, do the journey with `trailblaze snapshot` and `trailblaze tool`, then write it with
+`trailblaze session save`. `trailblaze skill show` explains the commands.
+
+- Run Trailblaze from `build/smoke`, as it writes its settings into the working directory. Pass
+  `-d android/$ANDROID_SERIAL` to each command.
+- Select by text or content description, never by position.
+- Don't expect a value that the trail changes itself, like the position of a book. Remember it and check that it
+  changes.
+- Don't use `verify` steps, `trailblaze step` or `--self-heal`. They call a model.
+- End in a state that the same trail can start from again.
+- When you're done, run `adb shell am force-stop xyz.block.trailblaze.runner`. agent-device can't read the screen
+  while that app runs.
 
 ## Device settings
 

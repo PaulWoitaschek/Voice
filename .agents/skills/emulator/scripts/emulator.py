@@ -295,6 +295,20 @@ def command_books(args):
       print(f"{name} | {author or '-'} | {book_id}")
 
 
+def command_smoke(args):
+  if not shutil.which("trailblaze"):
+    sys.exit("trailblaze is missing. Install it with: brew install block/tap/trailblaze")
+  trails = Path(__file__).resolve().parent.parent / "trails"
+  # Trailblaze writes its settings and logs into the working directory.
+  work = repo_root() / "build" / "smoke"
+  work.mkdir(parents=True, exist_ok=True)
+  command = ["trailblaze", "run", str(trails), "-d", f"android/{serial()}", "--no-save-recording"]
+  result = subprocess.run(command, cwd=work)
+  # agent-device can't read the screen while the Trailblaze app runs.
+  adb("shell", "am", "force-stop", "xyz.block.trailblaze.runner", check=False)
+  sys.exit(result.returncode)
+
+
 def main():
   parser = argparse.ArgumentParser(description=__doc__)
   subparsers = parser.add_subparsers(required=True)
@@ -314,6 +328,8 @@ def main():
   books_parser = subparsers.add_parser("books", help="list the library with book ids, last played first")
   books_parser.add_argument("--all", action="store_true", help="also books whose files are gone")
   books_parser.set_defaults(func=command_books)
+
+  subparsers.add_parser("smoke", help="run the smoke test flows on your emulator").set_defaults(func=command_smoke)
 
   args = parser.parse_args()
   try:
