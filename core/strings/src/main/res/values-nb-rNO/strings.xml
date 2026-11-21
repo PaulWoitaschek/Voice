@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Tipskrukke</string>
     <string name="support.badges.title">Merket ditt vokser for hver måned du støtter</string>
     <string name="support.action.donate_kofi">Doner på Ko-fi</string>
+    <string name="support.card.book.message">Voice er gratis og uten reklame. Det er takket være lyttere som deg.</string>
+    <string name="support.card.letter.action">Spander en te på Paul</string>
+    <string name="support.card.letter.message">Jeg lager Voice alene og holder det gratis og reklamefritt. Hvis det er verdt en kopp te for deg, hjelper det meg å fortsette.</string>
     <string name="support.description.maintenance">Voice er gratis, åpen kildekode og vedlikeholdes av én utvikler.</string>
     <string name="support.description.monthly">Månedlig støtte lar meg planlegge neste versjon, ikke bare neste feilretting.</string>
     <string name="support.fine_print">En takk: låser ikke opp noe. Si opp når som helst i Google Play.</string>

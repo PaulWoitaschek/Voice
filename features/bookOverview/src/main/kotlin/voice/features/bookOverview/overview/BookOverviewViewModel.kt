@@ -68,6 +68,8 @@ import voice.features.bookOverview.select.SelectionViewState
 import voice.features.bookOverview.select.of
 import voice.features.bookOverview.stats.WeekListening
 import voice.features.bookOverview.support.SupportCard
+import voice.features.bookOverview.support.SupportCardLook
+import voice.features.bookOverview.support.SupportCardOffer
 import voice.features.bookOverview.survey.Survey
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -164,8 +166,8 @@ class BookOverviewViewModel(
     }
       .collectAsState(initial = null)
       .value
-    val hasSupportCard = remember {
-      supportCard.show()
+    val supportCardOffer = remember {
+      supportCard.offer()
     }
       .collectAsState(initial = null)
       .value
@@ -192,7 +194,7 @@ class BookOverviewViewModel(
         gridMode == null ||
         hasFoldersWithoutAccess == null ||
         hasSurvey == null ||
-        hasSupportCard == null ||
+        supportCardOffer == null ||
         showHiddenBooks == null ||
         showNotDownloadedBooks == null ||
         grouping == null ||
@@ -242,9 +244,26 @@ class BookOverviewViewModel(
 
     // adding books comes first
     val showSurveyCard = hasSurvey && !showEmptyLibrary
-    val showSupportCard = hasSupportCard && !showEmptyLibrary && !showSurveyCard
-    LaunchedEffect(showSupportCard) {
-      if (showSupportCard) supportCard.shown()
+    val supportCardNow =
+      (supportCardOffer as? SupportCardOffer.Now)?.takeIf { !showEmptyLibrary && !showSurveyCard }
+    val supportCardState =
+      when (supportCardNow?.look) {
+        SupportCardLook.Letter ->
+          SupportCardViewState.Letter(supportCardNow.listened.inWholeHours.toInt())
+        // a hidden book stays hidden
+        SupportCardLook.Book ->
+          books
+            .firstOrNull { it.id == supportCardNow.finishedBook }
+            ?.let { SupportCardViewState.Book(it.name, it.coverUrl) }
+        SupportCardLook.None,
+        null -> null
+      }
+    val supportCardHeldBack = supportCardNow?.look == SupportCardLook.None
+    LaunchedEffect(supportCardState != null, supportCardHeldBack) {
+      when {
+        supportCardState != null -> supportCard.shown()
+        supportCardHeldBack -> supportCard.heldBack()
+      }
     }
 
     val layoutMode =
@@ -354,7 +373,7 @@ class BookOverviewViewModel(
         },
       selectionEdit = selectionEdit,
       listenedThisWeek = listenedThisWeek,
-      showSupportCard = showSupportCard,
+      supportCard = supportCardState,
     )
   }
 

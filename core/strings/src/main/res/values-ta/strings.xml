@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">உண்டியல்</string>
     <string name="support.badges.title">நீங்கள் ஆதரிக்கும் ஒவ்வொரு மாதமும் உங்கள் பதக்கம் வளரும்</string>
     <string name="support.action.donate_kofi">Ko-fi-யில் நன்கொடை அளிக்கவும்</string>
+    <string name="support.card.book.message">Voice இலவசம், விளம்பரங்களும் இல்லை. உங்களைப் போன்ற கேட்பவர்களால்தான் அது அப்படியே இருக்கிறது.</string>
+    <string name="support.card.letter.action">Paul-க்கு ஒரு தேநீர் வாங்கிக் கொடுங்கள்</string>
+    <string name="support.card.letter.message">நான் Voice-ஐத் தனியாக உருவாக்குகிறேன், அதை இலவசமாகவும் விளம்பரமின்றியும் வைத்திருக்கிறேன். உங்களுக்கு அது ஒரு கோப்பை தேநீருக்குத் தகுதியானது என்றால், தொடர்ந்து செயல்பட அது எனக்கு உதவும்.</string>
     <string name="support.description.maintenance">Voice இலவசம், திறந்த மூலமாகும், மேலும் ஒரே ஒரு உருவாக்குநரால் பராமரிக்கப்படுகிறது.</string>
     <string name="support.description.monthly">மாதாந்திர ஆதரவுதான் அடுத்த திருத்தத்தை மட்டுமல்ல, அடுத்த வெளியீட்டையும் திட்டமிட எனக்கு உதவுகிறது.</string>
     <string name="support.fine_print">இது ஒரு நன்றி மட்டுமே: எதையும் திறக்காது. Google Play-இல் எப்போது வேண்டுமானாலும் ரத்துசெய்யலாம்.</string>

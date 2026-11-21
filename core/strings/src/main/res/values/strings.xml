@@ -820,12 +820,12 @@
     <string name="review.prompt.feedback.idea.title" tools:ignore="UnusedResources">Suggest an idea</string>
     <!-- Title of the ways to share feedback in the rating prompt. -->
     <string name="review.prompt.feedback.title" tools:ignore="UnusedResources">What\'s on your mind?</string>
-    <!-- Title of the rating prompt after a book was finished. The name of the book is shown above it. Also the title of the card in the library that asks for support after a finished book. -->
+    <!-- Title of the rating prompt after a book was finished. The name of the book is shown above it. Also on the card in the library that asks for support after a finished book, above the name of the book. -->
     <string name="review.prompt.finished.title">Book finished!</string>
     <!-- Message of the rating prompt. Everyone sees it, so it must not take for granted that the listener likes Voice. -->
     <string name="review.prompt.message" tools:ignore="UnusedResources">Thanks for listening with Voice! If you like it, a rating on Google Play helps other listeners find it.</string>
-    <!-- Title of the rating prompt that celebrates the hours of audiobooks listened to. -->
-    <plurals name="review.prompt.milestone.title" tools:ignore="UnusedResources">
+    <!-- Title of the rating prompt that celebrates the hours of audiobooks listened to. Also the title of the note from the developer in the library that asks for support after a finished book. -->
+    <plurals name="review.prompt.milestone.title">
         <item quantity="one">%d hour of stories!</item>
         <item quantity="other">%d hours of stories!</item>
     </plurals>
@@ -985,7 +985,13 @@
     <string name="support.badges.title">Your badge grows each month you support</string>
     <!-- Support screen action for donating through Ko-fi. -->
     <string name="support.action.donate_kofi">Donate on Ko-fi</string>
-    <!-- Support screen text explaining why support is useful. Also the message on the card in the library that asks for support after a finished book. -->
+    <!-- Message on a card in the library that shows the book the listener just finished, with its cover, and asks for support one time. Gentle, not pushy. -->
+    <string name="support.card.book.message">Voice is free and has no ads. Listeners like you keep it that way.</string>
+    <!-- Button below the note from the developer in the library. Opens the support screen. Paul is the developer, keep the name. The tea matches the supporter tiers, which are named after tea. -->
+    <string name="support.card.letter.action">Buy Paul a tea</string>
+    <!-- A short personal note from the developer on a card in the library, written in first person and signed "— Paul". Shown one time after a finished book, below the hours the listener has listened. Warm and personal, not pushy. -->
+    <string name="support.card.letter.message">I build Voice on my own, and I keep it free and without ads. If it\'s worth a cup of tea to you, that helps me keep going.</string>
+    <!-- Support screen text explaining why support is useful. -->
     <string name="support.description.maintenance">Voice is free, open source, and maintained by one developer.</string>
     <!-- Support screen text under the main description, explaining why monthly support helps more than a one-time tip. Written by the developer in first person. -->
     <string name="support.description.monthly">Monthly support is what lets me plan the next release, not just the next fix.</string>
