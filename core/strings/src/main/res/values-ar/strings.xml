@@ -690,6 +690,9 @@
     <string name="support.badge.tip_jar">صندوق الإكراميات</string>
     <string name="support.badges.title">تكبر شارتك مع كل شهر من دعمك</string>
     <string name="support.action.donate_kofi">التبرع عبر Ko-fi</string>
+    <string name="support.card.book.message">تطبيق Voice مجاني وبلا إعلانات، ويبقى كذلك بفضل أمثالك.</string>
+    <string name="support.card.letter.action">إهداء Paul كوب شاي</string>
+    <string name="support.card.letter.message">أطوّر Voice بمفردي وأُبقيه مجانيًا وخاليًا من الإعلانات. إذا كان يستحق عندك كوب شاي، فهذا يعينني على الاستمرار.</string>
     <string name="support.description.maintenance">تطبيق Voice مجاني ومفتوح المصدر، ويعتني به مطوّر واحد.</string>
     <string name="support.description.monthly">الدعم الشهري هو ما يتيح لي التخطيط للإصدار القادم، لا للإصلاح القادم فحسب.</string>
     <string name="support.fine_print">إنها مجرد شكر: لا تفتح أي ميزة. يمكنك الإلغاء في أي وقت من Google Play.</string>

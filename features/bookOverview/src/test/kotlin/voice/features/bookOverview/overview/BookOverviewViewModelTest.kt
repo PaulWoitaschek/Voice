@@ -14,10 +14,12 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.mockk.verifyOrder
+import java.io.File
 import java.time.DayOfWeek
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertSame
 import kotlin.time.Clock
 import kotlin.time.Duration
@@ -85,6 +87,7 @@ import voice.features.bookOverview.stats.WeekListening
 import voice.features.bookOverview.support.SupportCard
 import voice.features.bookOverview.support.SupportCardAnsweredStore
 import voice.features.bookOverview.support.SupportCardFeatureFlag
+import voice.features.bookOverview.support.SupportCardLook
 import voice.features.bookOverview.survey.HandledSurveysStore
 import voice.features.bookOverview.survey.Survey
 import voice.features.bookOverview.survey.SurveyUrlFeatureFlag
@@ -1081,13 +1084,13 @@ class BookOverviewViewModelTest {
   }
 
   @Test
-  fun `setting on, a book finished yesterday, open the library, the support card shows`() =
+  fun `setting Letter, a book finished yesterday, open the library, the letter shows the hours`() =
     runTest {
       val analytics = mockk<Analytics>(relaxUnitFun = true)
       val viewModel =
         viewModel(
           books = listOf(book()),
-          supportCard = supportCard(enabled = true, analytics = analytics),
+          supportCard = supportCard(look = SupportCardLook.Letter, analytics = analytics),
         )
 
       backgroundScope
@@ -1096,9 +1099,105 @@ class BookOverviewViewModelTest {
         }
         .test {
           testScheduler.runCurrent()
-          assertEquals(expected = true, actual = expectMostRecentItem().showSupportCard)
+          assertEquals(
+            expected = SupportCardViewState.Letter(hoursListened = 12),
+            actual = expectMostRecentItem().supportCard,
+          )
         }
-      verify(exactly = 1) { analytics.event("support_card", mapOf("action" to "show")) }
+      verify(exactly = 1) {
+        analytics.event("support_card", mapOf("action" to "show", "kind" to "letter"))
+      }
+    }
+
+  @Test
+  fun `setting Book, a book finished yesterday, open the library, the card shows the book`() =
+    runTest {
+      val analytics = mockk<Analytics>(relaxUnitFun = true)
+      val cover = File("dune.jpg")
+      val dune = book(id = FINISHED_BOOK, name = "Dune")
+      val viewModel =
+        viewModel(
+          books = listOf(dune.copy(custom = dune.custom.copy(cover = cover))),
+          supportCard = supportCard(look = SupportCardLook.Book, analytics = analytics),
+        )
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.state()
+        }
+        .test {
+          testScheduler.runCurrent()
+          assertEquals(
+            expected = SupportCardViewState.Book(name = "Dune", cover = cover.toURI().toString()),
+            actual = expectMostRecentItem().supportCard,
+          )
+        }
+      verify(exactly = 1) {
+        analytics.event("support_card", mapOf("action" to "show", "kind" to "book"))
+      }
+    }
+
+  @Test
+  fun `setting Book, the finished book is hidden, open the library, no card`() = runTest {
+    val analytics = mockk<Analytics>(relaxUnitFun = true)
+    val viewModel =
+      viewModel(
+        books = listOf(book(), book(id = FINISHED_BOOK, hidden = true)),
+        supportCard = supportCard(look = SupportCardLook.Book, analytics = analytics),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        testScheduler.runCurrent()
+        assertEquals(expected = null, actual = expectMostRecentItem().supportCard)
+      }
+    verify(exactly = 0) { analytics.event(any(), any()) }
+  }
+
+  @Test
+  fun `setting Book, the finished book is gone, open the library, no card`() = runTest {
+    val analytics = mockk<Analytics>(relaxUnitFun = true)
+    val viewModel =
+      viewModel(
+        books = listOf(book()),
+        supportCard = supportCard(look = SupportCardLook.Book, analytics = analytics),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        testScheduler.runCurrent()
+        assertEquals(expected = null, actual = expectMostRecentItem().supportCard)
+      }
+    verify(exactly = 0) { analytics.event(any(), any()) }
+  }
+
+  @Test
+  fun `setting None, a book finished yesterday, open the library, no card and Voice reports it`() =
+    runTest {
+      val analytics = mockk<Analytics>(relaxUnitFun = true)
+      val viewModel =
+        viewModel(
+          books = listOf(book()),
+          supportCard = supportCard(look = SupportCardLook.None, analytics = analytics),
+        )
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.state()
+        }
+        .test {
+          testScheduler.runCurrent()
+          assertEquals(expected = null, actual = expectMostRecentItem().supportCard)
+        }
+      verify(exactly = 1) {
+        analytics.event("support_card", mapOf("action" to "skip", "kind" to "none"))
+      }
     }
 
   @Test
@@ -1109,7 +1208,7 @@ class BookOverviewViewModelTest {
         viewModel(
           books = listOf(book()),
           survey = survey(remoteUrl = SURVEY_URL),
-          supportCard = supportCard(enabled = true, analytics = analytics),
+          supportCard = supportCard(look = SupportCardLook.Letter, analytics = analytics),
         )
 
       backgroundScope
@@ -1120,14 +1219,14 @@ class BookOverviewViewModelTest {
           testScheduler.runCurrent()
           val state = expectMostRecentItem()
           assertEquals(expected = true, actual = state.showSurveyCard)
-          assertEquals(expected = false, actual = state.showSupportCard)
+          assertEquals(expected = null, actual = state.supportCard)
         }
       verify(exactly = 0) { analytics.event(any(), any()) }
     }
 
   @Test
-  fun `setting on, a book finished yesterday, an empty library, no support card`() = runTest {
-    val viewModel = viewModel(supportCard = supportCard(enabled = true))
+  fun `setting Letter, a book finished yesterday, an empty library, no support card`() = runTest {
+    val viewModel = viewModel(supportCard = supportCard(look = SupportCardLook.Letter))
 
     backgroundScope
       .launchMolecule(RecompositionMode.Immediate) {
@@ -1137,45 +1236,18 @@ class BookOverviewViewModelTest {
         testScheduler.runCurrent()
         val state = expectMostRecentItem()
         assertEquals(expected = true, actual = state.showEmptyLibrary)
-        assertEquals(expected = false, actual = state.showSupportCard)
+        assertEquals(expected = null, actual = state.supportCard)
       }
   }
 
   @Test
-  fun `the support card, tap Support development, the support screen opens and the card goes`() =
-    runTest {
-      val navigator = mockk<Navigator>(relaxed = true)
-      val viewModel =
-        viewModel(
-          books = listOf(book()),
-          navigator = navigator,
-          supportCard = supportCard(enabled = true),
-        )
-
-      backgroundScope
-        .launchMolecule(RecompositionMode.Immediate) {
-          viewModel.state()
-        }
-        .test {
-          testScheduler.runCurrent()
-          assertEquals(expected = true, actual = expectMostRecentItem().showSupportCard)
-
-          viewModel.onSupportCardClick()
-          testScheduler.runCurrent()
-
-          assertEquals(expected = false, actual = expectMostRecentItem().showSupportCard)
-        }
-      verify(exactly = 1) { navigator.goTo(Destination.SupportVoice) }
-    }
-
-  @Test
-  fun `the support card, tap No thanks, the card goes`() = runTest {
+  fun `the letter, tap Buy Paul a tea, the support screen opens and the card goes`() = runTest {
     val navigator = mockk<Navigator>(relaxed = true)
     val viewModel =
       viewModel(
         books = listOf(book()),
         navigator = navigator,
-        supportCard = supportCard(enabled = true),
+        supportCard = supportCard(look = SupportCardLook.Letter),
       )
 
     backgroundScope
@@ -1184,12 +1256,38 @@ class BookOverviewViewModelTest {
       }
       .test {
         testScheduler.runCurrent()
-        assertEquals(expected = true, actual = expectMostRecentItem().showSupportCard)
+        assertNotNull(expectMostRecentItem().supportCard)
+
+        viewModel.onSupportCardClick()
+        testScheduler.runCurrent()
+
+        assertEquals(expected = null, actual = expectMostRecentItem().supportCard)
+      }
+    verify(exactly = 1) { navigator.goTo(Destination.SupportVoice) }
+  }
+
+  @Test
+  fun `the letter, tap No thanks, the card goes`() = runTest {
+    val navigator = mockk<Navigator>(relaxed = true)
+    val viewModel =
+      viewModel(
+        books = listOf(book()),
+        navigator = navigator,
+        supportCard = supportCard(look = SupportCardLook.Letter),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        testScheduler.runCurrent()
+        assertNotNull(expectMostRecentItem().supportCard)
 
         viewModel.onSupportCardDismiss()
         testScheduler.runCurrent()
 
-        assertEquals(expected = false, actual = expectMostRecentItem().showSupportCard)
+        assertEquals(expected = null, actual = expectMostRecentItem().supportCard)
       }
     verify(exactly = 0) { navigator.goTo(any()) }
   }
@@ -1883,12 +1981,12 @@ class BookOverviewViewModelTest {
     )
 
   private fun supportCard(
-    enabled: Boolean = false,
+    look: SupportCardLook = SupportCardLook.None,
     analytics: Analytics = mockk(relaxUnitFun = true),
   ): SupportCard {
     val now = Instant.parse("2026-11-20T12:00:00Z")
     return SupportCard(
-      enabled = SupportCardFeatureFlag(MemoryFeatureFlag(enabled)),
+      look = SupportCardFeatureFlag(MemoryFeatureFlag(look)),
       answeredStore = SupportCardAnsweredStore(MemoryDataStore(false)),
       supporterStatusStore = SupporterStatusStore(MemoryDataStore(SupporterStatus())),
       statsRepo =
@@ -1897,7 +1995,7 @@ class BookOverviewViewModelTest {
             ListeningSummary(
               listened = 12.hours,
               listeningDays = 4,
-              finishedBooks = listOf(FinishedBook(BookId("finished"), now - 1.days)),
+              finishedBooks = listOf(FinishedBook(FINISHED_BOOK, now - 1.days)),
             )
         },
       clock =
@@ -1933,5 +2031,6 @@ class BookOverviewViewModelTest {
 
   private companion object {
     const val SURVEY_URL = "https://survey.example/s"
+    val FINISHED_BOOK = BookId("finished")
   }
 }

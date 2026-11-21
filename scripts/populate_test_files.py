@@ -125,9 +125,11 @@ def audio_duration_seconds(file):
   return float(subprocess.run(command, capture_output=True, text=True, check=True).stdout)
 
 
-def encode_mp3_sample():
-  sample = WORK_DIR / "sample.mp3"
-  ffmpeg("-i", SAMPLES / "auphonic_chapters_demo.mp3", "-map", "0:a", "-ac", "1", "-c:a", "libmp3lame", "-b:a", "64k", sample)
+# Silent, so that no emulator plays sound at the desk.
+def silent_sample(extension, codec):
+  sample = WORK_DIR / f"sample.{extension}"
+  source = SAMPLES / f"auphonic_chapters_demo.{extension}"
+  ffmpeg("-i", source, "-map", "0:a", "-ac", "1", "-af", "volume=0", "-c:a", codec, "-b:a", "64k", sample)
   return sample
 
 
@@ -241,9 +243,9 @@ def main():
 
   # Chapters loop these with stream copy instead of re-encoding, which keeps the generation instant.
   samples = {
-    "mp3": encode_mp3_sample(),
-    "m4b": SAMPLES / "auphonic_chapters_demo.m4a",
-    "opus": SAMPLES / "auphonic_chapters_demo.opus",
+    "mp3": silent_sample("mp3", "libmp3lame"),
+    "m4b": silent_sample("m4a", "aac"),
+    "opus": silent_sample("opus", "libopus"),
   }
   print(f"Generating {len(BOOKS)} audiobooks")
   generated = []

@@ -626,6 +626,9 @@
     <string name="support.badge.tip_jar">Słoik na napiwki</string>
     <string name="support.badges.title">Twoja odznaka rośnie z każdym miesiącem wsparcia</string>
     <string name="support.action.donate_kofi">Przekaż darowiznę na Ko-fi</string>
+    <string name="support.card.book.message">Voice jest darmowy i bez reklam. To dzięki takim osobom jak ty.</string>
+    <string name="support.card.letter.action">Postaw Paulowi herbatę</string>
+    <string name="support.card.letter.message">Tworzę Voice sam i utrzymuję go za darmo i bez reklam. Jeśli jest dla ciebie wart filiżanki herbaty, pomoże mi to działać dalej.</string>
     <string name="support.description.maintenance">Voice jest darmowy, open source i utrzymywany przez jednego programistę.</string>
     <string name="support.description.monthly">Comiesięczne wsparcie pozwala mi planować kolejne wydanie, a nie tylko kolejną poprawkę.</string>
     <string name="support.fine_print">To podziękowanie: nic nie odblokowuje. Anuluj w każdej chwili w Google Play.</string>

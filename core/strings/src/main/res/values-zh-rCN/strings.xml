@@ -530,6 +530,9 @@
     <string name="support.badge.tip_jar">打赏罐</string>
     <string name="support.badges.title">每多支持一个月，徽章就会成长</string>
     <string name="support.action.donate_kofi">通过 Ko-fi 捐助</string>
+    <string name="support.card.book.message">Voice 免费，也没有广告。这要感谢像您这样的听众。</string>
+    <string name="support.card.letter.action">请 Paul 喝杯茶</string>
+    <string name="support.card.letter.message">Voice 由我一个人开发，并始终保持免费、无广告。如果您觉得它值一杯茶，这会帮助我继续做下去。</string>
     <string name="support.description.maintenance">Voice 免费、开源，由一位开发者维护。</string>
     <string name="support.description.monthly">每月的支持让我能规划下一个版本，而不只是下一次修复。</string>
     <string name="support.fine_print">仅为感谢：不解锁任何功能。可随时在 Google Play 中取消。</string>

@@ -626,6 +626,9 @@
     <string name="support.badge.tip_jar">Kasička</string>
     <string name="support.badges.title">Váš odznak roste s každým měsícem podpory</string>
     <string name="support.action.donate_kofi">Přispět na Ko-fi</string>
+    <string name="support.card.book.message">Voice je zdarma a bez reklam. Je to díky lidem, jako jste vy.</string>
+    <string name="support.card.letter.action">Kupte Paulovi čaj</string>
+    <string name="support.card.letter.message">Voice vyvíjím sám a udržuji ho zdarma a bez reklam. Pokud vám stojí za šálek čaje, pomůže mi to pokračovat.</string>
     <string name="support.description.maintenance">Aplikace Voice je zdarma, má otevřený zdrojový kód a udržuje ji jeden vývojář.</string>
     <string name="support.description.monthly">Měsíční podpora mi umožňuje plánovat další verzi, nejen další opravu.</string>
     <string name="support.fine_print">Je to poděkování: nic neodemyká. Zrušit můžete kdykoli v Google Play.</string>

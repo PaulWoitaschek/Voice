@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Jootrahapurk</string>
     <string name="support.badges.title">Sinu märk kasvab iga toetatud kuuga</string>
     <string name="support.action.donate_kofi">Anneta Ko-fis</string>
+    <string name="support.card.book.message">Voice on tasuta ja reklaamideta. See on võimalik tänu sinusugustele kuulajatele.</string>
+    <string name="support.card.letter.action">Osta Paulile tass teed</string>
+    <string name="support.card.letter.message">Teen Voice\'i üksi ning hoian selle tasuta ja reklaamivabana. Kui see on sulle tassi teed väärt, aitab see mul jätkata.</string>
     <string name="support.description.maintenance">Voice on tasuta, avatud lähtekoodiga ja seda hooldab üks arendaja.</string>
     <string name="support.description.monthly">Igakuine toetus laseb mul planeerida järgmist versiooni, mitte ainult järgmist parandust.</string>
     <string name="support.fine_print">See on tänuavaldus: ei ava midagi. Tühista igal ajal Google Plays.</string>

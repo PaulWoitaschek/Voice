@@ -594,6 +594,9 @@
     <string name="support.badge.tip_jar">Mancia</string>
     <string name="support.badges.title">Il tuo badge cresce a ogni mese di sostegno</string>
     <string name="support.action.donate_kofi">Dona su Ko-fi</string>
+    <string name="support.card.book.message">Voice è gratuito e senza pubblicità. Resta così grazie a persone come te.</string>
+    <string name="support.card.letter.action">Offri un tè a Paul</string>
+    <string name="support.card.letter.message">Sviluppo Voice da solo e lo mantengo gratuito e senza pubblicità. Se per te vale una tazza di tè, mi aiuti ad andare avanti.</string>
     <string name="support.description.maintenance">Voice è gratuito, open source e mantenuto da un solo sviluppatore.</string>
     <string name="support.description.monthly">Il sostegno mensile è ciò che mi permette di pianificare la prossima versione, non solo la prossima correzione.</string>
     <string name="support.fine_print">È un grazie: non sblocca nulla. Annulla quando vuoi su Google Play.</string>

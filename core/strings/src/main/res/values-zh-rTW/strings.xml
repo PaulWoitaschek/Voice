@@ -530,6 +530,9 @@
     <string name="support.badge.tip_jar">小費罐</string>
     <string name="support.badges.title">每多支持一個月，徽章就會長大一點</string>
     <string name="support.action.donate_kofi">在 Ko-fi 上贊助</string>
+    <string name="support.card.book.message">Voice 免費，也沒有廣告。這都要感謝像你這樣的聽眾。</string>
+    <string name="support.card.letter.action">請 Paul 喝杯茶</string>
+    <string name="support.card.letter.message">Voice 由我一個人開發，並一直保持免費、沒有廣告。如果你覺得它值一杯茶，這會幫助我繼續做下去。</string>
     <string name="support.description.maintenance">Voice 免費、開放原始碼，由一位開發者維護。</string>
     <string name="support.description.monthly">每月的支持讓我能規劃下一個版本，而不只是下一次修正。</string>
     <string name="support.fine_print">這只是一份心意：不會解鎖任何功能。隨時可以在 Google Play 取消。</string>

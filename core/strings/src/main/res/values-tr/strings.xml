@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Bahşiş kavanozu</string>
     <string name="support.badges.title">Rozetiniz, destek olduğunuz her ay büyür</string>
     <string name="support.action.donate_kofi">Ko-fi üzerinden bağış yap</string>
+    <string name="support.card.book.message">Voice ücretsiz ve reklamsız. Sizin gibi dinleyiciler sayesinde de öyle kalıyor.</string>
+    <string name="support.card.letter.action">Paul\'a bir çay ısmarla</string>
+    <string name="support.card.letter.message">Voice\'u tek başıma geliştiriyorum ve ücretsiz, reklamsız tutuyorum. Sizin için bir bardak çay değerindeyse devam etmeme yardımcı olur.</string>
     <string name="support.description.maintenance">Voice ücretsiz, açık kaynaklıdır ve tek bir geliştirici tarafından sürdürülür.</string>
     <string name="support.description.monthly">Aylık destek, sadece bir sonraki düzeltmeyi değil, bir sonraki sürümü planlamamı sağlıyor.</string>
     <string name="support.fine_print">Bu bir teşekkür: hiçbir şeyin kilidini açmaz. Google Play\'den istediğiniz zaman iptal edebilirsiniz.</string>
