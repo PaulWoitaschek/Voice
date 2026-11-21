@@ -306,11 +306,11 @@ def command_books(args):
 def command_smoke(args):
   if not shutil.which("trailblaze"):
     sys.exit("trailblaze is missing. Install it with: brew install block/tap/trailblaze")
-  trails = Path(__file__).resolve().parent.parent / "trails"
+  root = repo_root()
   # Trailblaze writes its settings and logs into the working directory.
-  work = repo_root() / "build" / "smoke"
+  work = root / "build" / "smoke"
   work.mkdir(parents=True, exist_ok=True)
-  command = ["trailblaze", "run", str(trails), "-d", f"android/{serial()}", "--no-save-recording"]
+  command = ["trailblaze", "run", str(root / "smoke-tests"), "-d", f"android/{serial()}", "--no-save-recording"]
   result = subprocess.run(command, cwd=work)
   # agent-device can't read the screen while the Trailblaze app runs.
   adb("shell", "am", "force-stop", "xyz.block.trailblaze.runner", check=False)
