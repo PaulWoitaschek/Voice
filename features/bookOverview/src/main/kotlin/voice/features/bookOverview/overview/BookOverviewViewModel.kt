@@ -67,6 +67,7 @@ import voice.features.bookOverview.select.SelectionEditViewState
 import voice.features.bookOverview.select.SelectionViewState
 import voice.features.bookOverview.select.of
 import voice.features.bookOverview.stats.WeekListening
+import voice.features.bookOverview.support.SupportCard
 import voice.features.bookOverview.survey.Survey
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -100,6 +101,7 @@ class BookOverviewViewModel(
   private val bookSelectionRequests: BookSelectionRequests,
   private val selectedBooksEditor: SelectedBooksEditor,
   private val weekListening: WeekListening,
+  private val supportCard: SupportCard,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -162,6 +164,11 @@ class BookOverviewViewModel(
     }
       .collectAsState(initial = null)
       .value
+    val hasSupportCard = remember {
+      supportCard.show()
+    }
+      .collectAsState(initial = null)
+      .value
     val showHiddenBooks = remember {
       showHiddenBooksStore.data
     }
@@ -185,6 +192,7 @@ class BookOverviewViewModel(
         gridMode == null ||
         hasFoldersWithoutAccess == null ||
         hasSurvey == null ||
+        hasSupportCard == null ||
         showHiddenBooks == null ||
         showNotDownloadedBooks == null ||
         grouping == null ||
@@ -230,6 +238,13 @@ class BookOverviewViewModel(
     val showEmptyLibrary = !hasStoragePermissionBug && !scannerActive && library.books.isEmpty()
     LaunchedEffect(showEmptyLibrary) {
       if (showEmptyLibrary) emptyLibraryTracker.track()
+    }
+
+    // adding books comes first
+    val showSurveyCard = hasSurvey && !showEmptyLibrary
+    val showSupportCard = hasSupportCard && !showEmptyLibrary && !showSurveyCard
+    LaunchedEffect(showSupportCard) {
+      if (showSupportCard) supportCard.shown()
     }
 
     val layoutMode =
@@ -321,8 +336,7 @@ class BookOverviewViewModel(
       showFilterIcon = library.books.isNotEmpty(),
       isLoading = scannerActive,
       showStoragePermissionBugCard = hasStoragePermissionBug,
-      // adding books comes first
-      showSurveyCard = hasSurvey && !showEmptyLibrary,
+      showSurveyCard = showSurveyCard,
       showFolderAccessBadge = hasFoldersWithoutAccess,
       hiddenBookCount = hiddenBookCount,
       showHiddenBooks = showHiddenBooks,
@@ -340,6 +354,7 @@ class BookOverviewViewModel(
         },
       selectionEdit = selectionEdit,
       listenedThisWeek = listenedThisWeek,
+      showSupportCard = showSupportCard,
     )
   }
 
@@ -585,6 +600,19 @@ class BookOverviewViewModel(
     scope.launch {
       val url = survey.url().first() ?: return@launch
       survey.dismiss(url)
+    }
+  }
+
+  fun onSupportCardClick() {
+    scope.launch {
+      supportCard.open()
+    }
+    navigator.goTo(Destination.SupportVoice)
+  }
+
+  fun onSupportCardDismiss() {
+    scope.launch {
+      supportCard.dismiss()
     }
   }
 

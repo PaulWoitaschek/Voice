@@ -21,6 +21,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.time.Clock
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Instant
@@ -38,6 +39,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
+import voice.core.analytics.api.Analytics
 import voice.core.audiobookshelf.PickedLibrary
 import voice.core.audiobookshelf.ServerBookEdit
 import voice.core.audiobookshelf.ServerDownloads
@@ -52,8 +54,12 @@ import voice.core.data.CustomMetadata
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
+import voice.core.data.repo.FinishedBook
 import voice.core.data.repo.ListeningStatsRepo
+import voice.core.data.repo.ListeningSummary
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.supporter.SupporterStatus
+import voice.core.data.supporter.SupporterStatusStore
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
@@ -76,6 +82,9 @@ import voice.features.bookOverview.select.BookSelectionRequests
 import voice.features.bookOverview.select.BooksEdited
 import voice.features.bookOverview.select.SelectedBooksEditor
 import voice.features.bookOverview.stats.WeekListening
+import voice.features.bookOverview.support.SupportCard
+import voice.features.bookOverview.support.SupportCardAnsweredStore
+import voice.features.bookOverview.support.SupportCardFeatureFlag
 import voice.features.bookOverview.survey.HandledSurveysStore
 import voice.features.bookOverview.survey.Survey
 import voice.features.bookOverview.survey.SurveyUrlFeatureFlag
@@ -158,6 +167,7 @@ class BookOverviewViewModelTest {
         bookSelectionRequests = BookSelectionRequests(),
         selectedBooksEditor = SelectedBooksEditor(mockk(), serverLibrary),
         weekListening = weekListening(),
+        supportCard = supportCard(),
       )
 
     backgroundScope
@@ -240,6 +250,7 @@ class BookOverviewViewModelTest {
         bookSelectionRequests = BookSelectionRequests(),
         selectedBooksEditor = SelectedBooksEditor(mockk(), serverLibrary),
         weekListening = weekListening(),
+        supportCard = supportCard(),
       )
 
     backgroundScope
@@ -1070,6 +1081,120 @@ class BookOverviewViewModelTest {
   }
 
   @Test
+  fun `setting on, a book finished yesterday, open the library, the support card shows`() =
+    runTest {
+      val analytics = mockk<Analytics>(relaxUnitFun = true)
+      val viewModel =
+        viewModel(
+          books = listOf(book()),
+          supportCard = supportCard(enabled = true, analytics = analytics),
+        )
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.state()
+        }
+        .test {
+          testScheduler.runCurrent()
+          assertEquals(expected = true, actual = expectMostRecentItem().showSupportCard)
+        }
+      verify(exactly = 1) { analytics.event("support_card", mapOf("action" to "show")) }
+    }
+
+  @Test
+  fun `a survey waits and a book finished yesterday, open the library, only the survey card shows`() =
+    runTest {
+      val analytics = mockk<Analytics>(relaxUnitFun = true)
+      val viewModel =
+        viewModel(
+          books = listOf(book()),
+          survey = survey(remoteUrl = SURVEY_URL),
+          supportCard = supportCard(enabled = true, analytics = analytics),
+        )
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.state()
+        }
+        .test {
+          testScheduler.runCurrent()
+          val state = expectMostRecentItem()
+          assertEquals(expected = true, actual = state.showSurveyCard)
+          assertEquals(expected = false, actual = state.showSupportCard)
+        }
+      verify(exactly = 0) { analytics.event(any(), any()) }
+    }
+
+  @Test
+  fun `setting on, a book finished yesterday, an empty library, no support card`() = runTest {
+    val viewModel = viewModel(supportCard = supportCard(enabled = true))
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        testScheduler.runCurrent()
+        val state = expectMostRecentItem()
+        assertEquals(expected = true, actual = state.showEmptyLibrary)
+        assertEquals(expected = false, actual = state.showSupportCard)
+      }
+  }
+
+  @Test
+  fun `the support card, tap Support development, the support screen opens and the card goes`() =
+    runTest {
+      val navigator = mockk<Navigator>(relaxed = true)
+      val viewModel =
+        viewModel(
+          books = listOf(book()),
+          navigator = navigator,
+          supportCard = supportCard(enabled = true),
+        )
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.state()
+        }
+        .test {
+          testScheduler.runCurrent()
+          assertEquals(expected = true, actual = expectMostRecentItem().showSupportCard)
+
+          viewModel.onSupportCardClick()
+          testScheduler.runCurrent()
+
+          assertEquals(expected = false, actual = expectMostRecentItem().showSupportCard)
+        }
+      verify(exactly = 1) { navigator.goTo(Destination.SupportVoice) }
+    }
+
+  @Test
+  fun `the support card, tap No thanks, the card goes`() = runTest {
+    val navigator = mockk<Navigator>(relaxed = true)
+    val viewModel =
+      viewModel(
+        books = listOf(book()),
+        navigator = navigator,
+        supportCard = supportCard(enabled = true),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        testScheduler.runCurrent()
+        assertEquals(expected = true, actual = expectMostRecentItem().showSupportCard)
+
+        viewModel.onSupportCardDismiss()
+        testScheduler.runCurrent()
+
+        assertEquals(expected = false, actual = expectMostRecentItem().showSupportCard)
+      }
+    verify(exactly = 0) { navigator.goTo(any()) }
+  }
+
+  @Test
   fun `show folders opens the folders`() = runTest {
     val navigator = mockk<Navigator>(relaxed = true)
     val viewModel = viewModel(navigator = navigator)
@@ -1697,6 +1822,7 @@ class BookOverviewViewModelTest {
     },
     bookSelectionRequests: BookSelectionRequests = BookSelectionRequests(),
     listenedThisWeek: Flow<Duration?> = flowOf(null),
+    supportCard: SupportCard = supportCard(),
   ): BookOverviewViewModel {
     return BookOverviewViewModel(
       repo = repo,
@@ -1738,6 +1864,7 @@ class BookOverviewViewModelTest {
       bookSelectionRequests = bookSelectionRequests,
       selectedBooksEditor = SelectedBooksEditor(repo, serverLibrary),
       weekListening = weekListening(listenedThisWeek),
+      supportCard = supportCard,
     )
   }
 
@@ -1754,6 +1881,32 @@ class BookOverviewViewModelTest {
       zone = { ZoneOffset.UTC },
       firstDayOfWeek = { DayOfWeek.MONDAY },
     )
+
+  private fun supportCard(
+    enabled: Boolean = false,
+    analytics: Analytics = mockk(relaxUnitFun = true),
+  ): SupportCard {
+    val now = Instant.parse("2026-11-20T12:00:00Z")
+    return SupportCard(
+      enabled = SupportCardFeatureFlag(MemoryFeatureFlag(enabled)),
+      answeredStore = SupportCardAnsweredStore(MemoryDataStore(false)),
+      supporterStatusStore = SupporterStatusStore(MemoryDataStore(SupporterStatus())),
+      statsRepo =
+        mockk<ListeningStatsRepo> {
+          coEvery { summary(any(), any()) } returns
+            ListeningSummary(
+              listened = 12.hours,
+              listeningDays = 4,
+              finishedBooks = listOf(FinishedBook(BookId("finished"), now - 1.days)),
+            )
+        },
+      clock =
+        object : Clock {
+          override fun now() = now
+        },
+      analytics = analytics,
+    )
+  }
 
   private fun survey(remoteUrl: String = ""): Survey {
     return Survey(
