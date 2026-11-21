@@ -1,0 +1,95 @@
+config:
+  devices:
+    android:
+      driver: ANDROID_ONDEVICE_ACCESSIBILITY
+  title: headset
+
+trail:
+  # On a new emulator nothing has played yet, so the play key has nowhere to go.
+  - step: "Play and pause Snakey once in Voice"
+    recording:
+      android:
+        - android_forceStop:
+            appId: de.ph1b.audiobook
+        - openApp:
+            appId: de.ph1b.audiobook
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  textRegex: Snakey
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  contentDescriptionRegex: Play
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  contentDescriptionRegex: Pause
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                contentDescriptionRegex: Play
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  contentDescriptionRegex: Close
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Continue listening
+
+  - step: "Go to the home screen, so that Voice runs in the background"
+    recording:
+      android:
+        - android_adbShell:
+            command: [input, keyevent, KEYCODE_HOME]
+        - android_adbShell:
+            command: [sleep, "2"]
+
+  # Trailblaze can only read the screen, so Voice comes to the front after the play key had time to start playback.
+  - step: "Send the play key while Voice is in the background"
+    recording:
+      android:
+        - android_adbShell:
+            command: [input, keyevent, KEYCODE_MEDIA_PLAY]
+        - android_adbShell:
+            command: [sleep, "3"]
+
+  - step: "Voice plays"
+    recording:
+      android:
+        - openApp:
+            appId: de.ph1b.audiobook
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                contentDescriptionRegex: Pause
+
+  - step: "The time moves"
+    recording:
+      android:
+        - rememberTextBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "\\d+:\\d{2} left"
+              childOf:
+                containsChild:
+                  androidAccessibility:
+                    textRegex: Continue listening
+            variable: left
+        - assertNotVisibleWithText:
+            text: "{{left}}"
+
+  - step: "Send the pause key, and Voice shows Play"
+    recording:
+      android:
+        - android_adbShell:
+            command: [input, keyevent, KEYCODE_MEDIA_PAUSE]
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                contentDescriptionRegex: Play

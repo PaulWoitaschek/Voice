@@ -2,7 +2,7 @@ config:
   devices:
     android:
       driver: ANDROID_ONDEVICE_ACCESSIBILITY
-  title: play-a-book
+  title: sleep-timer
 
 trail:
   - step: "Start Voice fresh on the library"
@@ -13,25 +13,36 @@ trail:
         - openApp:
             appId: de.ph1b.audiobook
 
-  - step: "Open the book Snakey"
+  - step: "Open the book Treeman"
     recording:
       android:
         - tapOnElementBySelector:
             nodeSelector:
               containsChild:
                 androidAccessibility:
-                  textRegex: Snakey
+                  textRegex: Treeman
 
-  - step: "Remember the position before playback"
+  - step: "Set the sleep timer to 15 minutes"
     recording:
       android:
-        - rememberTextBySelector:
+        - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: "\\d{2}:\\d{2}"
-            variable: start
+                contentDescriptionRegex: Sleep timer
+        - tapOnElementBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: 15 minutes
 
-  - step: "Start playback"
+  - step: "The button shows 15:00"
+    recording:
+      android:
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "15:00"
+
+  - step: "Play, and the time on the button goes down"
     recording:
       android:
         - tapOnElementBySelector:
@@ -39,22 +50,12 @@ trail:
               containsChild:
                 androidAccessibility:
                   contentDescriptionRegex: Play
-
-  - step: "The button shows Pause"
-    recording:
-      android:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Pause
+                textRegex: "14:\\d{2}"
 
-  - step: "The time moves on"
-    recording:
-      android:
-        - assertNotVisibleWithText:
-            text: "{{start}}"
-
-  - step: "Pause playback"
+  - step: "Pause"
     recording:
       android:
         - tapOnElementBySelector:
@@ -62,28 +63,20 @@ trail:
               containsChild:
                 androidAccessibility:
                   contentDescriptionRegex: Pause
-
-  - step: "The button shows Play again"
-    recording:
-      android:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
                 contentDescriptionRegex: Play
 
-  - step: "Close the player"
+  - step: "Press the button, and the timer is off"
     recording:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Close
-
-  - step: "The library is back"
-    recording:
-      android:
+              androidAccessibility:
+                contentDescriptionRegex: Sleep timer
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: Search your library
+                contentDescriptionRegex: Sleep timer
+                isChecked: false
