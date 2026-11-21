@@ -296,14 +296,16 @@ def command_books(args):
 
 
 def command_smoke(args):
-  serial()
-  # agent-device test can't use the emulator while this session holds it.
-  agent("close", check=False)
-  flows = Path(__file__).resolve().parent.parent / "flows"
-  # The retry is for the restart of the app, which agent-device gives up on now and then.
-  command = ["agent-device", "test", str(flows), "--retries", "1", "--artifacts-dir", str(repo_root() / "build" / "smoke")]
-  result = subprocess.run(command)
-  agent("open", PACKAGE, "--platform", "android")
+  if not shutil.which("trailblaze"):
+    sys.exit("trailblaze is missing. Install it with: brew install block/tap/trailblaze")
+  trails = Path(__file__).resolve().parent.parent / "trails"
+  # Trailblaze writes its settings and logs into the working directory.
+  work = repo_root() / "build" / "smoke"
+  work.mkdir(parents=True, exist_ok=True)
+  command = ["trailblaze", "run", str(trails), "-d", f"android/{serial()}", "--no-save-recording"]
+  result = subprocess.run(command, cwd=work)
+  # agent-device can't read the screen while the Trailblaze app runs.
+  adb("shell", "am", "force-stop", "xyz.block.trailblaze.runner", check=False)
   sys.exit(result.returncode)
 
 
