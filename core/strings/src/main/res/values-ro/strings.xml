@@ -594,6 +594,9 @@
     <string name="support.badge.tip_jar">Borcan de bacșiș</string>
     <string name="support.badges.title">Insigna ta crește cu fiecare lună de susținere</string>
     <string name="support.action.donate_kofi">Donează pe Ko-fi</string>
+    <string name="support.card.book.message">Voice este gratuit și fără reclame. Rămâne așa datorită ascultătorilor ca tine.</string>
+    <string name="support.card.letter.action">Fă-i cinste lui Paul cu un ceai</string>
+    <string name="support.card.letter.message">Dezvolt Voice de unul singur și îl păstrez gratuit și fără reclame. Dacă pentru tine valorează o ceașcă de ceai, asta mă ajută să merg mai departe.</string>
     <string name="support.description.maintenance">Voice este gratuit, open source și întreținut de un singur dezvoltator.</string>
     <string name="support.description.monthly">Susținerea lunară îmi permite să planific următoarea versiune, nu doar următoarea remediere.</string>
     <string name="support.fine_print">E un mulțumesc: nu deblochează nimic. Anulezi oricând din Google Play.</string>

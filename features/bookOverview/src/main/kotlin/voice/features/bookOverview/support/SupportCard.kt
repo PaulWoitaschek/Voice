@@ -2,17 +2,29 @@ package voice.features.bookOverview.support
 
 import dev.zacsweers.metro.Inject
 import kotlin.time.Clock
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import voice.core.analytics.api.Analytics
+import voice.core.data.BookId
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.supporter.SupporterStatusStore
 
+sealed interface SupportCardOffer {
+  data object NotNow : SupportCardOffer
+
+  data class Now(
+    val look: SupportCardLook,
+    val finishedBook: BookId,
+    val listened: Duration,
+  ) : SupportCardOffer
+}
+
 @Inject
 class SupportCard(
-  private val enabled: SupportCardFeatureFlag,
+  private val look: SupportCardFeatureFlag,
   private val answeredStore: SupportCardAnsweredStore,
   private val supporterStatusStore: SupporterStatusStore,
   private val statsRepo: ListeningStatsRepo,
@@ -20,26 +32,38 @@ class SupportCard(
   private val analytics: Analytics,
 ) {
 
-  fun show(): Flow<Boolean> {
-    return combine(enabled.flow, answeredStore.data, supporterStatusStore.data) {
-      enabled,
+  // the setting can change while a card shows, and the reports name the look the listener got
+  private var offered = SupportCardLook.None
+
+  fun offer(): Flow<SupportCardOffer> {
+    return combine(look.flow, answeredStore.data, supporterStatusStore.data) {
+      look,
       answered,
       supporter ->
-      enabled.value && !answered && supporter.badge == null && finishedBookLately()
+      if (answered || supporter.badge != null) return@combine SupportCardOffer.NotNow
+      val summary = statsRepo.summary()
+      val finished = summary.finishedBooks.firstOrNull()
+      // the same bar as the rating prompt, so Voice only asks listeners who know it
+      if (
+        finished == null ||
+          finished.at < clock.now() - 3.days ||
+          summary.listened < 5.hours ||
+          summary.listeningDays < 3
+      ) {
+        return@combine SupportCardOffer.NotNow
+      }
+      offered = look.value
+      SupportCardOffer.Now(look.value, finished.bookId, summary.listened)
     }
   }
 
-  // the same bar as the rating prompt, so Voice only asks listeners who know it
-  private suspend fun finishedBookLately(): Boolean {
-    val summary = statsRepo.summary()
-    val finished = summary.finishedBooks.firstOrNull() ?: return false
-    return finished.at >= clock.now() - 3.days &&
-      summary.listened >= 5.hours &&
-      summary.listeningDays >= 3
+  fun shown() {
+    report("show")
   }
 
-  fun shown() {
-    analytics.event("support_card", mapOf("action" to "show"))
+  // Voice compares the cards with the listeners who could have seen one
+  fun heldBack() {
+    report("skip")
   }
 
   suspend fun open() {
@@ -49,6 +73,13 @@ class SupportCard(
 
   suspend fun dismiss() {
     answeredStore.updateData { true }
-    analytics.event("support_card", mapOf("action" to "dismiss"))
+    report("dismiss")
+  }
+
+  private fun report(action: String) {
+    analytics.event(
+      "support_card",
+      mapOf("action" to action, "kind" to offered.name.lowercase()),
+    )
   }
 }

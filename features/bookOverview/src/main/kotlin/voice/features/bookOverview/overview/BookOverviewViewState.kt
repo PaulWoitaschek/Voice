@@ -34,7 +34,7 @@ data class BookOverviewViewState(
   val upNext: Boolean = false,
   // null while Voice never counted any listening
   val listenedThisWeek: Duration? = null,
-  val showSupportCard: Boolean = false,
+  val supportCard: SupportCardViewState? = null,
 ) {
 
   // a switch only shows once it has something to filter, so a library without it stays as it was
@@ -155,3 +155,13 @@ internal fun AuthorGroup.toEntryViewState(category: BookCategory) =
     hidden = hidden,
     bookIds = books.map { it.id },
   )
+
+@Immutable
+sealed interface SupportCardViewState {
+  data class Letter(val hoursListened: Int) : SupportCardViewState
+
+  data class Book(
+    val name: String,
+    val cover: String?,
+  ) : SupportCardViewState
+}

@@ -594,6 +594,9 @@
     <string name="support.badge.tip_jar">Pot de propines</string>
     <string name="support.badges.title">La vostra insígnia creix amb cada mes de suport</string>
     <string name="support.action.donate_kofi">Fes un donatiu a Ko-fi</string>
+    <string name="support.card.book.message">Voice és de franc i no té anuncis. Això és gràcies a oients com vós.</string>
+    <string name="support.card.letter.action">Convida en Paul a un te</string>
+    <string name="support.card.letter.message">Faig Voice tot sol, i vull que continuï sent de franc i sense anuncis. Si per a vós val una tassa de te, m\'ajudeu a continuar.</string>
     <string name="support.description.maintenance">Voice és de franc i de codi obert, i en té cura una sola persona.</string>
     <string name="support.description.monthly">El suport mensual és el que em permet planificar la propera versió, no només la propera correcció.</string>
     <string name="support.fine_print">És un agraïment: no desbloqueja res. Cancel·leu-ho quan vulgueu a Google Play.</string>

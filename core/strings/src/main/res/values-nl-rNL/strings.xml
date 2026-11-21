@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Fooienpot</string>
     <string name="support.badges.title">Je badge groeit elke maand dat je steunt</string>
     <string name="support.action.donate_kofi">Doneren op Ko-fi</string>
+    <string name="support.card.book.message">Voice is gratis en reclamevrij. Dat blijft zo dankzij luisteraars zoals jij.</string>
+    <string name="support.card.letter.action">Trakteer Paul op thee</string>
+    <string name="support.card.letter.message">Ik maak Voice in mijn eentje en houd het gratis en reclamevrij. Als het jou een kopje thee waard is, helpt dat me om door te gaan.</string>
     <string name="support.description.maintenance">Voice is gratis, open source en wordt onderhouden door één ontwikkelaar.</string>
     <string name="support.description.monthly">Met maandelijkse steun kan ik de volgende versie plannen, niet alleen de volgende bugfix.</string>
     <string name="support.fine_print">Een bedankje: ontgrendelt niets. Altijd opzegbaar in Google Play.</string>

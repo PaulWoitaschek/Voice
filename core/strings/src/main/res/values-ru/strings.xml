@@ -626,6 +626,9 @@
     <string name="support.badge.tip_jar">Банка для чаевых</string>
     <string name="support.badges.title">Ваш значок растёт с каждым месяцем поддержки</string>
     <string name="support.action.donate_kofi">Пожертвовать на Ko-fi</string>
+    <string name="support.card.book.message">Voice бесплатен и без рекламы. Это благодаря таким слушателям, как вы.</string>
+    <string name="support.card.letter.action">Чашка чая для Paul</string>
+    <string name="support.card.letter.message">Я делаю Voice один и сохраняю его бесплатным и без рекламы. Если для вас он стоит чашки чая, это поможет мне продолжать.</string>
     <string name="support.description.maintenance">Voice бесплатен, имеет открытый исходный код и поддерживается одним разработчиком.</string>
     <string name="support.description.monthly">Ежемесячная поддержка позволяет мне планировать следующую версию, а не только следующее исправление.</string>
     <string name="support.fine_print">Это благодарность: ничего не открывает. Отменить можно в любой момент в Google Play.</string>

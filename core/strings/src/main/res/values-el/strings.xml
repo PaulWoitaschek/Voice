@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Κουμπαράς</string>
     <string name="support.badges.title">Το σήμα σας μεγαλώνει με κάθε μήνα υποστήριξης</string>
     <string name="support.action.donate_kofi">Δωρεά μέσω Ko-fi</string>
+    <string name="support.card.book.message">Το Voice είναι δωρεάν και χωρίς διαφημίσεις. Παραμένει έτσι χάρη σε ανθρώπους σαν εσάς.</string>
+    <string name="support.card.letter.action">Ένα τσάι για τον Paul</string>
+    <string name="support.card.letter.message">Φτιάχνω το Voice μόνος μου και το κρατάω δωρεάν και χωρίς διαφημίσεις. Αν για εσάς αξίζει ένα φλιτζάνι τσάι, με βοηθάτε να συνεχίσω.</string>
     <string name="support.description.maintenance">Το Voice είναι δωρεάν, ανοιχτού κώδικα και το συντηρεί ένας μόνο προγραμματιστής.</string>
     <string name="support.description.monthly">Η μηνιαία υποστήριξη μού επιτρέπει να σχεδιάζω την επόμενη έκδοση, όχι μόνο την επόμενη διόρθωση.</string>
     <string name="support.fine_print">Είναι ένα ευχαριστώ: δεν ξεκλειδώνει τίποτα. Ακυρώστε όποτε θέλετε στο Google Play.</string>

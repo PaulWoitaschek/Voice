@@ -530,6 +530,9 @@
     <string name="support.badge.tip_jar">チップ箱</string>
     <string name="support.badges.title">応援を続けると、バッジが毎月成長します</string>
     <string name="support.action.donate_kofi">Ko-fiで寄付</string>
+    <string name="support.card.book.message">Voice は無料で、広告もありません。それを支えているのは、リスナーのみなさんです。</string>
+    <string name="support.card.letter.action">Paul にお茶を一杯おごる</string>
+    <string name="support.card.letter.message">Voice は私ひとりで開発していて、無料・広告なしを続けています。お茶一杯分の価値があると感じていただけたら、続けていく力になります。</string>
     <string name="support.description.maintenance">Voiceは無料のオープンソースで、1人の開発者が保守しています。</string>
     <string name="support.description.monthly">毎月の支援があるからこそ、次の修正だけでなく次のリリースを計画できます。</string>
     <string name="support.fine_print">感謝の気持ちのみ：機能は解放されません。Google Play でいつでも解約できます。</string>

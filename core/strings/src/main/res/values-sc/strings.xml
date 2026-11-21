@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Istrina</string>
     <string name="support.badges.title">Sa medàllia tua creschet cun cada mese de suportu</string>
     <string name="support.action.donate_kofi">Dona in Ko-fi</string>
+    <string name="support.card.book.message">Voice est de badas e chene publitzidade. Est gasi gràtzias a gente che a tie.</string>
+    <string name="support.card.letter.action">Cumbida unu te a Paul</string>
+    <string name="support.card.letter.message">Fatzo Voice a sa sola e lu mantèngio de badas e chene publitzidade. Si pro tene balet unu tzicherone de te, m\'agiudas a sighire.</string>
     <string name="support.description.maintenance">Voice est gratis, a còdighe abertu e mantentu dae un\'isvilupadore ebbia.</string>
     <string name="support.description.monthly">Cun su suportu de cada mese potzo preparare sa versione imbeniente, non petzi sa curretzione imbeniente.</string>
     <string name="support.fine_print">Est unu gràtzias: no isblocat nudda. Annulla cando boles in Google Play.</string>

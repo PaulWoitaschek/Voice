@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">टिप जार</string>
     <string name="support.badges.title">हर महीने के समर्थन के साथ आपका बैज बढ़ता है</string>
     <string name="support.action.donate_kofi">Ko-fi पर दान करें</string>
+    <string name="support.card.book.message">Voice मुफ़्त है और इसमें कोई विज्ञापन नहीं है। आप जैसे श्रोताओं की बदौलत यह ऐसा ही बना हुआ है।</string>
+    <string name="support.card.letter.action">Paul को चाय पिलाएँ</string>
+    <string name="support.card.letter.message">मैं Voice अकेले बनाता हूँ और इसे मुफ़्त और विज्ञापन-मुक्त रखता हूँ। अगर आपके लिए यह एक कप चाय के लायक़ है, तो इससे मुझे आगे बढ़ने में मदद मिलती है।</string>
     <string name="support.description.maintenance">Voice मुफ़्त और ओपन सोर्स है, और इसे एक ही डेवलपर संभालता है।</string>
     <string name="support.description.monthly">मासिक समर्थन से ही मैं सिर्फ़ अगले फ़िक्स की नहीं, अगली रिलीज़ की योजना बना पाता हूँ।</string>
     <string name="support.fine_print">यह एक धन्यवाद है: इससे कुछ भी अनलॉक नहीं होता। Google Play में कभी भी रद्द करें।</string>

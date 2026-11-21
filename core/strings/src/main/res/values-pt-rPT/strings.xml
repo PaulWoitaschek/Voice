@@ -594,6 +594,9 @@
     <string name="support.badge.tip_jar">Frasco de gorjetas</string>
     <string name="support.badges.title">O seu emblema cresce a cada mês de apoio</string>
     <string name="support.action.donate_kofi">Doar no Ko-fi</string>
+    <string name="support.card.book.message">O Voice é gratuito e sem anúncios. Continua assim graças ao apoio de quem o usa.</string>
+    <string name="support.card.letter.action">Ofereça um chá ao Paul</string>
+    <string name="support.card.letter.message">Faço o Voice sozinho e mantenho-o gratuito e sem anúncios. Se achar que vale uma chávena de chá, isso ajuda-me a continuar.</string>
     <string name="support.description.maintenance">O Voice é gratuito, de código aberto e mantido por um único programador.</string>
     <string name="support.description.monthly">O apoio mensal é o que me permite planear a próxima versão, e não apenas a próxima correção.</string>
     <string name="support.fine_print">É um agradecimento: não desbloqueia nada. Cancele quando quiser no Google Play.</string>
