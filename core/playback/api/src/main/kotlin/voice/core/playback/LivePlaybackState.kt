@@ -13,7 +13,8 @@ data class LivePlaybackState(
 )
 
 fun Book.overlay(livePlaybackState: LivePlaybackState): Book {
-  return if (livePlaybackState.bookId == id) {
+  // the player keeps its files when a scan finds that the book lost one of them
+  return if (livePlaybackState.bookId == id && livePlaybackState.chapterId in content.chapters) {
     update {
       it.copy(
         currentChapter = livePlaybackState.chapterId,

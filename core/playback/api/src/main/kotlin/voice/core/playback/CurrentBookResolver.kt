@@ -30,6 +30,9 @@ class CurrentBookResolver(
       return book
     }
     val livePosition = playerController.livePlaybackState(bookId) ?: return book
+    if (livePosition.chapterId !in book.content.chapters) {
+      return book
+    }
     return book.update {
       it.copy(
         currentChapter = livePosition.chapterId,
