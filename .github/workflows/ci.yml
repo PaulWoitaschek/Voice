@@ -72,7 +72,7 @@ jobs:
           disk-size: 6000M
           heap-size: 600M
           # The smoke test saves and loads its own snapshot, so snapshots stay on.
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot-load -no-snapshot-save
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot-load -no-snapshot-save -feature -Vulkan
           script: >-
             python3 scripts/populate_test_files.py --skip-adb
             && ANDROID_SERIAL=emulator-5554 .agents/skills/emulator/scripts/emulator.py setup

@@ -325,7 +325,8 @@ def emulator_snapshot(action):
   deadline = time.monotonic() + 60
   while not package_manager_answers():
     if time.monotonic() > deadline:
-      sys.exit(f"The emulator didn't come back after the {action} of the snapshot {SMOKE_SNAPSHOT}.")
+      state = subprocess.run(["adb", "-s", serial(), "get-state"], capture_output=True, text=True)
+      sys.exit(f"The emulator didn't come back after the {action} of the snapshot {SMOKE_SNAPSHOT}. adb: {(state.stdout + state.stderr).strip()}")
     time.sleep(1)
 
 
