@@ -545,6 +545,7 @@
     <string name="support.price.monthly">%1$s pe lună</string>
     <string name="support.price.yearly">%1$s pe an</string>
     <string name="support.price.once">%1$s o singură dată</string>
+    <string name="support.supporter.count">Peste %1$d de ascultători au susținut Voice</string>
     <string name="support.supporter.since">Alături de Voice din %1$s</string>
     <string name="support.supporter.title">Ești printre susținători</string>
     <string name="support.thank_you.action">Înapoi la ascultare</string>

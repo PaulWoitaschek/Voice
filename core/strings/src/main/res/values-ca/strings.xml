@@ -545,6 +545,7 @@
     <string name="support.price.monthly">%1$s al mes</string>
     <string name="support.price.yearly">%1$s a l\'any</string>
     <string name="support.price.once">%1$s un cop</string>
+    <string name="support.supporter.count">Més de %1$d oients han donat suport a Voice</string>
     <string name="support.supporter.since">Suport des de %1$s</string>
     <string name="support.supporter.title">Ja doneu suport a Voice</string>
     <string name="support.thank_you.action">Torna a l\'escolta</string>

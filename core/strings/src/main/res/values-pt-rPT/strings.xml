@@ -545,6 +545,7 @@
     <string name="support.price.monthly">%1$s por mês</string>
     <string name="support.price.yearly">%1$s por ano</string>
     <string name="support.price.once">%1$s uma vez</string>
+    <string name="support.supporter.count">Mais de %1$d ouvintes já apoiaram o Voice</string>
     <string name="support.supporter.since">Apoiante desde %1$s</string>
     <string name="support.supporter.title">É apoiante do Voice</string>
     <string name="support.thank_you.action">Voltar a ouvir</string>

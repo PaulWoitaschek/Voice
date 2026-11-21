@@ -26,6 +26,7 @@ class SupportViewModel(
   private val supporterStatusStore: SupporterStatusStore,
   private val supporterNoteFeatureFlag: SupporterNoteFeatureFlag,
   private val yearlySupportPickFeatureFlag: YearlySupportPickFeatureFlag,
+  private val supporterCountFeatureFlag: SupporterCountFeatureFlag,
   private val zone: () -> ZoneId,
 ) : SupportListener {
 
@@ -58,6 +59,10 @@ class SupportViewModel(
       supporterNoteFeatureFlag.flow.map { it.value }
     }
       .collectAsState(initial = supporterNoteFeatureFlag.get())
+    val supporterCount by remember {
+      supporterCountFeatureFlag.flow.map { it.value }
+    }
+      .collectAsState(initial = supporterCountFeatureFlag.get())
     return SupportViewState(
       content =
         when (val state = backendState) {
@@ -72,6 +77,7 @@ class SupportViewModel(
         status.supporterSince?.let {
           YearMonth.from(Instant.ofEpochMilli(it).atZone(zone()))
         },
+      supporterCount = supporterCount.takeIf { it > 0 },
       thankYou = thankYou,
       message = message,
     )

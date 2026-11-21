@@ -516,6 +516,7 @@
     <string name="support.price.monthly">%1$s kuus</string>
     <string name="support.price.yearly">%1$s aastas</string>
     <string name="support.price.once">%1$s ühekordselt</string>
+    <string name="support.supporter.count">Voice\'i on toetanud juba üle %1$d kuulaja</string>
     <string name="support.supporter.since">Toetaja alates: %1$s</string>
     <string name="support.supporter.title">Oled toetaja</string>
     <string name="support.thank_you.action">Tagasi kuulama</string>

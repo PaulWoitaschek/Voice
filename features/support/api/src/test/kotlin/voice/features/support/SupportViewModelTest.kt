@@ -47,6 +47,7 @@ class SupportViewModelTest {
   private val supporterStatusStore = MemoryDataStore(SupporterStatus())
   private val supporterNoteFeatureFlag = MemoryFeatureFlag("")
   private val yearlySupportPickFeatureFlag = MemoryFeatureFlag(false)
+  private val supporterCountFeatureFlag = MemoryFeatureFlag(0L)
   private val activity = mockk<Activity>()
   private val viewModel =
     SupportViewModel(
@@ -55,6 +56,7 @@ class SupportViewModelTest {
       supporterStatusStore = SupporterStatusStore(supporterStatusStore),
       supporterNoteFeatureFlag = SupporterNoteFeatureFlag(supporterNoteFeatureFlag),
       yearlySupportPickFeatureFlag = YearlySupportPickFeatureFlag(yearlySupportPickFeatureFlag),
+      supporterCountFeatureFlag = SupporterCountFeatureFlag(supporterCountFeatureFlag),
       zone = { ZoneOffset.UTC },
     )
 
@@ -333,6 +335,29 @@ class SupportViewModelTest {
     backend.mutableState.value = SupportBackendState.Play(offers, tips, activeSubscription = null)
 
     assertNull(assertIs<Content.Play>(viewState().content).note)
+  }
+
+  @Test
+  fun `the supporter count comes from remote config`() = scope.runTest {
+    backend.mutableState.value = SupportBackendState.KoFi
+    supporterCountFeatureFlag.value = 250
+
+    assertEquals(expected = 250, actual = viewState().supporterCount)
+  }
+
+  @Test
+  fun `a supporter count of zero is no count`() = scope.runTest {
+    backend.mutableState.value = SupportBackendState.KoFi
+
+    assertNull(viewState().supporterCount)
+  }
+
+  @Test
+  fun `a supporter count below zero is no count`() = scope.runTest {
+    backend.mutableState.value = SupportBackendState.KoFi
+    supporterCountFeatureFlag.value = -5
+
+    assertNull(viewState().supporterCount)
   }
 
   @Test

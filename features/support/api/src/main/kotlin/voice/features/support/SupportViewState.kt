@@ -7,6 +7,7 @@ data class SupportViewState(
   val content: Content,
   val badge: SupporterBadge?,
   val supporterSince: YearMonth?,
+  val supporterCount: Long?,
   val thankYou: Boolean,
   val message: Message?,
 ) {
@@ -62,6 +63,7 @@ data class SupportViewState(
         content = content,
         badge = SupporterBadge.ThreeMonths,
         supporterSince = YearMonth.of(2026, 3),
+        supporterCount = 200,
         thankYou = false,
         message = null,
       )

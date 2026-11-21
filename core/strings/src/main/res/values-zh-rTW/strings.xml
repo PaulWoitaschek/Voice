@@ -487,6 +487,7 @@
     <string name="support.price.monthly">每月 %1$s</string>
     <string name="support.price.yearly">每年 %1$s</string>
     <string name="support.price.once">單次 %1$s</string>
+    <string name="support.supporter.count">已有超過 %1$d 位聽眾支持 Voice</string>
     <string name="support.supporter.since">自 %1$s 起成為支持者</string>
     <string name="support.supporter.title">你是支持者</string>
     <string name="support.thank_you.action">回去收聽</string>

@@ -904,6 +904,8 @@
     <string name="support.price.yearly">%1$s a year</string>
     <!-- Price of a one-time tip. %1$s is the price, for example "€4.99". Shown in the support button, for example "Support for €4.99 once". -->
     <string name="support.price.once">%1$s once</string>
+    <!-- Line on the support screen that says how many listeners gave money to Voice. %1$d is a round number of 200 or more, for example 200 or 250, so it needs no plural forms. Calm, not a call to action. -->
+    <string name="support.supporter.count" tools:ignore="PluralsCandidate">More than %1$d listeners have supported Voice</string>
     <!-- Since when someone supports Voice. %1$s is a month and year, for example "March 2026". -->
     <string name="support.supporter.since">Supporter since %1$s</string>
     <!-- Title on the support screen for someone who already supported Voice. -->

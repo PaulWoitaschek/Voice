@@ -516,6 +516,7 @@
     <string name="support.price.monthly">மாதத்திற்கு %1$s</string>
     <string name="support.price.yearly">ஆண்டுக்கு %1$s</string>
     <string name="support.price.once">ஒருமுறை %1$s</string>
+    <string name="support.supporter.count">%1$d-க்கும் மேற்பட்ட கேட்பவர்கள் Voice-ஐ ஆதரித்துள்ளனர்</string>
     <string name="support.supporter.since">%1$s முதல் ஆதரவாளர்</string>
     <string name="support.supporter.title">நீங்கள் ஒரு ஆதரவாளர்</string>
     <string name="support.thank_you.action">கேட்பதற்குத் திரும்பு</string>

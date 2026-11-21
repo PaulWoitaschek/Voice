@@ -516,6 +516,7 @@
     <string name="support.price.monthly">Ayda %1$s</string>
     <string name="support.price.yearly">Yılda %1$s</string>
     <string name="support.price.once">Tek seferlik %1$s</string>
+    <string name="support.supporter.count">%1$d\'den fazla dinleyici Voice\'u destekledi</string>
     <string name="support.supporter.since">%1$s tarihinden beri destekçi</string>
     <string name="support.supporter.title">Bir destekçisiniz</string>
     <string name="support.thank_you.action">Dinlemeye dön</string>

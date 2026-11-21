@@ -516,6 +516,7 @@
     <string name="support.price.monthly">%1$s τον μήνα</string>
     <string name="support.price.yearly">%1$s τον χρόνο</string>
     <string name="support.price.once">%1$s εφάπαξ</string>
+    <string name="support.supporter.count">Πάνω από %1$d ακροατές έχουν στηρίξει το Voice</string>
     <string name="support.supporter.since">Υποστήριξη από: %1$s</string>
     <string name="support.supporter.title">Στηρίζετε το Voice</string>
     <string name="support.thank_you.action">Πίσω στην ακρόαση</string>

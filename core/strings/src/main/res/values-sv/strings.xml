@@ -516,6 +516,7 @@
     <string name="support.price.monthly">%1$s per månad</string>
     <string name="support.price.yearly">%1$s per år</string>
     <string name="support.price.once">%1$s en gång</string>
+    <string name="support.supporter.count">Fler än %1$d lyssnare har stöttat Voice</string>
     <string name="support.supporter.since">Supporter sedan %1$s</string>
     <string name="support.supporter.title">Du är supporter</string>
     <string name="support.thank_you.action">Fortsätt lyssna</string>

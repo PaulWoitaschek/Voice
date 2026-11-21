@@ -28,6 +28,7 @@ import voice.core.ui.supporterSinceText
 internal fun SupportHero(
   badge: SupporterBadge?,
   supporterSince: YearMonth?,
+  supporterCount: Long?,
   modifier: Modifier = Modifier,
 ) {
   Column(
@@ -80,5 +81,14 @@ internal fun SupportHero(
       color = MaterialTheme.colorScheme.onSurfaceVariant,
       textAlign = TextAlign.Center,
     )
+    if (supporterCount != null) {
+      Spacer(Modifier.height(4.dp))
+      Text(
+        text = stringResource(StringsR.string.support_supporter_count, supporterCount),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.primary,
+        textAlign = TextAlign.Center,
+      )
+    }
   }
 }

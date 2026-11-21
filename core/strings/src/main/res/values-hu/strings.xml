@@ -516,6 +516,7 @@
     <string name="support.price.monthly">%1$s havonta</string>
     <string name="support.price.yearly">%1$s évente</string>
     <string name="support.price.once">%1$s egyszer</string>
+    <string name="support.supporter.count">Már több mint %1$d hallgató támogatta a Voice-t</string>
     <string name="support.supporter.since">Támogató %1$s óta</string>
     <string name="support.supporter.title">Ön már támogató</string>
     <string name="support.thank_you.action">Vissza a hallgatáshoz</string>

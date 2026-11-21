@@ -487,6 +487,7 @@
     <string name="support.price.monthly">月額 %1$s</string>
     <string name="support.price.yearly">年額 %1$s</string>
     <string name="support.price.once">1回 %1$s</string>
+    <string name="support.supporter.count">%1$d人以上のリスナーが Voice を支援しています</string>
     <string name="support.supporter.since">%1$s から応援中</string>
     <string name="support.supporter.title">あなたはサポーターです</string>
     <string name="support.thank_you.action">リスニングに戻る</string>
