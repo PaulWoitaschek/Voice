@@ -295,6 +295,18 @@ def command_books(args):
       print(f"{name} | {author or '-'} | {book_id}")
 
 
+def command_smoke(args):
+  serial()
+  # agent-device test can't use the emulator while this session holds it.
+  agent("close", check=False)
+  flows = Path(__file__).resolve().parent.parent / "flows"
+  # The retry is for the restart of the app, which agent-device gives up on now and then.
+  command = ["agent-device", "test", str(flows), "--retries", "1", "--artifacts-dir", str(repo_root() / "build" / "smoke")]
+  result = subprocess.run(command)
+  agent("open", PACKAGE, "--platform", "android")
+  sys.exit(result.returncode)
+
+
 def main():
   parser = argparse.ArgumentParser(description=__doc__)
   subparsers = parser.add_subparsers(required=True)
@@ -314,6 +326,8 @@ def main():
   books_parser = subparsers.add_parser("books", help="list the library with book ids, last played first")
   books_parser.add_argument("--all", action="store_true", help="also books whose files are gone")
   books_parser.set_defaults(func=command_books)
+
+  subparsers.add_parser("smoke", help="run the smoke test flows on your emulator").set_defaults(func=command_smoke)
 
   args = parser.parse_args()
   try:

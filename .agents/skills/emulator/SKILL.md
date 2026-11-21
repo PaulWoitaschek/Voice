@@ -1,6 +1,6 @@
 ---
 name: emulator
-description: Running and driving Voice on an Android emulator to see a change in the real app. Every agent leases its own emulator with a real test library from simlock and drives it with agent-device, so parallel agents don't get in each other's way. Use when asked to run, start, or screenshot the app, to check a UI or behavior change on a device, to open a specific screen, or for the emulator checks in the design skill.
+description: Running and driving Voice on an Android emulator to see a change in the real app. Every agent leases its own emulator with a real test library from simlock and drives it with agent-device, so parallel agents don't get in each other's way. Use when asked to run, start, or screenshot the app, to check a UI or behavior change on a device, to open a specific screen, to run or extend the smoke test, or for the emulator checks in the design skill.
 ---
 
 # Running Voice on an emulator
@@ -88,6 +88,30 @@ emulator.py open BookOverview '{"type":"Playback","bookId":"<id>"}' '{"type":"Bo
 
 `open` force-stops the app first and reports a crash on start, like an unknown destination. New destinations work
 without extra code, as long as they stay `@Serializable`.
+
+## Smoke test
+
+```sh
+emulator.py smoke
+```
+
+It replays the flows in `.agents/skills/emulator/flows` on your emulator, without a model, in about 10 seconds per
+flow. Run it after you install your build, when the change touches playback or a screen that a flow goes through.
+The flows expect the fresh library. After a failed run, or when you changed the library, `stop` and `start` first.
+
+When a flow fails, the output names the line and lists what is on the screen. Then decide:
+
+- Voice does the wrong thing: your change has a bug. Fix the app.
+- The screen changed on purpose, like a button with a new name: correct the line in the flow in the same pull request.
+
+A flow is an `.ad` file with one agent-device command per line, see `agent-device help scripting`. To add one, do the
+journey by hand first, then write the lines:
+
+- Start with `open "de.ph1b.audiobook" --relaunch` and end with `close`.
+- Target by label or text, never by an `@e` ref.
+- A press doesn't wait. On a new screen, `wait` for something on it before the press.
+- Check each result with `wait` or `wait absent`, like a time that moves.
+- End in a state that the same flow can start from again.
 
 ## Device settings
 
