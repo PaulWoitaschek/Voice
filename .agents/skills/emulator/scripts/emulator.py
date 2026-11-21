@@ -160,6 +160,14 @@ def set_up_library():
   agent("back", "--system", "--settle")
 
 
+def install_library(root):
+  adb("push", str(root / "build" / "testfiles"), "/sdcard/testfiles")
+  adb("install", "-r", str(root / "app/build/outputs/apk/foss/debug/app-foss-debug.apk"))
+  agent("open", PACKAGE, "--platform", "android")
+  set_up_library()
+  agent("close")
+
+
 def prepare(args=None):
   root = repo_root()
   if own_lease():
@@ -189,11 +197,7 @@ def prepare(args=None):
   os.environ["AGENT_DEVICE_SESSION"] = f"voice-prepare-{session_name(lease).removeprefix('voice-')}"
   saved = False
   try:
-    adb("push", str(root / "build" / "testfiles"), "/sdcard/testfiles")
-    adb("install", "-r", str(root / "app/build/outputs/apk/foss/debug/app-foss-debug.apk"))
-    agent("open", PACKAGE, "--platform", "android")
-    set_up_library()
-    agent("close")
+    install_library(root)
     commit = subprocess.run(["git", "log", "-1", "--format=%h %s"], cwd=root, capture_output=True, text=True).stdout.strip()
     if subprocess.run(["git", "status", "--porcelain"], cwd=root, capture_output=True, text=True).stdout.strip():
       commit += " with local changes"
@@ -254,6 +258,10 @@ def command_prepare(args):
   prepare(args)
 
 
+def command_setup(args):
+  install_library(repo_root())
+
+
 def destination_json(entry):
   destination = json.loads(entry) if entry.startswith("{") else {"type": entry}
   if "." not in destination["type"]:
@@ -298,11 +306,11 @@ def command_books(args):
 def command_smoke(args):
   if not shutil.which("trailblaze"):
     sys.exit("trailblaze is missing. Install it with: brew install block/tap/trailblaze")
-  trails = Path(__file__).resolve().parent.parent / "trails"
+  root = repo_root()
   # Trailblaze writes its settings and logs into the working directory.
-  work = repo_root() / "build" / "smoke"
+  work = root / "build" / "smoke"
   work.mkdir(parents=True, exist_ok=True)
-  command = ["trailblaze", "run", str(trails), "-d", f"android/{serial()}", "--no-save-recording"]
+  command = ["trailblaze", "run", str(root / "smoke-tests"), "-d", f"android/{serial()}", "--no-save-recording"]
   result = subprocess.run(command, cwd=work)
   # agent-device can't read the screen while the Trailblaze app runs.
   adb("shell", "am", "force-stop", "xyz.block.trailblaze.runner", check=False)
@@ -316,6 +324,9 @@ def main():
   subparsers.add_parser("start", help="lease or reuse your emulator and print the export line for it").set_defaults(func=command_start)
   subparsers.add_parser("stop", help="give your emulator back").set_defaults(func=command_stop)
   subparsers.add_parser("prepare", help=f"(re)build the {BASELINE} baseline from your worktree's app").set_defaults(func=command_prepare)
+
+  setup_help = "put the built app and the generated test library on a plain emulator, as CI does"
+  subparsers.add_parser("setup", help=setup_help).set_defaults(func=command_setup)
 
   open_parser = subparsers.add_parser("open", help="restart the debug app on a back stack: open BookOverview Settings")
   open_parser.add_argument(

@@ -95,7 +95,7 @@ without extra code, as long as they stay `@Serializable`.
 emulator.py smoke
 ```
 
-It replays the trails in `.agents/skills/emulator/trails` on your emulator with
+It replays the trails in `smoke-tests` on your emulator with
 [Trailblaze](https://block.github.io/trailblaze), without a model, in about 45 seconds per trail. Run it after you
 install your build, when the change touches playback or a screen that a trail goes through. If `trailblaze` is
 missing, ask the user to run `brew install block/tap/trailblaze`.

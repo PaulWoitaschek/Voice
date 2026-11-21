@@ -38,3 +38,20 @@ jobs:
         with:
           report_paths: '**/test-results/**/TEST-*.xml'
           check_name: "Unit Tests"
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/build_setup
+      - name: Build
+        run: ./gradlew :app:assembleFossDebug
+      - name: Install agent-device
+        run: npm install -g agent-device@0.21.39
+      - uses: block/trailblaze/.github/actions/trailblaze@v2026.11.20
+        with:
+          trails: smoke-tests
+          setup: >-
+            python3 scripts/populate_test_files.py --skip-adb
+            && ANDROID_SERIAL=emulator-5554 .agents/skills/emulator/scripts/emulator.py setup
+          comment: false
