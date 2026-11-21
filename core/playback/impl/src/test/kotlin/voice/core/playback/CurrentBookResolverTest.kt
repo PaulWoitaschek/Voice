@@ -88,6 +88,33 @@ class CurrentBookResolverTest {
   }
 
   @Test
+  fun `returns persisted book when the player is in a chapter the book no longer has`() = runTest {
+    val resolver =
+      CurrentBookResolver(
+        bookRepository =
+          mockk {
+            coEvery { get(book.id) } returns book
+          },
+        playerController =
+          mockk {
+            coEvery { livePlaybackState(book.id) } returns
+              LivePlaybackState(
+                bookId = book.id,
+                chapterId = ChapterId("deleted-chapter"),
+                positionMs = 1234L,
+                isPlaying = false,
+                playbackSpeed = 1f,
+              )
+          },
+        currentBookStore = CurrentBookStore(currentBookStore),
+        experimentalPlaybackPersistenceFeatureFlag =
+          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
+      )
+
+    assertEquals(expected = book, actual = resolver.currentBook())
+  }
+
+  @Test
   fun `returns persisted book when no live playback state is available`() = runTest {
     val resolver =
       CurrentBookResolver(
