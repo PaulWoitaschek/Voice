@@ -41,14 +41,8 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        attempt: [1, 2, 3, 4, 5, broken]
     steps:
       - uses: actions/checkout@v7
-      - if: matrix.attempt == 'broken'
-        run: sed -i 's/Search your library/No such text/' .agents/skills/emulator/trails/play-a-book.trail.yaml
       - uses: ./.github/actions/build_setup
       - name: Build
         run: ./gradlew :app:assembleFossDebug
@@ -61,4 +55,3 @@ jobs:
             python3 scripts/populate_test_files.py --skip-adb
             && ANDROID_SERIAL=emulator-5554 .agents/skills/emulator/scripts/emulator.py setup
           comment: false
-          artifact-suffix: -${{ matrix.attempt }}
