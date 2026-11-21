@@ -7,6 +7,7 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
+import kotlin.math.roundToInt
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.toJavaInstant
@@ -60,11 +61,21 @@ internal data class Finish(
 
 internal data class PeriodStats(
   val listened: Duration,
-  val saved: Duration,
+  val audio: Duration,
   val days: Int,
   val bars: List<Duration>,
   val finished: List<Finish>,
-)
+  val hours: List<Duration>,
+  val workdayHours: List<Duration>,
+  val weekdays: Map<DayOfWeek, Duration>,
+  val weeks: Int,
+  val longestStretch: Duration,
+  val books: Map<BookId, Duration>,
+) {
+  // the player counts both times apart, so a steady 1.5× can come out as 1.499
+  val speed: Float
+    get() = if (listened > Duration.ZERO) (audio / listened * 100).roundToInt() / 100F else 1F
+}
 
 internal fun ListeningSession.day(): LocalDate = localDate(startedAtMillis, utcOffsetSeconds)
 
@@ -94,10 +105,9 @@ internal fun Period.stats(
 ): PeriodStats {
   val byDay = sessions.groupBy { it.day() }.filterKeys { it in this }
   val inPeriod = byDay.values.flatten()
-  val listened = inPeriod.sumOf { it.listenedMillis }.milliseconds
-  val audio = inPeriod.sumOf { it.audioMillis }.milliseconds
   fun listenedOn(days: Map<LocalDate, List<ListeningSession>>) =
     days.values.sumOf { day -> day.sumOf { it.listenedMillis } }.milliseconds
+  val listenedDays = byDay.filterValues { day -> day.any { it.listenedMillis > 0 } }.keys
   val bars =
     when (kind) {
       PeriodKind.Week,
@@ -108,9 +118,9 @@ internal fun Period.stats(
       PeriodKind.AllTime -> emptyList()
     }
   return PeriodStats(
-    listened = listened,
-    saved = (audio - listened).coerceAtLeast(Duration.ZERO),
-    days = byDay.count { (_, sessions) -> sessions.any { it.listenedMillis > 0 } },
+    listened = inPeriod.listened(),
+    audio = inPeriod.sumOf { it.audioMillis }.milliseconds,
+    days = listenedDays.size,
     bars = bars,
     finished =
       finishes
@@ -118,7 +128,51 @@ internal fun Period.stats(
         .groupBy { it.bookId }
         .map { (_, finishes) -> finishes.maxBy { it.day } }
         .sortedByDescending { it.day },
+    hours = inPeriod.hours(),
+    workdayHours = inPeriod.filter { it.day().dayOfWeek < DayOfWeek.SATURDAY }.hours(),
+    weekdays = inPeriod.groupBy { it.day().dayOfWeek }.mapValues { it.value.listened() },
+    weeks =
+      listenedDays.distinctBy { it.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)) }.size,
+    longestStretch = (inPeriod.maxOfOrNull { it.listenedMillis } ?: 0).milliseconds,
+    books = inPeriod.groupBy { it.bookId }.mapValues { it.value.listened() },
   )
+}
+
+internal fun List<ListeningSession>.listened(): Duration = sumOf { it.listenedMillis }.milliseconds
+
+internal fun Period.countedDays(
+  firstDay: LocalDate,
+  today: LocalDate,
+): Int =
+  ChronoUnit.DAYS.between(maxOf(start, firstDay), minOf(end, today.plusDays(1)))
+    .toInt()
+    .coerceAtLeast(1)
+
+internal fun Period.habitDays(
+  sessions: List<ListeningSession>,
+  firstDay: LocalDate,
+  today: LocalDate,
+): Int {
+  // like the streak, today counts only from its first listening
+  val open = today in this && sessions.none { it.day() == today && it.listenedMillis > 0 }
+  return countedDays(firstDay, today) - if (open) 1 else 0
+}
+
+private const val HOUR_MILLIS = 3_600_000L
+
+private fun List<ListeningSession>.hours(): List<Duration> {
+  val hours = LongArray(24)
+  forEach { session ->
+    val start = session.startedAtMillis + session.utcOffsetSeconds * 1000L
+    val end = maxOf(start + 1, session.endedAtMillis + session.utcOffsetSeconds * 1000L)
+    var at = start
+    while (at < end) {
+      val next = minOf(end, (at / HOUR_MILLIS + 1) * HOUR_MILLIS)
+      hours[(at / HOUR_MILLIS % 24).toInt()] += session.listenedMillis * (next - at) / (end - start)
+      at = next
+    }
+  }
+  return hours.map { it.milliseconds }
 }
 
 private fun localDate(
