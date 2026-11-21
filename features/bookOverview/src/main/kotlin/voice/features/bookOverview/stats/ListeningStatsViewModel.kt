@@ -60,36 +60,79 @@ class ListeningStatsViewModel(
     val zone = zone()
     val firstDay = remember(sessions) { sessions.minOfOrNull { it.day() } }
     val finishes = remember(sessions, contents, zone) { finishes(sessions, contents, zone) }
-    val period = kind.period(today, back, weekListening.weekStart())
+    val weekStart = weekListening.weekStart()
+    val period = kind.period(today, back, weekStart)
     val stats = remember(period, sessions, finishes) { period.stats(sessions, finishes) }
     val booksById = remember(books) { books.associateBy { it.id } }
     val contentsById = remember(contents) { contents.associateBy { it.id } }
+    fun book(id: BookId): StatsBookViewState? =
+      booksById[id]?.toStatsBook()
+        ?: contentsById[id]?.let {
+          StatsBookViewState(it.id, it.metadata.name, cover = null, inLibrary = false)
+        }
+    val listening = firstDay != null && stats.listened >= 1.minutes
+    val current = back == 0
     return ListeningStatsViewState(
       period = period,
-      current = back == 0,
+      current = current,
       canGoBack = kind != PeriodKind.AllTime && firstDay != null && firstDay < period.start,
       canGoForward = back > 0,
       listened = stats.listened,
       days = stats.days,
       bars = stats.bars,
-      saved = stats.saved.takeIf { it >= 1.minutes },
       countsSince = firstDay.takeIf { kind == PeriodKind.AllTime },
+      name =
+        if (listening) {
+          stats
+            .names(
+              kind = kind,
+              countedDays = period.countedDays(firstDay, today),
+              habitDays = period.habitDays(sessions, firstDay, today),
+            )
+            .pick(today, count = 1)
+            .firstOrNull()
+        } else {
+          null
+        },
+      wideFact =
+        if (listening) {
+          listOfNotNull(
+              stats.whenYouListen(),
+              stats.mostListened(::book),
+              if (current && kind != PeriodKind.AllTime) {
+                forecast(sessions, books, firstDay, today)
+              } else {
+                null
+              },
+            )
+            .pick(today, count = 1)
+            .firstOrNull()
+        } else {
+          null
+        },
+      smallFacts =
+        if (listening) {
+          listOfNotNull(
+              period.change(
+                listened = stats.listened,
+                before = kind.period(today, back + 1, weekStart),
+                sessions = sessions,
+                firstDay = firstDay,
+                today = today,
+              ),
+              period.longest(stats.bars),
+              stats.saved(),
+              stats.longestStretch(),
+              stats.yourDay(kind),
+              if (current) streak(sessions, today) else null,
+            )
+            .pick(today, count = 2)
+        } else {
+          emptyList()
+        },
       finished =
         stats.finished.mapNotNull { finish ->
-          val book = booksById[finish.bookId]
-          if (book != null) {
-            FinishedBookViewState(book.id, book.name, book.author, book.coverUrl, finish.day, true)
-          } else {
-            val content = contentsById[finish.bookId] ?: return@mapNotNull null
-            FinishedBookViewState(
-              content.id,
-              content.metadata.name,
-              content.metadata.author,
-              cover = null,
-              day = finish.day,
-              inLibrary = false,
-            )
-          }
+          book(finish.bookId)?.let { FinishedBookViewState(it, finish.day) }
         },
       supporterBadge = supporter.badge,
     )
@@ -142,8 +185,10 @@ internal data class ListeningStatsViewState(
   val listened: Duration,
   val days: Int,
   val bars: List<Duration>,
-  val saved: Duration?,
   val countsSince: LocalDate?,
+  val name: ListenerName?,
+  val wideFact: WideFact?,
+  val smallFacts: List<SmallFact>,
   val finished: List<FinishedBookViewState>,
   val supporterBadge: SupporterBadge?,
 ) {
@@ -153,10 +198,6 @@ internal data class ListeningStatsViewState(
 
 @Immutable
 internal data class FinishedBookViewState(
-  val id: BookId,
-  val name: String,
-  val author: String?,
-  val cover: String?,
+  val book: StatsBookViewState,
   val day: LocalDate,
-  val inLibrary: Boolean,
 )

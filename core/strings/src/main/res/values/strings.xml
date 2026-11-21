@@ -569,8 +569,32 @@
     <string name="library.survey.title">Help shape Voice</string>
     <!-- Listening stats: chip for all the listening Voice counted. -->
     <string name="listening_stats.all_time">All time</string>
-    <!-- Listening stats: tile with the number of books finished in the period. -->
+    <!-- Listening stats: title of the shelf with the covers of the books finished in the period, next to their number. -->
     <string name="listening_stats.books_finished">Books finished</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the month before this one. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.less_month">less than last month</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the month before the one shown, when that is not the current month. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.less_month_before">less than the month before</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the week before this one. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.less_week">less than last week</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the week before the one shown, when that is not the current week. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.less_week_before">less than the week before</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the year before this one. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.less_year">less than last year</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the year before the one shown, when that is not the current year. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.less_year_before">less than the year before</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the month before this one. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.more_month">more than last month</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the month before the one shown, when that is not the current month. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.more_month_before">more than the month before</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the week before this one. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.more_week">more than last week</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the week before the one shown, when that is not the current week. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.more_week_before">more than the week before</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the year before this one. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.more_year">more than last year</string>
+    <!-- Listening stats: small tile below a time like "+1h 20m" or "−1h", the change against the same days of the year before the one shown, when that is not the current year. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.change.more_year_before">more than the year before</string>
     <!-- Listening stats, All time: since when Voice counts the listening. Before that day, it didn't. %s is a date like "8 October 2026". -->
     <string name="listening_stats.counts_since">Voice counts since %s.</string>
     <!-- Listening stats: below the time listened in a year or in all time. %d is the number of days with listening. -->
@@ -587,26 +611,121 @@
     <string name="listening_stats.earlier">Earlier</string>
     <!-- Listening stats: shown for a week, month or year without listening. Calm and friendly, never a push to listen more. -->
     <string name="listening_stats.empty">Nothing here yet. Press play, and this fills up.</string>
-    <!-- Listening stats: header above the list of books finished in the period, each with its day. -->
-    <string name="listening_stats.finished">Finished</string>
+    <!-- Listening stats: below the book the listener is in, the day they finish it when they go on like in the last two weeks. A calm guess, never a goal. %s is a date like "3 Dec". -->
+    <string name="listening_stats.forecast.date">At your pace, you finish it on %s</string>
+    <!-- Listening stats: above the book the listener is in, the listening time left in it. %s is a time like "9h". -->
+    <string name="listening_stats.forecast.left">%s left</string>
+    <!-- Listening stats: below the book the listener is in, the day they finish it when they go on like in the last two weeks. A calm guess, never a goal. -->
+    <string name="listening_stats.forecast.today">At your pace, you finish it today</string>
+    <!-- Listening stats: below the book the listener is in, the day they finish it when they go on like in the last two weeks. A calm guess, never a goal. -->
+    <string name="listening_stats.forecast.tomorrow">At your pace, you finish it tomorrow</string>
+    <!-- Listening stats: below the book the listener is in, the day they finish it when they go on like in the last two weeks. A calm guess, never a goal. %s is a day of the week like "Sunday", in its basic form. -->
+    <string name="listening_stats.forecast.weekday">At your pace, you finish it on %s</string>
     <!-- Listening stats: read out by screen readers for the arrow that goes forward one week, month or year. -->
     <string name="listening_stats.later">Later</string>
+    <!-- Listening stats: small tile below a time like "2h", the day of the month with the most listening. %s is a date like "Thu, 12 Nov". Lowercase, it reads on from the time. Never praise, it is not a record to beat. -->
+    <string name="listening_stats.longest.date">on %s</string>
+    <!-- Listening stats: small tile below a time like "2h", the month of the year with the most listening. %s is a month like "November", in its basic form. Lowercase, it reads on from the time. Never praise, it is not a record to beat. -->
+    <string name="listening_stats.longest.month">in %s</string>
+    <!-- Listening stats: small tile below a time like "2h", the day of the week with the most listening. %s is a day of the week like "Thursday", in its basic form. Lowercase, it reads on from the time. Never praise, it is not a record to beat. -->
+    <string name="listening_stats.longest.weekday">on %s</string>
     <!-- Listening stats: chip for calendar months. -->
     <string name="listening_stats.month">Month</string>
-    <!-- Listening stats: tile with the time that a faster playback speed saved, compared to listening at normal speed. -->
-    <string name="listening_stats.saved">Saved by listening faster</string>
+    <!-- Listening stats: label above the book with the most listening time in the period. -->
+    <string name="listening_stats.most_listened">Most listened</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens mostly in the afternoon. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.afternoon">You are an afternoon listener</string>
+    <!-- Listening stats: the reason below the name "You are an afternoon listener". %s is a percentage like "61%". -->
+    <string name="listening_stats.name.afternoon_reason">%s of your listening is in the afternoon</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens a lot, each day. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.audiomaniac">You are an audiomaniac</string>
+    <!-- Listening stats: the reason below the name "You are an audiomaniac". %s is a time like "2h 40m". -->
+    <string name="listening_stats.name.audiomaniac_reason">%s on an average day</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens on the way to work and back. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.commuter">You are a commuter</string>
+    <!-- Listening stats: the reason below the name "You are a commuter". When they listen, from Monday to Friday. -->
+    <string name="listening_stats.name.commuter_reason">Mornings and late afternoons on weekdays</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens early in the morning. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.early_bird">You are an early bird</string>
+    <!-- Listening stats: the reason below the name "You are an early bird". %s is a percentage like "61%". -->
+    <string name="listening_stats.name.early_bird_reason">%s of your listening is before 9 in the morning</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens mostly in the evening. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.evening">You are an evening listener</string>
+    <!-- Listening stats: the reason below the name "You are an evening listener". %s is a percentage like "61%". -->
+    <string name="listening_stats.name.evening_reason">%s of your listening is in the evening</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens each day. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.habit">You are a creature of habit</string>
+    <!-- Listening stats: the reason below the name "You are a creature of habit". -->
+    <string name="listening_stats.name.habit_reason">You listened on each day</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens to several books at the same time. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.juggler">You are a juggler</string>
+    <!-- Listening stats: the reason below the name "You are a juggler". %d is the number of books, 3 or more. -->
+    <plurals name="listening_stats.name.juggler_reason">
+        <item quantity="one">%d book at the same time</item>
+        <item quantity="other">%d books at the same time</item>
+    </plurals>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens for hours without a stop. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.marathon">You are a marathon listener</string>
+    <!-- Listening stats: the reason below the name "You are a marathon listener". %s is a time like "2h 40m". The longest time without a stop. -->
+    <string name="listening_stats.name.marathon_reason">%s in one go</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens mostly in the morning. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.morning">You are a morning listener</string>
+    <!-- Listening stats: the reason below the name "You are a morning listener". %s is a percentage like "61%". -->
+    <string name="listening_stats.name.morning_reason">%s of your listening is in the morning</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens late at night. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.night_owl">You are a night owl</string>
+    <!-- Listening stats: the reason below the name "You are a night owl". %s is a percentage like "61%". -->
+    <string name="listening_stats.name.night_owl_reason">%s of your listening is at night</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens at a fast playback speed. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.speedster">You are a speedster</string>
+    <!-- Listening stats: the reason below the name "You are a speedster". %s is a playback speed like "1.6×". -->
+    <string name="listening_stats.name.speedster_reason">You listen at %s</string>
+    <!-- Listening stats: a playful name for the kind of listener the period shows, as one whole sentence. Use the idiom of the language for someone who listens mostly on Saturday and Sunday. It describes, it is never a rank or a goal. -->
+    <string name="listening_stats.name.weekend">You are a weekend listener</string>
+    <!-- Listening stats: the reason below the name "You are a weekend listener". %s is a percentage like "61%". -->
+    <string name="listening_stats.name.weekend_reason">%s of your listening is on Saturday and Sunday</string>
+    <!-- Listening stats: part of the day, below its share of the listening time. A short label, four of them stand side by side. -->
+    <string name="listening_stats.part.afternoon">Afternoon</string>
+    <!-- Listening stats: part of the day, below its share of the listening time. A short label, four of them stand side by side. -->
+    <string name="listening_stats.part.evening">Evening</string>
+    <!-- Listening stats: part of the day, below its share of the listening time. A short label, four of them stand side by side. -->
+    <string name="listening_stats.part.morning">Morning</string>
+    <!-- Listening stats: part of the day, below its share of the listening time. A short label, four of them stand side by side. -->
+    <string name="listening_stats.part.night">Night</string>
+    <!-- Listening stats: small tile below a time like "3h 10m", the time that a faster playback speed saved. %s is the average speed like "1.6×". Lowercase, it reads on from the time. -->
+    <string name="listening_stats.saved_at">saved at %s</string>
+    <!-- Listening stats: big number on the small tile for the days in a row with listening. A line like "in a row, your longest streak" follows below. -->
+    <plurals name="listening_stats.streak.days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <!-- Listening stats: small tile below a number like "9 days", when no run of days goes on now. Lowercase, it reads on from the number. A fact, never a goal to reach again. -->
+    <string name="listening_stats.streak.longest">is your longest streak</string>
+    <!-- Listening stats: small tile below a number like "4 days", the days in a row with listening up to today. %d is the longest run so far. Lowercase, it reads on from the number. -->
+    <plurals name="listening_stats.streak.row">
+        <item quantity="one">in a row. The longest: %d day</item>
+        <item quantity="other">in a row. The longest: %d days</item>
+    </plurals>
+    <!-- Listening stats: small tile below a number like "4 days", the days in a row with listening up to today, when no run was longer. Lowercase, it reads on from the number. -->
+    <string name="listening_stats.streak.row_longest">in a row, your longest streak</string>
+    <!-- Listening stats: small tile below a time like "2h 15m", the longest time of listening without a stop. Lowercase, it reads on from the time. -->
+    <string name="listening_stats.stretch">in one go</string>
     <!-- Listening stats: the current calendar month. -->
     <string name="listening_stats.this_month">This month</string>
     <!-- Listening stats: the current calendar week. -->
     <string name="listening_stats.this_week">This week</string>
     <!-- Listening stats: the current calendar year. -->
     <string name="listening_stats.this_year">This year</string>
-    <!-- Title of the listening stats screen: how much the listener listened, on how many days, and which books they finished. -->
+    <!-- Title of the listening stats screen: how much the listener listened, what kind of listener they are, and which books they finished. -->
     <string name="listening_stats.title">Your listening</string>
     <!-- Listening stats: chip for calendar weeks. -->
     <string name="listening_stats.week">Week</string>
+    <!-- Listening stats: title of the tile with a bar for each hour of the day, and the shares of the morning, afternoon, evening and night. -->
+    <string name="listening_stats.when">When you listen</string>
     <!-- Listening stats: chip for calendar years. -->
     <string name="listening_stats.year">Year</string>
+    <!-- Listening stats: small tile below a day of the week like "Sunday", the day with the most listening. Lowercase, it reads on from the day. -->
+    <string name="listening_stats.your_day">is your day</string>
     <!-- Media browser title for recently played audiobooks. -->
     <string name="media_session.library.recent">Recent</string>
     <!-- Media browser root title for all audiobooks. -->

@@ -2,6 +2,7 @@
 
 package voice.features.bookOverview.stats
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -19,18 +20,23 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -44,7 +50,9 @@ import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -53,6 +61,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -60,9 +69,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavEntry
 import coil3.compose.AsyncImage
 import dev.zacsweers.metro.AppScope
@@ -72,6 +81,7 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.Month
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -155,27 +165,18 @@ internal fun ListeningStatsScreen(
           .verticalScroll(rememberScrollState())
           .padding(horizontal = horizontalPadding)
           .navigationBarsPadding(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
       ) {
         KindChips(viewState.period.kind, onKindClick)
-        if (viewState.period.kind != PeriodKind.AllTime) {
-          PeriodRow(viewState, onEarlierClick, onLaterClick)
-        } else {
-          Spacer(Modifier.height(16.dp))
-        }
-        if (viewState.empty) {
-          Text(
-            text = stringResource(StringsR.string.listening_stats_empty),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 48.dp),
-          )
-        } else {
-          Stats(viewState, onBookClick)
-          Spacer(Modifier.height(32.dp))
+        Hero(viewState, onEarlierClick, onLaterClick)
+        if (!viewState.empty) {
+          viewState.name?.let { NameTile(it) }
+          viewState.wideFact?.let { WideFactTile(it, onBookClick) }
+          SmallFactTiles(viewState.smallFacts, viewState.period.kind, viewState.current)
+          Shelf(viewState.finished, viewState.period.kind, onBookClick)
           SupportLine(viewState.supporterBadge, onSupportClick)
-          Spacer(Modifier.height(24.dp))
         }
+        Spacer(Modifier.height(16.dp))
       }
     }
   }
@@ -225,93 +226,98 @@ private fun KindChips(
 }
 
 @Composable
-private fun PeriodRow(
+private fun Hero(
   viewState: ListeningStatsViewState,
   onEarlierClick: () -> Unit,
   onLaterClick: () -> Unit,
 ) {
-  Row(Modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-    IconButton(onClick = onEarlierClick, enabled = viewState.canGoBack) {
-      Icon(
-        painterResource(UiR.drawable.ic_chevron_left),
-        contentDescription = stringResource(StringsR.string.listening_stats_earlier),
-      )
-    }
-    Text(
-      text = periodText(viewState.period, viewState.current),
-      style = MaterialTheme.typography.titleMedium,
-      textAlign = TextAlign.Center,
-      modifier = Modifier.weight(1F),
-    )
-    IconButton(onClick = onLaterClick, enabled = viewState.canGoForward) {
-      Icon(
-        painterResource(UiR.drawable.ic_chevron_right),
-        contentDescription = stringResource(StringsR.string.listening_stats_later),
-      )
-    }
-  }
-}
-
-@Composable
-private fun Stats(
-  viewState: ListeningStatsViewState,
-  onBookClick: (BookId) -> Unit,
-) {
-  Column {
-    val kind = viewState.period.kind
-    ListenedTime(viewState.listened)
-    Text(
-      text =
-        when (kind) {
-          PeriodKind.Week,
-          PeriodKind.Month ->
-            pluralStringResource(
-              StringsR.plurals.listening_stats_days_of,
-              viewState.period.days,
-              viewState.days,
-              viewState.period.days,
+  val colors = MaterialTheme.colorScheme
+  Surface(
+    shape = MaterialTheme.shapes.extraLargeIncreased,
+    // the primary is a light tone in the dark theme, which glares as a whole tile
+    color = if (colors.surface.luminance() < 0.5F) colors.primaryContainer else colors.primary,
+    modifier = Modifier.fillMaxWidth(),
+  ) {
+    Column(Modifier.padding(start = 24.dp, end = 12.dp, top = 12.dp, bottom = 20.dp)) {
+      Row(Modifier.heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+          text = periodText(viewState.period, viewState.current),
+          style = MaterialTheme.typography.titleMedium,
+          modifier = Modifier.weight(1F),
+        )
+        if (viewState.period.kind != PeriodKind.AllTime) {
+          val colors =
+            IconButtonDefaults.iconButtonColors(
+              disabledContentColor = LocalContentColor.current.copy(alpha = 0.38F),
             )
-          PeriodKind.Year,
-          PeriodKind.AllTime ->
-            pluralStringResource(
-              StringsR.plurals.listening_stats_days,
-              viewState.days,
-              viewState.days,
+          IconButton(onClick = onEarlierClick, enabled = viewState.canGoBack, colors = colors) {
+            Icon(
+              painterResource(UiR.drawable.ic_chevron_left),
+              contentDescription = stringResource(StringsR.string.listening_stats_earlier),
             )
-        },
-      style = MaterialTheme.typography.titleMedium,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
-    if (viewState.countsSince != null) {
-      Spacer(Modifier.height(4.dp))
-      Text(
-        text = countsSinceText(viewState.countsSince),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-      )
-    }
-    if (viewState.bars.isNotEmpty()) {
-      Spacer(Modifier.height(24.dp))
-      Bars(viewState.bars, barLabels(viewState.period))
-    }
-    Spacer(Modifier.height(24.dp))
-    Tiles(viewState.finished.size, viewState.saved)
-    if (viewState.finished.isNotEmpty()) {
-      Spacer(Modifier.height(24.dp))
-      Text(
-        text = stringResource(StringsR.string.listening_stats_finished),
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.semantics { heading() },
-      )
-      Spacer(Modifier.height(8.dp))
-      viewState.finished.forEachIndexed { index, book ->
-        key(book.id) {
-          FinishedRow(book, kind, index, onBookClick)
+          }
+          IconButton(onClick = onLaterClick, enabled = viewState.canGoForward, colors = colors) {
+            Icon(
+              painterResource(UiR.drawable.ic_chevron_right),
+              contentDescription = stringResource(StringsR.string.listening_stats_later),
+            )
+          }
+        }
+      }
+      Column(Modifier.padding(end = 12.dp)) {
+        if (viewState.empty) {
+          Text(
+            text = stringResource(StringsR.string.listening_stats_empty),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 40.dp),
+          )
+        } else {
+          ListenedTime(viewState.listened)
+          val quiet = LocalContentColor.current.copy(alpha = 0.8F)
+          Text(
+            text = daysText(viewState),
+            style = MaterialTheme.typography.titleMedium,
+            color = quiet,
+          )
+          if (viewState.countsSince != null) {
+            Spacer(Modifier.height(4.dp))
+            Text(
+              text = countsSinceText(viewState.countsSince),
+              style = MaterialTheme.typography.bodyMedium,
+              color = quiet,
+            )
+          }
+          if (viewState.bars.isNotEmpty()) {
+            Spacer(Modifier.height(20.dp))
+            Bars(
+              bars = viewState.bars,
+              labels = barLabels(viewState.period),
+              color = { LocalContentColor.current },
+              modifier = Modifier.height(112.dp),
+            )
+          }
         }
       }
     }
   }
 }
+
+@Composable
+private fun daysText(viewState: ListeningStatsViewState): String =
+  when (viewState.period.kind) {
+    PeriodKind.Week,
+    PeriodKind.Month ->
+      pluralStringResource(
+        StringsR.plurals.listening_stats_days_of,
+        viewState.period.days,
+        viewState.days,
+        viewState.period.days,
+      )
+    PeriodKind.Year,
+    PeriodKind.AllTime ->
+      pluralStringResource(StringsR.plurals.listening_stats_days, viewState.days, viewState.days)
+  }
 
 @Composable
 private fun ListenedTime(listened: Duration) {
@@ -323,19 +329,27 @@ private fun ListenedTime(listened: Duration) {
   }
   Text(
     text = listenedText(animated.value.toLong().minutes),
-    style = MaterialTheme.typography.displayMediumEmphasized.copy(fontFamily = FontFamily.Default),
+    style = MaterialTheme.typography.displayLargeEmphasized.copy(fontFamily = FontFamily.Default),
+    maxLines = 1,
+    autoSize =
+      TextAutoSize.StepBased(
+        minFontSize = 28.sp,
+        maxFontSize = MaterialTheme.typography.displayLargeEmphasized.fontSize,
+      ),
   )
 }
 
 @Composable
-private fun Bars(
+internal fun Bars(
   bars: List<Duration>,
   labels: List<String>,
+  color: @Composable (Int) -> Color,
+  modifier: Modifier = Modifier,
 ) {
   val max = bars.max().coerceAtLeast(1.minutes)
   val animate = animationsEnabled()
   Row(
-    Modifier.fillMaxWidth().height(140.dp).clearAndSetSemantics {},
+    modifier.fillMaxWidth().clearAndSetSemantics {},
     horizontalArrangement = Arrangement.spacedBy(if (bars.size > 12) 2.dp else 8.dp),
     verticalAlignment = Alignment.Bottom,
   ) {
@@ -356,14 +370,11 @@ private fun Bars(
         Box(Modifier.weight(1F).fillMaxWidth(), contentAlignment = Alignment.BottomCenter) {
           Box(
             Modifier.fillMaxWidth()
-              .fillMaxHeight(height.value.coerceIn(if (bar > Duration.ZERO) 0.03F else 0.01F, 1F))
+              .fillMaxHeight(height.value.coerceIn(0.04F, 1F))
               .clip(MaterialTheme.shapes.extraSmall)
               .background(
-                if (bar > Duration.ZERO) {
-                  MaterialTheme.colorScheme.primary
-                } else {
-                  MaterialTheme.colorScheme.surfaceContainerHighest
-                },
+                if (bar > Duration.ZERO) color(index)
+                else LocalContentColor.current.copy(alpha = 0.16F),
               ),
           )
         }
@@ -371,7 +382,7 @@ private fun Bars(
         Text(
           text = labels[index],
           style = MaterialTheme.typography.labelSmall,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          color = LocalContentColor.current.copy(alpha = 0.8F),
           maxLines = 1,
           softWrap = false,
           // a day like 29 is wider than the bar of a month
@@ -383,55 +394,58 @@ private fun Bars(
 }
 
 @Composable
-private fun Tiles(
-  finishedCount: Int,
-  saved: Duration?,
-) {
-  val finished = stringResource(StringsR.string.listening_stats_books_finished)
-  val savedLabel = stringResource(StringsR.string.listening_stats_saved)
-  val savedText = saved?.let { listenedText(it) }
-  if (LocalDensity.current.fontScale >= 1.5F) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-      Tile(finishedCount.toString(), finished, Modifier.fillMaxWidth())
-      if (savedText != null) Tile(savedText, savedLabel, Modifier.fillMaxWidth())
-    }
-  } else {
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-      Tile(finishedCount.toString(), finished, Modifier.weight(1F))
-      if (savedText != null) Tile(savedText, savedLabel, Modifier.weight(1F))
-    }
-  }
-}
-
-@Composable
-private fun Tile(
-  value: String,
-  label: String,
-  modifier: Modifier = Modifier,
+private fun Shelf(
+  finished: List<FinishedBookViewState>,
+  kind: PeriodKind,
+  onBookClick: (BookId) -> Unit,
 ) {
   Surface(
-    modifier = modifier,
-    shape = MaterialTheme.shapes.largeIncreased,
-    color = MaterialTheme.colorScheme.secondaryContainer,
+    shape = MaterialTheme.shapes.extraLargeIncreased,
+    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+    modifier = Modifier.fillMaxWidth(),
   ) {
-    Column(Modifier.padding(16.dp)) {
-      Text(
-        value,
-        style =
-          MaterialTheme.typography.headlineSmallEmphasized.copy(fontFamily = FontFamily.Default),
-      )
-      Text(label, style = MaterialTheme.typography.bodyMedium)
+    Column(Modifier.padding(vertical = 20.dp)) {
+      Row(Modifier.padding(horizontal = 24.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+          text = stringResource(StringsR.string.listening_stats_books_finished),
+          style = MaterialTheme.typography.titleLargeEmphasized,
+          modifier = Modifier.weight(1F).semantics { heading() },
+        )
+        Text(
+          text = countText(finished.size),
+          style = MaterialTheme.typography.titleMedium,
+          color = MaterialTheme.colorScheme.onPrimary,
+          modifier =
+            Modifier.padding(start = 16.dp)
+              .background(MaterialTheme.colorScheme.primary, CircleShape)
+              .padding(horizontal = 14.dp, vertical = 4.dp),
+        )
+      }
+      if (finished.isNotEmpty()) {
+        Spacer(Modifier.height(16.dp))
+        Row(
+          Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 24.dp),
+          horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+          finished.forEachIndexed { index, book ->
+            key(book.book.id) {
+              ShelfBook(book, kind, index, onBookClick)
+            }
+          }
+        }
+      }
     }
   }
 }
 
 @Composable
-private fun FinishedRow(
-  book: FinishedBookViewState,
+private fun ShelfBook(
+  finished: FinishedBookViewState,
   kind: PeriodKind,
   index: Int,
   onBookClick: (BookId) -> Unit,
 ) {
+  val book = finished.book
   val animate = animationsEnabled()
   val landing = remember { Animatable(if (animate) 0F else 1F) }
   LaunchedEffect(landing) {
@@ -441,48 +455,63 @@ private fun FinishedRow(
       spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
     )
   }
-  Row(
-    Modifier.fillMaxWidth()
-      .clip(MaterialTheme.shapes.largeIncreased)
-      .then(if (book.inLibrary) Modifier.clickable { onBookClick(book.id) } else Modifier)
-      .padding(vertical = 6.dp),
-    verticalAlignment = Alignment.CenterVertically,
+  // large text needs room for more of the name. At 96 dp, a phone cuts the next cover, which shows
+  // that the shelf scrolls.
+  val width = if (LocalDensity.current.fontScale >= 1.5F) 136.dp else 96.dp
+  Column(
+    Modifier.width(width)
+      .clip(MaterialTheme.shapes.small)
+      .then(
+        if (book.inLibrary) {
+          Modifier.clickable(role = Role.Button) { onBookClick(book.id) }
+        } else {
+          Modifier
+        },
+      ),
   ) {
-    val cover =
-      Modifier.size(56.dp).graphicsLayer {
+    BookCover(
+      book,
+      Modifier.size(width).graphicsLayer {
         val progress = landing.value
         translationY = (1F - progress) * -60F
         scaleX = 0.6F + 0.4F * progress
         scaleY = 0.6F + 0.4F * progress
         alpha = progress.coerceIn(0F, 1F)
-      }
-    if (book.inLibrary) {
-      AsyncImage(
-        model = rememberCoverThumbnailRequest(book.cover),
-        placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
-        error = painterResource(UiR.drawable.album_art),
-        contentScale = ContentScale.Crop,
-        contentDescription = null,
-        modifier = cover.clip(CoverShape),
-      )
-    } else {
-      Box(cover)
-    }
-    Column(Modifier.padding(start = 16.dp).weight(1F)) {
-      Text(
-        text = book.name,
-        style = MaterialTheme.typography.titleMedium.bookText(),
-        maxLines = 2,
-        overflow = TextOverflow.Ellipsis,
-      )
-      Text(
-        text = listOfNotNull(book.author, finishedDayText(book.day, kind)).joinToString(" · "),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        maxLines = 2,
-        overflow = TextOverflow.Ellipsis,
-      )
-    }
+      },
+    )
+    Spacer(Modifier.height(8.dp))
+    Text(
+      text = book.name,
+      style = MaterialTheme.typography.titleSmall.bookText(),
+      maxLines = 2,
+      overflow = TextOverflow.Ellipsis,
+    )
+    Text(
+      text = finishedDayText(finished.day, kind),
+      style = MaterialTheme.typography.bodySmall,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+      maxLines = 1,
+      overflow = TextOverflow.Ellipsis,
+    )
+  }
+}
+
+@Composable
+internal fun BookCover(
+  book: StatsBookViewState,
+  modifier: Modifier = Modifier,
+) {
+  if (book.inLibrary) {
+    AsyncImage(
+      model = rememberCoverThumbnailRequest(book.cover),
+      placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
+      error = painterResource(UiR.drawable.album_art),
+      contentScale = ContentScale.Crop,
+      contentDescription = null,
+      modifier = modifier.clip(CoverShape),
+    )
+  } else {
+    Box(modifier.clip(CoverShape).background(MaterialTheme.colorScheme.outlineVariant))
   }
 }
 
@@ -541,62 +570,118 @@ private fun SupportLine(
   }
 }
 
-@Composable
-@PreviewLightDark
-@Preview(fontScale = 2F, name = "large text")
-private fun ListeningStatsWeekPreview() {
-  val monday = LocalDate.of(2026, 11, 16)
-  StatsPreview(
-    ListeningStatsViewState(
-      period = PeriodKind.Week.period(monday.plusDays(4), back = 0, DayOfWeek.MONDAY),
-      current = true,
-      canGoBack = true,
-      canGoForward = false,
-      listened = 6.hours + 40.minutes,
-      days = 5,
-      bars = listOf(60, 95, 0, 120, 45, 80, 0).map { it.minutes },
-      saved = 70.minutes,
-      countsSince = null,
-      finished =
-        listOf(
-          FinishedBookViewState(
-            BookId("1"),
-            "Long Way North",
-            "Daniel Hartwell",
+private val previewToday = LocalDate.of(2026, 11, 20)
+
+private val previewWeek =
+  ListeningStatsViewState(
+    period = PeriodKind.Week.period(previewToday, back = 0, DayOfWeek.MONDAY),
+    current = true,
+    canGoBack = true,
+    canGoForward = false,
+    listened = 6.hours + 40.minutes,
+    days = 5,
+    bars = listOf(60, 95, 0, 120, 45, 80, 0).map { it.minutes },
+    countsSince = null,
+    name = ListenerName.NightOwl(percent = 61),
+    wideFact =
+      WideFact.WhenYouListen(
+        List(24) { hour ->
+          when (hour) {
+            in 22..23 -> 70.minutes
+            0 -> 55.minutes
+            7 -> 35.minutes
+            in 17..19 -> 40.minutes
+            else -> Duration.ZERO
+          }
+        },
+      ),
+    smallFacts = listOf(SmallFact.Change(80.minutes), SmallFact.Streak(current = 4, longest = 9)),
+    finished =
+      listOf(
+        FinishedBookViewState(
+          StatsBookViewState(BookId("1"), "Long Way North", null, inLibrary = true),
+          previewToday.minusDays(1),
+        ),
+        FinishedBookViewState(
+          StatsBookViewState(
+            BookId("2"),
+            "The Unlikely Pilgrimage of the Lighthouse Keeper",
             null,
-            monday.plusDays(3),
             inLibrary = true,
           ),
-          FinishedBookViewState(
-            BookId("2"),
-            "Paper Moons",
-            "Lena Morgan",
-            null,
-            monday.plusDays(1),
-            inLibrary = false,
-          ),
+          previewToday.minusDays(2),
         ),
-      supporterBadge = null,
+        FinishedBookViewState(
+          StatsBookViewState(BookId("3"), "Paper Moons", null, inLibrary = false),
+          previewToday.minusDays(3),
+        ),
+      ),
+    supporterBadge = null,
+  )
+
+@Composable
+@Preview(heightDp = 1400)
+@Preview(heightDp = 1400, uiMode = Configuration.UI_MODE_NIGHT_YES, name = "dark")
+@Preview(heightDp = 2500, fontScale = 2F, name = "large text")
+private fun ListeningStatsWeekPreview() {
+  StatsPreview(previewWeek)
+}
+
+@Composable
+@Preview(heightDp = 1150)
+private fun ListeningStatsMonthPreview() {
+  StatsPreview(
+    previewWeek.copy(
+      period = PeriodKind.Month.period(previewToday, back = 1, DayOfWeek.MONDAY),
+      current = false,
+      canGoForward = true,
+      listened = 71.hours + 5.minutes,
+      days = 28,
+      bars = List(31) { (it * 37 % 190).minutes },
+      name = ListenerName.Audiomaniac(perDay = 2.hours + 17.minutes),
+      wideFact =
+        WideFact.MostListened(
+          StatsBookViewState(
+            BookId("2"),
+            "The Unlikely Pilgrimage of the Lighthouse Keeper",
+            null,
+            inLibrary = true,
+          ),
+          listened = 31.hours + 20.minutes,
+        ),
+      smallFacts =
+        listOf(
+          SmallFact.LongestDay(5.hours + 10.minutes, LocalDate.of(2026, 10, 14)),
+          SmallFact.YourDay(DayOfWeek.WEDNESDAY),
+        ),
+      finished = previewWeek.finished.take(1),
     ),
   )
 }
 
 @Composable
-@Preview
-private fun ListeningStatsMonthPreview() {
+@Preview(heightDp = 1050)
+private fun ListeningStatsYearPreview() {
   StatsPreview(
-    ListeningStatsViewState(
-      period = PeriodKind.Month.period(LocalDate.of(2026, 10, 20), back = 0, DayOfWeek.MONDAY),
-      current = true,
-      canGoBack = true,
-      canGoForward = false,
-      listened = 21.hours + 5.minutes,
-      days = 18,
-      bars = List(31) { (it * 37 % 90).minutes },
-      saved = null,
-      countsSince = null,
+    previewWeek.copy(
+      period = PeriodKind.Year.period(previewToday, back = 0, DayOfWeek.MONDAY),
+      listened = 212.hours + 30.minutes,
+      days = 143,
+      bars = listOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 97, 53).map { it.hours },
+      name = ListenerName.Juggler(books = 4),
+      wideFact =
+        WideFact.Forecast(
+          StatsBookViewState(BookId("1"), "Long Way North", null, inLibrary = true),
+          left = 9.hours,
+          day = previewToday.plusDays(4),
+          today = previewToday,
+        ),
+      smallFacts =
+        listOf(
+          SmallFact.LongestMonth(97.hours, Month.NOVEMBER),
+          SmallFact.Saved(saved = 43.hours + 10.minutes, speed = 1.25F),
+        ),
       finished = emptyList(),
-      supporterBadge = null,
     ),
   )
 }
@@ -605,36 +690,36 @@ private fun ListeningStatsMonthPreview() {
 @Preview
 private fun ListeningStatsEmptyPreview() {
   StatsPreview(
-    ListeningStatsViewState(
-      period = PeriodKind.Month.period(LocalDate.of(2026, 11, 20), back = 1, DayOfWeek.MONDAY),
+    previewWeek.copy(
+      period = PeriodKind.Month.period(previewToday, back = 1, DayOfWeek.MONDAY),
       current = false,
       canGoBack = false,
       canGoForward = true,
       listened = Duration.ZERO,
       days = 0,
       bars = List(31) { Duration.ZERO },
-      saved = null,
-      countsSince = null,
+      name = null,
+      wideFact = null,
+      smallFacts = emptyList(),
       finished = emptyList(),
-      supporterBadge = null,
     ),
   )
 }
 
 @Composable
-@Preview
+@Preview(heightDp = 900)
 private fun ListeningStatsAllTimeSupporterPreview() {
   StatsPreview(
-    ListeningStatsViewState(
-      period = PeriodKind.AllTime.period(LocalDate.of(2026, 11, 20), back = 0, DayOfWeek.MONDAY),
-      current = true,
+    previewWeek.copy(
+      period = PeriodKind.AllTime.period(previewToday, back = 0, DayOfWeek.MONDAY),
       canGoBack = false,
-      canGoForward = false,
       listened = 52.hours + 5.minutes,
       days = 31,
       bars = emptyList(),
-      saved = null,
       countsSince = LocalDate.of(2026, 10, 8),
+      name = ListenerName.PartOfDay(DayPart.Evening, percent = 52),
+      wideFact = null,
+      smallFacts = listOf(SmallFact.LongestStretch(2.hours + 15.minutes)),
       finished = emptyList(),
       supporterBadge = SupporterBadge.ThreeMonths,
     ),
