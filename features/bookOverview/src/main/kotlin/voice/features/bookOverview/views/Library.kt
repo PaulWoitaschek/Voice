@@ -179,10 +179,12 @@ internal fun Library(
           )
         }
       }
-      if (viewState.showSupportCard) {
+      val supportCard = viewState.supportCard
+      if (supportCard != null) {
         val index = entranceIndex()
         item(key = "support", span = { GridItemSpan(maxLineSpan) }, contentType = "support") {
           SupportCard(
+            state = supportCard,
             onClick = onSupportCardClick,
             onDismiss = onSupportCardDismiss,
             modifier =

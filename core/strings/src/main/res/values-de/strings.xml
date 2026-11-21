@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Trinkgeldglas</string>
     <string name="support.badges.title">Dein Abzeichen wächst jeden Monat, den Du unterstützt</string>
     <string name="support.action.donate_kofi">Auf Ko-fi spenden</string>
+    <string name="support.card.book.message">Voice ist kostenlos und werbefrei. Das bleibt so dank Menschen wie Dir.</string>
+    <string name="support.card.letter.action">Paul einen Tee spendieren</string>
+    <string name="support.card.letter.message">Ich entwickle Voice allein und halte es kostenlos und werbefrei. Wenn es Dir eine Tasse Tee wert ist, hilft mir das, weiterzumachen.</string>
     <string name="support.description.maintenance">Voice ist kostenlos, quelloffen und wird von einem Entwickler betreut.</string>
     <string name="support.description.monthly">Mit monatlicher Unterstützung kann ich die nächste Version planen, nicht nur den nächsten Bugfix.</string>
     <string name="support.fine_print">Ein Dankeschön: schaltet nichts frei. Jederzeit in Google Play kündbar.</string>

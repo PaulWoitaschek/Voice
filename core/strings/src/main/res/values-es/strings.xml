@@ -594,6 +594,9 @@
     <string name="support.badge.tip_jar">Bote de propinas</string>
     <string name="support.badges.title">Tu insignia crece con cada mes de apoyo</string>
     <string name="support.action.donate_kofi">Donar en Ko-fi</string>
+    <string name="support.card.book.message">Voice es gratis y no tiene anuncios. Eso es gracias a oyentes como tú.</string>
+    <string name="support.card.letter.action">Invitar a Paul a un té</string>
+    <string name="support.card.letter.message">Hago Voice por mi cuenta y lo mantengo gratis y sin anuncios. Si para ti vale una taza de té, me ayudas a seguir adelante.</string>
     <string name="support.description.maintenance">Voice es gratis, de código abierto y lo mantiene un desarrollador.</string>
     <string name="support.description.monthly">El apoyo mensual es lo que me permite planificar la próxima versión, no solo el próximo arreglo.</string>
     <string name="support.fine_print">Es un agradecimiento: no desbloquea nada. Cancela cuando quieras en Google Play.</string>

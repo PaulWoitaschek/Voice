@@ -594,6 +594,9 @@
     <string name="support.badge.tip_jar">צנצנת טיפים</string>
     <string name="support.badges.title">התג שלכם גדל בכל חודש של תמיכה</string>
     <string name="support.action.donate_kofi">לתרום ב-Ko-fi</string>
+    <string name="support.card.book.message">Voice חינמית וללא פרסומות. היא נשארת כזו בזכות מאזינים כמוכם.</string>
+    <string name="support.card.letter.action">כוס תה ל-Paul</string>
+    <string name="support.card.letter.message">אני מפתח את Voice לבד ושומר עליה חינמית וללא פרסומות. אם היא שווה לכם כוס תה, זה עוזר לי להמשיך.</string>
     <string name="support.description.maintenance">Voice חינמית, בקוד פתוח, ומתוחזקת בידי מפתח אחד.</string>
     <string name="support.description.monthly">תמיכה חודשית היא מה שמאפשר לי לתכנן את הגרסה הבאה, ולא רק את התיקון הבא.</string>
     <string name="support.fine_print">זו תודה בלבד: לא פותחת שום תכונה. אפשר לבטל בכל עת ב-Google Play.</string>

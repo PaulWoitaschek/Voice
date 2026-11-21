@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Тегла за бакшиш</string>
     <string name="support.badges.title">Вашата значка расте со секој месец поддршка</string>
     <string name="support.action.donate_kofi">Донирај на Ko-fi</string>
+    <string name="support.card.book.message">Voice е бесплатен и без реклами. Така останува благодарение на слушатели како вас.</string>
+    <string name="support.card.letter.action">Почасти го Paul со чај</string>
+    <string name="support.card.letter.message">Сам го правам Voice и го одржувам бесплатен и без реклами. Ако за вас вреди шолја чај, тоа ми помага да продолжам.</string>
     <string name="support.description.maintenance">Voice е бесплатен, со отворен код и го одржува еден развивач.</string>
     <string name="support.description.monthly">Месечната поддршка ми овозможува да ја планирам следната верзија, а не само следната поправка.</string>
     <string name="support.fine_print">Ова е благодарност: ништо не отклучува. Откажете во секое време на Google Play.</string>

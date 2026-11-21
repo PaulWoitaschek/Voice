@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Tippipurkki</string>
     <string name="support.badges.title">Merkkisi kasvaa jokaisen tukikuukauden myötä</string>
     <string name="support.action.donate_kofi">Lahjoita Ko-fissa</string>
+    <string name="support.card.book.message">Voice on ilmainen ja mainokseton. Kaltaisesi kuuntelijat pitävät sen sellaisena.</string>
+    <string name="support.card.letter.action">Tarjoa Paulille kuppi teetä</string>
+    <string name="support.card.letter.message">Teen Voicea yksin ja pidän sen ilmaisena ja mainoksettomana. Jos se on sinulle teekupillisen arvoinen, se auttaa minua jatkamaan.</string>
     <string name="support.description.maintenance">Voice on ilmainen avoimen lähdekoodin sovellus, jota ylläpitää yksi kehittäjä.</string>
     <string name="support.description.monthly">Kuukausituki antaa minun suunnitella seuraavaa versiota, ei vain seuraavaa korjausta.</string>
     <string name="support.fine_print">Tämä on kiitos: se ei avaa mitään. Peru milloin vain Google Playssa.</string>

@@ -530,6 +530,9 @@
     <string name="support.badge.tip_jar">Kotak tip</string>
     <string name="support.badges.title">Lencana Anda tumbuh setiap bulan Anda mendukung</string>
     <string name="support.action.donate_kofi">Donasi di Ko-fi</string>
+    <string name="support.card.book.message">Voice gratis dan tanpa iklan. Semua itu berkat pendengar seperti Anda.</string>
+    <string name="support.card.letter.action">Traktir Paul secangkir teh</string>
+    <string name="support.card.letter.message">Saya membuat Voice sendirian dan menjaganya tetap gratis dan bebas iklan. Jika menurut Anda Voice layak dihargai secangkir teh, itu membantu saya terus berkarya.</string>
     <string name="support.description.maintenance">Voice gratis, bersumber terbuka, dan dirawat oleh satu pengembang.</string>
     <string name="support.description.monthly">Dukungan bulanan memungkinkan saya merencanakan rilis berikutnya, bukan sekadar perbaikan berikutnya.</string>
     <string name="support.fine_print">Ini ucapan terima kasih: tidak membuka fitur apa pun. Batalkan kapan saja di Google Play.</string>

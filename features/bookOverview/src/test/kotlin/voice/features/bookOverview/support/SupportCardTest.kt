@@ -29,74 +29,99 @@ class SupportCardTest {
   private val answered = MemoryDataStore(false)
 
   @Test
-  fun `setting on, a book finished yesterday, 5 hours on 3 days, the card shows`() = runTest {
-    assertEquals(true, supportCard().show().first())
+  fun `setting Letter, a book finished yesterday, 5 hours on 3 days, the letter is offered`() =
+    runTest {
+      assertEquals(
+        SupportCardOffer.Now(SupportCardLook.Letter, BookId("book0"), 5.hours),
+        supportCard(look = SupportCardLook.Letter).offer().first(),
+      )
+    }
+
+  @Test
+  fun `no answer, a book finished yesterday and one 5 days ago, the newest book is offered`() =
+    runTest {
+      assertEquals(
+        SupportCardOffer.Now(SupportCardLook.Letter, BookId("book0"), 5.hours),
+        supportCard(finishedAgo = listOf(1.days, 5.days)).offer().first(),
+      )
+    }
+
+  @Test
+  fun `setting Letter, no finished book, no card`() = runTest {
+    assertEquals(SupportCardOffer.NotNow, supportCard(finishedAgo = emptyList()).offer().first())
   }
 
   @Test
-  fun `no answer, a book finished 5 days ago and one yesterday, the card shows`() = runTest {
-    assertEquals(true, supportCard(finishedAgo = listOf(1.days, 5.days)).show().first())
+  fun `setting Letter, a book finished 5 days ago, no card`() = runTest {
+    assertEquals(SupportCardOffer.NotNow, supportCard(finishedAgo = listOf(5.days)).offer().first())
   }
 
   @Test
-  fun `setting off, a book finished yesterday, no card`() = runTest {
-    assertEquals(false, supportCard(enabled = false).show().first())
+  fun `setting Letter, a book finished yesterday, 2 hours listened, no card`() = runTest {
+    assertEquals(SupportCardOffer.NotNow, supportCard(listened = 2.hours).offer().first())
   }
 
   @Test
-  fun `setting on, no finished book, no card`() = runTest {
-    assertEquals(false, supportCard(finishedAgo = emptyList()).show().first())
-  }
-
-  @Test
-  fun `setting on, a book finished 5 days ago, no card`() = runTest {
-    assertEquals(false, supportCard(finishedAgo = listOf(5.days)).show().first())
-  }
-
-  @Test
-  fun `setting on, a book finished yesterday, 2 hours listened, no card`() = runTest {
-    assertEquals(false, supportCard(listened = 2.hours).show().first())
-  }
-
-  @Test
-  fun `setting on, a book finished yesterday, listening on 2 days, no card`() = runTest {
-    assertEquals(false, supportCard(listeningDays = 2).show().first())
+  fun `setting Letter, a book finished yesterday, listening on 2 days, no card`() = runTest {
+    assertEquals(SupportCardOffer.NotNow, supportCard(listeningDays = 2).offer().first())
   }
 
   @Test
   fun `a supporter, a book finished yesterday, no card`() = runTest {
-    assertEquals(false, supportCard(supporter = SupporterStatus(tipped = true)).show().first())
+    assertEquals(
+      SupportCardOffer.NotNow,
+      supportCard(supporter = SupporterStatus(tipped = true)).offer().first(),
+    )
   }
 
   @Test
-  fun `the card, tap Support development, the card never comes back`() = runTest {
+  fun `the letter, tap Buy Paul a tea, the card never comes back`() = runTest {
     val supportCard = supportCard()
 
     supportCard.open()
 
-    assertEquals(false, supportCard.show().first())
+    assertEquals(SupportCardOffer.NotNow, supportCard.offer().first())
     verify(exactly = 1) { analytics.event("support_open", mapOf("from" to "library_card")) }
   }
 
   @Test
-  fun `the card, tap No thanks, the card never comes back`() = runTest {
-    val supportCard = supportCard()
+  fun `the book card, tap No thanks, the card never comes back`() = runTest {
+    val supportCard = supportCard(look = SupportCardLook.Book)
+    supportCard.offer().first()
 
     supportCard.dismiss()
 
-    assertEquals(false, supportCard.show().first())
-    verify(exactly = 1) { analytics.event("support_card", mapOf("action" to "dismiss")) }
+    assertEquals(SupportCardOffer.NotNow, supportCard.offer().first())
+    verify(exactly = 1) {
+      analytics.event("support_card", mapOf("action" to "dismiss", "kind" to "book"))
+    }
   }
 
+  @Test
+  fun `the letter shows, the setting changes to Book, tap No thanks, Voice reports the letter`() =
+    runTest {
+      val flag = MemoryFeatureFlag(SupportCardLook.Letter)
+      val supportCard = supportCard(flag = flag)
+      supportCard.offer().first()
+      flag.value = SupportCardLook.Book
+
+      supportCard.dismiss()
+
+      verify(exactly = 1) {
+        analytics.event("support_card", mapOf("action" to "dismiss", "kind" to "letter"))
+      }
+    }
+
   private fun supportCard(
-    enabled: Boolean = true,
+    look: SupportCardLook = SupportCardLook.Letter,
     finishedAgo: List<Duration> = listOf(1.days),
     listened: Duration = 5.hours,
     listeningDays: Int = 3,
     supporter: SupporterStatus = SupporterStatus(),
+    flag: MemoryFeatureFlag<SupportCardLook> = MemoryFeatureFlag(look),
   ): SupportCard {
     return SupportCard(
-      enabled = SupportCardFeatureFlag(MemoryFeatureFlag(enabled)),
+      look = SupportCardFeatureFlag(flag),
       answeredStore = SupportCardAnsweredStore(answered),
       supporterStatusStore = SupporterStatusStore(MemoryDataStore(supporter)),
       statsRepo =
@@ -105,7 +130,10 @@ class SupportCardTest {
             ListeningSummary(
               listened = listened,
               listeningDays = listeningDays,
-              finishedBooks = finishedAgo.map { FinishedBook(BookId("a"), now - it) },
+              finishedBooks =
+                finishedAgo.mapIndexed { index, ago ->
+                  FinishedBook(BookId("book$index"), now - ago)
+                },
             )
         },
       clock =

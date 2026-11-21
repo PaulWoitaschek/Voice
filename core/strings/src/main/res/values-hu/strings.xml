@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Persely</string>
     <string name="support.badges.title">A jelvénye minden hónappal nő, amíg támogat</string>
     <string name="support.action.donate_kofi">Adományozás a Ko-fi oldalán</string>
+    <string name="support.card.book.message">A Voice ingyenes és reklámmentes. Ez az Önhöz hasonló hallgatóknak köszönhető.</string>
+    <string name="support.card.letter.action">Egy tea Paulnak</string>
+    <string name="support.card.letter.message">Egyedül fejlesztem a Voice-t, és ingyenesen, reklámok nélkül tartom fenn. Ha Önnek megér egy csésze teát, azzal segít, hogy folytathassam.</string>
     <string name="support.description.maintenance">A Voice ingyenes, nyílt forráskódú, és egyetlen fejlesztő tartja karban.</string>
     <string name="support.description.monthly">A havi támogatás teszi lehetővé, hogy ne csak a következő javítást, hanem a következő kiadást is megtervezhessem.</string>
     <string name="support.fine_print">Ez egy köszönet: nem old fel semmit. Bármikor lemondható a Google Playen.</string>

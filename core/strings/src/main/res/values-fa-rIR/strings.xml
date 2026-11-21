@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">قلک انعام</string>
     <string name="support.badges.title">نشان شما با هر ماه حمایت بزرگ‌تر می‌شود</string>
     <string name="support.action.donate_kofi">کمک مالی در Ko-fi</string>
+    <string name="support.card.book.message">Voice رایگان و بدون تبلیغات است. به لطف شنوندگانی مثل شما همین‌طور می‌ماند.</string>
+    <string name="support.card.letter.action">یک چای برای Paul</string>
+    <string name="support.card.letter.message">من Voice را به‌تنهایی می‌سازم و آن را رایگان و بدون تبلیغات نگه می‌دارم. اگر برایتان به یک استکان چای می‌ارزد، کمکم می‌کند ادامه بدهم.</string>
     <string name="support.description.maintenance">Voice رایگان، متن‌باز، و توسط یک توسعه‌دهنده نگهداری می‌شود.</string>
     <string name="support.description.monthly">حمایت ماهانه به من امکان می‌دهد نسخه‌ی بعدی را برنامه‌ریزی کنم، نه فقط رفع اشکال بعدی را.</string>
     <string name="support.fine_print">این یک تشکر است: هیچ قابلیتی را باز نمی‌کند. هر زمان خواستید در Google Play لغو کنید.</string>

@@ -562,6 +562,9 @@
     <string name="support.badge.tip_jar">Dricksburk</string>
     <string name="support.badges.title">Ditt märke växer för varje månad du stöttar</string>
     <string name="support.action.donate_kofi">Donera på Ko-fi</string>
+    <string name="support.card.book.message">Voice är gratis och reklamfritt. Det är tack vare lyssnare som du.</string>
+    <string name="support.card.letter.action">Bjud Paul på en kopp te</string>
+    <string name="support.card.letter.message">Jag bygger Voice på egen hand och håller det gratis och reklamfritt. Om det är värt en kopp te för dig hjälper det mig att fortsätta.</string>
     <string name="support.description.maintenance">Voice är gratis, har öppen källkod och underhålls av en enda utvecklare.</string>
     <string name="support.description.monthly">Månatligt stöd gör att jag kan planera nästa version, inte bara nästa buggfix.</string>
     <string name="support.fine_print">Ett tack: låser inte upp något. Säg upp när som helst i Google Play.</string>
