@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextOverflow
@@ -75,6 +76,7 @@ internal fun ContinueListeningCard(
             ),
           )
           .libraryItemClickable(selected, onClick = onClick, onLongClick = onLongClick)
+          .testTag("continue_listening")
           .padding(20.dp),
     ) {
       CompositionLocalProvider(LocalContentColor provides colors.onSurface) {
@@ -174,6 +176,7 @@ internal fun ContinueListeningCard(
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
+                  modifier = Modifier.testTag("time_left"),
                   text =
                     stringResource(R.string.playback_book_progress_remaining, book.remainingTime),
                   style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),

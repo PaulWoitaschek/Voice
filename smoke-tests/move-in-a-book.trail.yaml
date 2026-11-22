@@ -30,9 +30,8 @@ trail:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Chapters
+              androidAccessibility:
+                resourceIdRegex: chapters
         - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
@@ -40,6 +39,7 @@ trail:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
+                resourceIdRegex: chapter_counter
                 textRegex: Chapter 3 of 3
 
   - step: "Previous goes to chapter 2"
@@ -47,12 +47,12 @@ trail:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Previous track
+              androidAccessibility:
+                resourceIdRegex: previous_chapter
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
+                resourceIdRegex: chapter_counter
                 textRegex: Chapter 2 of 3
 
   - step: "Remember the time in the chapter"
@@ -61,7 +61,7 @@ trail:
         - rememberTextBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: "\\d{2}:\\d{2}"
+                resourceIdRegex: elapsed
             variable: start
 
   - step: "Fast forward moves the time"
@@ -69,9 +69,8 @@ trail:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Fast forward
+              androidAccessibility:
+                resourceIdRegex: fast_forward
         - assertNotVisibleWithText:
             text: "{{start}}"
 
@@ -80,12 +79,12 @@ trail:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Rewind
+              androidAccessibility:
+                resourceIdRegex: rewind
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
+                resourceIdRegex: elapsed
                 textRegex: "{{start}}"
 
   - step: "The pill goes back to chapter 3"
@@ -94,10 +93,11 @@ trail:
         - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: "Back to Ch\\. 3 .*"
+                resourceIdRegex: jump_back
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
+                resourceIdRegex: chapter_counter
                 textRegex: Chapter 3 of 3
 
   - step: "Nothing plays"
@@ -106,4 +106,4 @@ trail:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Play
+                resourceIdRegex: play

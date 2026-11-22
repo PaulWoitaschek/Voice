@@ -23,7 +23,7 @@ trail:
         - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: "Let's go"
+                resourceIdRegex: onboarding_start
 
   - step: "Go to the folder step"
     recording:
@@ -31,7 +31,7 @@ trail:
         - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: Next
+                resourceIdRegex: onboarding_next
 
   - step: "Open Android's folder picker"
     recording:
@@ -39,7 +39,7 @@ trail:
         - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: Choose a folder
+                resourceIdRegex: choose_folder
 
   - step: "Open the testfiles folder"
     recording:
@@ -73,13 +73,16 @@ trail:
               androidAccessibility:
                 textRegex: "(?i)allow"
 
-  - step: "Add the books"
+  - step: "Add the six books"
     recording:
       android:
         - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: Add 6 books
+                resourceIdRegex: add_books
+              containsChild:
+                androidAccessibility:
+                  textRegex: Add 6 books
 
   - step: "Start listening"
     recording:
@@ -87,7 +90,7 @@ trail:
         - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: Start Listening
+                resourceIdRegex: start_listening
 
   - step: "The library shows the six books"
     recording:
@@ -95,7 +98,7 @@ trail:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: Search your library
+                resourceIdRegex: library_search
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:

@@ -122,7 +122,15 @@ repair one, do the journey with `trailblaze snapshot` and `trailblaze tool`, the
 
 - Run Trailblaze from `build/smoke`, as it writes its settings into the working directory. Pass
   `-d android/$ANDROID_SERIAL` to each command.
-- Select by text or content description, never by position.
+- Select Voice's own controls by test tag: `Modifier.testTag("play")` in the code, `resourceIdRegex: play` in the
+  trail. When a trail needs a control without a tag, add one. Never select by position.
+- Voice shows test tags as resource ids only in its main window, because Trailblaze can't read `composeTestTagRegex`.
+  Sheets and dialogs have their own window, so select their choices by text. Also select book titles, chapter names
+  and Android's own screens by text.
+- To check a value, like a time, add `textRegex` to the selector of the tag. When a button holds the text, the text is
+  a child node: use `containsChild`.
+- Each `PlayButton` has the tag `play` or `pause`. Where a screen shows more than one, add the book title with
+  `containsChild` or `childOf`.
 - Don't expect a value that the trail changes itself, like the position of a book. Remember it and check that it
   changes.
 - Don't use `verify` steps, `trailblaze step` or `--self-heal`. They call a model.

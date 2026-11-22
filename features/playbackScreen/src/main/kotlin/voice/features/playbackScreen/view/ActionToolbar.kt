@@ -55,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -105,6 +106,7 @@ internal fun ActionToolbar(
         // it counts down every second, rolling would keep it moving the whole time
         rollLabel = false,
         onClick = onSleepTimerClick,
+        modifier = Modifier.testTag("sleep_timer"),
       )
       val speedChanged = playbackSpeed !in 0.99F..1.01F
       ToolbarAction(
@@ -208,7 +210,6 @@ private fun ToolbarAction(
     positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
     tooltip = { PlainTooltip { Text(contentDescription) } },
     state = tooltipState,
-    modifier = modifier,
     // a long click of its own takes precedence over showing the tooltip
     enableUserInput = onLongClick == null,
   ) {
@@ -228,6 +229,7 @@ private fun ToolbarAction(
       },
       onLongClick = onLongClick,
       onLongClickLabel = onLongClickLabel,
+      modifier = modifier,
     )
   }
 }

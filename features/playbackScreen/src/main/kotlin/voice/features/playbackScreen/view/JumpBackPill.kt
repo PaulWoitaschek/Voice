@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalAccessibilityManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -135,7 +136,10 @@ private fun Pill(
     shape = CircleShape,
     color = colors.tertiaryContainer,
     contentColor = colors.onTertiaryContainer,
-    modifier = Modifier.heightIn(min = 32.dp).semantics { liveRegion = LiveRegionMode.Polite },
+    modifier =
+      Modifier.heightIn(min = 32.dp)
+        .semantics { liveRegion = LiveRegionMode.Polite }
+        .testTag("jump_back"),
   ) {
     Row(
       modifier = Modifier.padding(start = 6.dp, end = 12.dp),

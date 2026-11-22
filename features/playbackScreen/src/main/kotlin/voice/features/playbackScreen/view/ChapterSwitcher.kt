@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -53,7 +54,8 @@ internal fun ChapterSwitcher(
     FilledTonalIconButton(
       onClick = onSkipToPrevious,
       shapes = IconButtonDefaults.shapes(),
-      modifier = Modifier.size(IconButtonDefaults.mediumContainerSize()),
+      modifier =
+        Modifier.size(IconButtonDefaults.mediumContainerSize()).testTag("previous_chapter"),
     ) {
       Icon(
         painter = painterResource(UiR.drawable.ic_skip_previous),
@@ -86,6 +88,7 @@ internal fun ChapterSwitcher(
         ) { label ->
           Column {
             Text(
+              modifier = Modifier.testTag("chapter_counter"),
               text = stringResource(R.string.playback_chapter_counter, label.number, chapterCount),
               style = MaterialTheme.typography.labelMedium,
               color = MaterialTheme.colorScheme.primary,

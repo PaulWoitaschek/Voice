@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
@@ -102,7 +103,8 @@ fun PlayButton(
             if (playing) HapticFeedbackType.ToggleOff else HapticFeedbackType.ToggleOn,
           )
           onClick()
-        },
+        }
+        .testTag(if (playing) "pause" else "play"),
     contentAlignment = Alignment.Center,
   ) {
     PlayPauseIcon(

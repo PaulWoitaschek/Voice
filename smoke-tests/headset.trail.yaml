@@ -20,27 +20,24 @@ trail:
                   textRegex: Snakey
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Play
+              androidAccessibility:
+                resourceIdRegex: play
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Pause
+              androidAccessibility:
+                resourceIdRegex: pause
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Play
+                resourceIdRegex: play
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Close
+              androidAccessibility:
+                resourceIdRegex: close
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: Continue listening
+                resourceIdRegex: continue_listening
 
   - step: "Go to the home screen, so that Voice runs in the background"
     recording:
@@ -67,7 +64,7 @@ trail:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Pause
+                resourceIdRegex: pause
 
   - step: "The time moves"
     recording:
@@ -75,11 +72,7 @@ trail:
         - rememberTextBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: "\\d+:\\d{2} left"
-              childOf:
-                containsChild:
-                  androidAccessibility:
-                    textRegex: Continue listening
+                resourceIdRegex: time_left
             variable: left
         - assertNotVisibleWithText:
             text: "{{left}}"
@@ -92,4 +85,4 @@ trail:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Play
+                resourceIdRegex: play

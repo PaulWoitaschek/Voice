@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import voice.core.common.rootGraphAs
@@ -45,6 +46,7 @@ private fun OnboardingExplanation(
       OnboardingButton(
         text = stringResource(StringsR.string.onboarding_action_next),
         onClick = onNext,
+        modifier = Modifier.testTag("onboarding_next"),
         trailingArrow = true,
       )
     },

@@ -55,6 +55,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
@@ -148,6 +149,7 @@ internal fun SeekSection(
         listOf(
           {
             Text(
+              modifier = Modifier.testTag("elapsed"),
               text = formatTime(shownTime.inWholeMilliseconds, duration.inWholeMilliseconds),
               style =
                 MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),

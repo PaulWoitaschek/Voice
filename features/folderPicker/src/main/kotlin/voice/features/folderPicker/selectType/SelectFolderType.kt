@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -438,6 +439,7 @@ private fun ReviewActions(
               )
             },
           onClick = onAddClick,
+          modifier = Modifier.testTag("add_books"),
           enabled = !viewState.loading,
         )
         TextButton(
