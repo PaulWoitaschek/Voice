@@ -42,7 +42,7 @@ trail:
 
   # The picker's folders ignore Trailblaze's taps, so the keyboard opens them. Typing a name focuses that folder,
   # but only while the focus is in the folder list. Down keys stop at the button above the list, and Tab moves on
-  # to the list. An Enter right after the typing can get lost, so a short wait comes first.
+  # to the list. Trailblaze's pressKey sometimes loses the Enter here, so adb sends it, like the other keys.
   - step: "Open the testfiles folder"
     recording:
       android:
@@ -69,9 +69,7 @@ trail:
                 - androidAccessibility:
                     textRegex: testfiles
         - android_adbShell:
-            command: [sleep, "1"]
-        - pressKey:
-            keyCode: ENTER
+            command: [input, keyevent, KEYCODE_ENTER]
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
@@ -90,9 +88,7 @@ trail:
                 - androidAccessibility:
                     textRegex: Audiobooks
         - android_adbShell:
-            command: [sleep, "1"]
-        - pressKey:
-            keyCode: ENTER
+            command: [input, keyevent, KEYCODE_ENTER]
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
