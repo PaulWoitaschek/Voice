@@ -130,7 +130,7 @@ repair one, do the journey with `trailblaze snapshot` and `trailblaze tool`, the
   snapshot.
 - Android's folder picker ignores Trailblaze's taps. `voice_tapWithAdb` taps an element by its text through adb. It
   is a scripted tool in `smoke-tests/trailblaze-config`, and a trail that uses it needs `target: voice` in its config.
-  Trailblaze reads the tool with `bun`. If `bun` is missing, ask the user to install it.
+  Trailblaze needs `bun` and `esbuild` for the tool. If one is missing, ask the user to install it.
 - Trailblaze reads only the screen. To check what Voice does in the background, like `headset` does with the play
   key, wait a few seconds and then open Voice.
 - When you're done, run `adb shell am force-stop xyz.block.trailblaze.runner`. agent-device can't read the screen

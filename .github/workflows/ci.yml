@@ -54,8 +54,10 @@ jobs:
           chmod +x "$RUNNER_TEMP/trailblaze/trailblaze"
           echo "$RUNNER_TEMP/trailblaze" >> "$GITHUB_PATH"
           echo "TRAILBLAZE_HOME=$RUNNER_TEMP/trailblaze-home" >> "$GITHUB_ENV"
-      # Trailblaze reads the scripted tool in smoke-tests with bun.
+      # Trailblaze reads the scripted tool in smoke-tests with bun and bundles it with esbuild.
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - name: Install esbuild
+        run: npm install -g esbuild@0.28.2
       - name: Install ffmpeg for the test books
         run: sudo apt-get update -q && sudo apt-get install -y -q ffmpeg
       - name: Enable KVM and keep the Trailblaze daemon port free
