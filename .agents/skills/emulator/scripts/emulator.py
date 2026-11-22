@@ -175,6 +175,12 @@ def run_trails_in_order(root, names):
 
 
 def install_library(root):
+  # Right after boot, the shared storage refuses new files for a while.
+  deadline = time.monotonic() + 60
+  while adb("shell", "touch /sdcard/.voice-probe && rm /sdcard/.voice-probe", check=False).returncode != 0:
+    if time.monotonic() > deadline:
+      sys.exit("The emulator's shared storage didn't become writable.")
+    time.sleep(1)
   adb("push", str(root / "build" / "testfiles"), "/sdcard/testfiles")
   adb("install", "-r", str(root / "app/build/outputs/apk/foss/debug/app-foss-debug.apk"))
 
