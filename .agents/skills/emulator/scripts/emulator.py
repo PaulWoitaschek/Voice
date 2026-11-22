@@ -334,6 +334,8 @@ def emulator_snapshot(action):
     if time.monotonic() > deadline:
       state = subprocess.run(["adb", "-s", serial(), "get-state"], capture_output=True, text=True)
       sys.exit(f"The emulator didn't come back after the {action} of the snapshot {SMOKE_SNAPSHOT}. adb: {(state.stdout + state.stderr).strip()}")
+    # adb can keep a loaded emulator as offline until it connects again.
+    subprocess.run(["adb", "reconnect", "offline"], capture_output=True)
     time.sleep(1)
 
 
