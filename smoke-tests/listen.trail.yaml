@@ -28,7 +28,7 @@ trail:
         - rememberTextBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: "\\d{2}:\\d{2}"
+                resourceIdRegex: elapsed
             variable: start
 
   - step: "Start playback"
@@ -36,9 +36,8 @@ trail:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Play
+              androidAccessibility:
+                resourceIdRegex: play
 
   - step: "The button shows Pause"
     recording:
@@ -46,7 +45,7 @@ trail:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Pause
+                resourceIdRegex: pause
 
   - step: "The time moves on"
     recording:
@@ -59,9 +58,8 @@ trail:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Pause
+              androidAccessibility:
+                resourceIdRegex: pause
 
   - step: "The button shows Play again"
     recording:
@@ -69,7 +67,7 @@ trail:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Play
+                resourceIdRegex: play
 
   - step: "Remember the position where playback paused"
     recording:
@@ -77,7 +75,7 @@ trail:
         - rememberTextBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: "\\d{2}:\\d{2}"
+                resourceIdRegex: elapsed
             variable: paused
 
   - step: "Close the player"
@@ -85,9 +83,8 @@ trail:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Close
+              androidAccessibility:
+                resourceIdRegex: close
 
   - step: "The library is back"
     recording:
@@ -95,7 +92,7 @@ trail:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: Search your library
+                resourceIdRegex: library_search
 
   - step: "Force-stop Voice and open it again"
     recording:
@@ -110,11 +107,11 @@ trail:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsDescendants:
-                - androidAccessibility:
-                    textRegex: Continue listening
-                - androidAccessibility:
-                    textRegex: Snakey
+              androidAccessibility:
+                resourceIdRegex: continue_listening
+              containsChild:
+                androidAccessibility:
+                  textRegex: Snakey
 
   - step: "The player is at the place where playback paused"
     recording:
@@ -122,4 +119,5 @@ trail:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
+                resourceIdRegex: elapsed
                 textRegex: "{{paused}}"

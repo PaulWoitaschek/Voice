@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import voice.core.logging.api.Logger
 import voice.core.strings.R as StringsR
@@ -51,6 +52,7 @@ internal fun ColumnScope.ContentTypeChoices(
         onNoPicker()
       }
     },
+    modifier = Modifier.testTag("choose_folder"),
   )
   if (onConnectAudiobookshelf != null) {
     OnboardingButton(

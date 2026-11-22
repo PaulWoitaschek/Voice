@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import kotlin.time.Duration
 import voice.core.data.BookId
@@ -32,7 +33,7 @@ internal fun TransportControls(
       forward = false,
       amount = skipAmount,
       onClick = onRewindClick,
-      modifier = Modifier.fillMaxHeight(0.72F),
+      modifier = Modifier.fillMaxHeight(0.72F).testTag("rewind"),
     )
     PlayButton(
       playing = playing,
@@ -46,7 +47,7 @@ internal fun TransportControls(
       forward = true,
       amount = skipAmount,
       onClick = onFastForwardClick,
-      modifier = Modifier.fillMaxHeight(0.72F),
+      modifier = Modifier.fillMaxHeight(0.72F).testTag("fast_forward"),
     )
   }
 }

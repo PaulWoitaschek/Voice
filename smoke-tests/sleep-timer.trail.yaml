@@ -28,7 +28,7 @@ trail:
         - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Sleep timer
+                resourceIdRegex: sleep_timer
         - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
@@ -40,33 +40,37 @@ trail:
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: "15:00"
+                resourceIdRegex: sleep_timer
+              containsChild:
+                androidAccessibility:
+                  textRegex: "15:00"
 
   - step: "Play, and the time on the button goes down"
     recording:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Play
+              androidAccessibility:
+                resourceIdRegex: play
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                textRegex: "14:\\d{2}"
+                resourceIdRegex: sleep_timer
+              containsChild:
+                androidAccessibility:
+                  textRegex: "14:\\d{2}"
 
   - step: "Pause"
     recording:
       android:
         - tapOnElementBySelector:
             nodeSelector:
-              containsChild:
-                androidAccessibility:
-                  contentDescriptionRegex: Pause
+              androidAccessibility:
+                resourceIdRegex: pause
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Play
+                resourceIdRegex: play
 
   - step: "Press the button, and the timer is off"
     recording:
@@ -74,9 +78,9 @@ trail:
         - tapOnElementBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Sleep timer
+                resourceIdRegex: sleep_timer
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
-                contentDescriptionRegex: Sleep timer
+                resourceIdRegex: sleep_timer
                 isChecked: false

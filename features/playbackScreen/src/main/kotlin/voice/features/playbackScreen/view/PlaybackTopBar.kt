@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -63,7 +64,7 @@ internal fun ChaptersButton(
     icon = UiR.drawable.ic_view_list,
     contentDescription = stringResource(R.string.playback_chapters_title),
     onClick = onClick,
-    modifier = modifier,
+    modifier = modifier.testTag("chapters"),
   )
 }
 
@@ -89,7 +90,7 @@ internal fun CloseButton(
     icon = UiR.drawable.ic_keyboard_arrow_down,
     contentDescription = stringResource(R.string.common_action_close),
     onClick = onClick,
-    modifier = modifier,
+    modifier = modifier.testTag("close"),
   )
 }
 

@@ -20,8 +20,11 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.net.toUri
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.scene.DialogSceneStrategy
@@ -132,7 +135,8 @@ class MainActivity : AppCompatActivity() {
         val windowWidth = LocalWindowInfo.current.containerSize.width
         val playerDrag = remember { PlayerDrag() }
 
-        SharedTransitionLayout {
+        // lets the smoke tests find controls by their test tag
+        SharedTransitionLayout(Modifier.semantics { testTagsAsResourceId = true }) {
           CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
             LocalSharesCovers provides ::sharesCovers,
