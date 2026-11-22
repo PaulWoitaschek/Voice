@@ -152,6 +152,14 @@ def trailblaze_work_dir(root):
   return work
 
 
+def check_trails(root):
+  result = subprocess.run(["trailblaze", "check"], cwd=root / "smoke-tests", capture_output=True, text=True)
+  output = result.stdout + result.stderr
+  # A trail that doesn't load, or that the check skips, is in the output but not in the exit code.
+  if result.returncode != 0 or "Load/run errors" in output or "Skipped (no manifest)" in output:
+    sys.exit(f"{output}\ntrailblaze check failed. Correct the trail or the tool that it names.")
+
+
 def trail_path(root, name):
   path = root / "smoke-tests" / f"{name}.trail.yaml"
   if not path.exists():
@@ -347,10 +355,17 @@ def package_manager_answers():
   return "package:" in result.stdout
 
 
+def command_check(args):
+  require_trailblaze()
+  check_trails(repo_root())
+  print("trailblaze check passed.")
+
+
 def command_smoke(args):
   require_trailblaze()
   root = repo_root()
   paths = [trail_path(root, name) for name in args.trails] or sorted((root / "smoke-tests").glob("*.trail.yaml"))
+  check_trails(root)
   work = trailblaze_work_dir(root)
   adb("shell", "am", "force-stop", "xyz.block.trailblaze.runner", check=False)
   # Without the last load, the next run would save the state that a trail left behind.
@@ -392,6 +407,9 @@ def main():
   books_parser = subparsers.add_parser("books", help="list the library with book ids, last played first")
   books_parser.add_argument("--all", action="store_true", help="also books whose files are gone")
   books_parser.set_defaults(func=command_books)
+
+  check_help = "check the trails and the tools of the smoke test, without an emulator"
+  subparsers.add_parser("check", help=check_help).set_defaults(func=command_check)
 
   smoke_parser = subparsers.add_parser("smoke", help="run the smoke test trails on your emulator, each from the same state")
   smoke_parser.add_argument("trails", nargs="*", help="names of the trails to run, like listen. Default: all")

@@ -3,6 +3,7 @@ config:
     android:
       driver: ANDROID_ONDEVICE_ACCESSIBILITY
   title: sleep-timer
+  target: voice
 
 trail:
   - step: "Start Voice fresh on the library"
