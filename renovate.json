@@ -61,6 +61,13 @@
         "com.google.android.play:review-ktx"
       ],
       "allowedVersions": "!/^(2\\.0\\.2)$/"
+    },
+    {
+      "description": "The Play upload and promote lanes only run in a release, so a fastlane update needs a manual merge",
+      "matchDatasources": [
+        "rubygems"
+      ],
+      "automerge": false
     }
   ],
   "prHourlyLimit": 0,
