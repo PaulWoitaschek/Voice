@@ -24,3 +24,4 @@ reports
 testResults
 /plugins/.idea/workspace.xml
 /app/src/*/generated
+__pycache__/

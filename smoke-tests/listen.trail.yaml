@@ -1,0 +1,125 @@
+config:
+  devices:
+    android:
+      driver: ANDROID_ONDEVICE_ACCESSIBILITY
+  title: listen
+
+trail:
+  - step: "Start Voice fresh on the library"
+    recording:
+      android:
+        - android_forceStop:
+            appId: de.ph1b.audiobook
+        - openApp:
+            appId: de.ph1b.audiobook
+
+  - step: "Open the book Snakey"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  textRegex: Snakey
+
+  - step: "Remember the position before playback"
+    recording:
+      android:
+        - rememberTextBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "\\d{2}:\\d{2}"
+            variable: start
+
+  - step: "Start playback"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  contentDescriptionRegex: Play
+
+  - step: "The button shows Pause"
+    recording:
+      android:
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                contentDescriptionRegex: Pause
+
+  - step: "The time moves on"
+    recording:
+      android:
+        - assertNotVisibleWithText:
+            text: "{{start}}"
+
+  - step: "Pause playback"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  contentDescriptionRegex: Pause
+
+  - step: "The button shows Play again"
+    recording:
+      android:
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                contentDescriptionRegex: Play
+
+  - step: "Remember the position where playback paused"
+    recording:
+      android:
+        - rememberTextBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "\\d{2}:\\d{2}"
+            variable: paused
+
+  - step: "Close the player"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  contentDescriptionRegex: Close
+
+  - step: "The library is back"
+    recording:
+      android:
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Search your library
+
+  - step: "Force-stop Voice and open it again"
+    recording:
+      android:
+        - android_forceStop:
+            appId: de.ph1b.audiobook
+        - openApp:
+            appId: de.ph1b.audiobook
+
+  - step: "Open Snakey from Continue listening"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsDescendants:
+                - androidAccessibility:
+                    textRegex: Continue listening
+                - androidAccessibility:
+                    textRegex: Snakey
+
+  - step: "The player is at the place where playback paused"
+    recording:
+      android:
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "{{paused}}"

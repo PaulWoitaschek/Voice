@@ -1,0 +1,109 @@
+config:
+  devices:
+    android:
+      driver: ANDROID_ONDEVICE_ACCESSIBILITY
+  title: move-in-a-book
+
+trail:
+  - step: "Start Voice fresh on the library"
+    recording:
+      android:
+        # Each step takes seconds, or a minute on a busy machine, so the jump-back pill gets 10 minutes.
+        - android_adbShell:
+            command: [settings, put, secure, accessibility_interactive_ui_timeout_ms, "600000"]
+        - android_forceStop:
+            appId: de.ph1b.audiobook
+        - openApp:
+            appId: de.ph1b.audiobook
+
+  - step: "Open the book El Guitarrero, which has three chapters"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  textRegex: El Guitarrero
+
+  - step: "Pick chapter 3 in the chapter list"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  contentDescriptionRegex: Chapters
+        - tapOnElementBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Flamenco Midnight
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Chapter 3 of 3
+
+  - step: "Previous goes to chapter 2"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  contentDescriptionRegex: Previous track
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Chapter 2 of 3
+
+  - step: "Remember the time in the chapter"
+    recording:
+      android:
+        - rememberTextBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "\\d{2}:\\d{2}"
+            variable: start
+
+  - step: "Fast forward moves the time"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  contentDescriptionRegex: Fast forward
+        - assertNotVisibleWithText:
+            text: "{{start}}"
+
+  - step: "Rewind brings the time back"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              containsChild:
+                androidAccessibility:
+                  contentDescriptionRegex: Rewind
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "{{start}}"
+
+  - step: "The pill goes back to chapter 3"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "Back to Ch\\. 3 .*"
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Chapter 3 of 3
+
+  - step: "Nothing plays"
+    recording:
+      android:
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                contentDescriptionRegex: Play

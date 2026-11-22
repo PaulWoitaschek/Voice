@@ -1,0 +1,122 @@
+config:
+  devices:
+    android:
+      driver: ANDROID_ONDEVICE_ACCESSIBILITY
+  title: first-start
+  target: voice
+
+trail:
+  - step: "Clear the app data and open Voice"
+    recording:
+      android:
+        - mobile_clearAppData:
+            appId: de.ph1b.audiobook
+        # The picker opens in the folder it showed last.
+        - mobile_clearAppData:
+            appId: com.google.android.documentsui
+        - openApp:
+            appId: de.ph1b.audiobook
+
+  - step: "Start the onboarding"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "Let's go"
+
+  - step: "Go to the folder step"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Next
+
+  - step: "Open Android's folder picker"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Choose a folder
+
+  - step: "Open the testfiles folder"
+    recording:
+      android:
+        - voice_tapWithAdb:
+            textRegex: testfiles
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: SingleAudiobook
+
+  - step: "Open the Audiobooks folder in testfiles"
+    recording:
+      android:
+        - voice_tapWithAdb:
+            textRegex: Audiobooks
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Dream in a Boat
+
+  - step: "Use this folder and allow access"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "(?i)use this folder"
+        - tapOnElementBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: "(?i)allow"
+
+  - step: "Add the books"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Add 6 books
+
+  - step: "Start listening"
+    recording:
+      android:
+        - tapOnElementBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Start Listening
+
+  - step: "The library shows the six books"
+    recording:
+      android:
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Search your library
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Dream in a Boat
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: El Guitarrero
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Snakey
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: The Boy and the Cave
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: The Fabulous Geysha
+        - assertVisibleBySelector:
+            nodeSelector:
+              androidAccessibility:
+                textRegex: Treeman

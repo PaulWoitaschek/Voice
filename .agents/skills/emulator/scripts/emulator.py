@@ -6,6 +6,7 @@ import json
 import os
 import shlex
 import shutil
+import signal
 import sqlite3
 import subprocess
 import sys
@@ -21,6 +22,7 @@ TTL = "4h"
 PACKAGE = "de.ph1b.audiobook"
 ACTIVITY = f"{PACKAGE}/voice.app.MainActivity"
 DESTINATION_PREFIX = "voice.navigation.Destination."
+SMOKE_SNAPSHOT = "voice-smoke"
 INSTALL_HINT = "Install it with: npm install -g simlock agent-device"
 
 
@@ -125,50 +127,67 @@ def agent(*args, check=True):
   return result
 
 
-def nodes():
-  """The screen as agent-device's JSON nodes: label, identifier, checked, rect and more."""
-  # The full tree, as -i leaves out a checkbox when its row takes the click.
-  return json.loads(agent("snapshot", "--json").stdout)["data"]["nodes"]
+def require_trailblaze():
+  if not shutil.which("trailblaze"):
+    sys.exit("trailblaze is missing. Install it with: brew install block/tap/trailblaze")
 
 
-def label(text):
-  return f'label="{text}"'
+def trailblaze_ready(work):
+  devices = subprocess.run(["trailblaze", "device", "list"], cwd=work, capture_output=True, text=True).stdout
+  voice_tools = subprocess.run(["trailblaze", "toolbox", "-n", "voice_tapWithAdb"], cwd=work, capture_output=True).returncode == 0
+  return f"android/{serial()}" in devices and voice_tools
 
 
-def wait(text, timeout=30):
-  if agent("wait", label(text), str(timeout * 1000), check=False).returncode != 0:
-    sys.exit(f'"{text}" didn\'t show up. Look with agent-device screenshot.')
+def trailblaze_work_dir(root):
+  # Trailblaze writes its settings into the working directory.
+  work = root / "build" / "smoke"
+  work.mkdir(parents=True, exist_ok=True)
+  # The one Trailblaze daemon per machine keeps the adb server and the workspace with Voice's tools that it started with.
+  if not trailblaze_ready(work):
+    print("Trailblaze doesn't see your emulator or Voice's tools. Starting its daemon again.", flush=True)
+    subprocess.run(["trailblaze", "app", "--stop"], cwd=work, capture_output=True)
+    subprocess.run(["trailblaze", "app", "--headless"], cwd=root / "smoke-tests", capture_output=True)
+    if not trailblaze_ready(work):
+      sys.exit(f"Trailblaze still doesn't see {serial()} or voice_tapWithAdb. Check trailblaze device list and toolbox.")
+  return work
 
 
-def tap(text):
-  wait(text)
-  print(f"tap {text}", flush=True)
-  agent("press", label(text), "--settle")
+def trail_path(root, name):
+  path = root / "smoke-tests" / f"{name}.trail.yaml"
+  if not path.exists():
+    sys.exit(f"There is no trail {path.relative_to(root)}.")
+  return path
 
 
-def set_up_library():
-  for text in ["Let's go", "Next", "Choose a folder", "testfiles"]:
-    tap(text)
-  # The folders above testfiles have an Audiobooks folder as well.
-  wait("SingleAudiobook")
-  tap("Audiobooks")
-  wait("Dream in a Boat")
-  for text in ["Use this folder", "Allow", "Add 6 books", "Start listening", "Dream in a Boat", "Play"]:
-    tap(text)
-  time.sleep(2)
-  tap("Pause")
-  agent("back", "--system", "--settle")
+def run_trail(work, path):
+  print(f"Trail {path.name.removesuffix('.trail.yaml')}", flush=True)
+  command = ["trailblaze", "run", str(path), "-d", f"android/{serial()}", "--no-save-recording"]
+  passed = subprocess.run(command, cwd=work).returncode == 0
+  # agent-device can't read the screen while the Trailblaze app runs.
+  adb("shell", "am", "force-stop", "xyz.block.trailblaze.runner", check=False)
+  return passed
+
+
+def run_trails_in_order(root, names):
+  work = trailblaze_work_dir(root)
+  for name in names:
+    if not run_trail(work, trail_path(root, name)):
+      sys.exit(f"The trail {name} failed.")
 
 
 def install_library(root):
+  # Right after boot, the shared storage refuses new files for a while.
+  deadline = time.monotonic() + 60
+  while adb("shell", "touch /sdcard/.voice-probe && rm /sdcard/.voice-probe", check=False).returncode != 0:
+    if time.monotonic() > deadline:
+      sys.exit("The emulator's shared storage didn't become writable.")
+    time.sleep(1)
   adb("push", str(root / "build" / "testfiles"), "/sdcard/testfiles")
   adb("install", "-r", str(root / "app/build/outputs/apk/foss/debug/app-foss-debug.apk"))
-  agent("open", PACKAGE, "--platform", "android")
-  set_up_library()
-  agent("close")
 
 
 def prepare(args=None):
+  require_trailblaze()
   root = repo_root()
   if own_lease():
     sys.exit("You hold an emulator. prepare needs a lease of its own: run emulator.py stop first.")
@@ -194,10 +213,10 @@ def prepare(args=None):
   grant = json.loads(stdout)
   lease = {"id": grant["lease"]["id"], "serial": grant["device"]["address"]}
   os.environ.update(device_env(lease))
-  os.environ["AGENT_DEVICE_SESSION"] = f"voice-prepare-{session_name(lease).removeprefix('voice-')}"
   saved = False
   try:
     install_library(root)
+    run_trails_in_order(root, ["first-start", "listen"])
     commit = subprocess.run(["git", "log", "-1", "--format=%h %s"], cwd=root, capture_output=True, text=True).stdout.strip()
     if subprocess.run(["git", "status", "--porcelain"], cwd=root, capture_output=True, text=True).stdout.strip():
       commit += " with local changes"
@@ -209,7 +228,6 @@ def prepare(args=None):
     sys.exit(f"simlock failed: {error}")
   finally:
     if not saved:
-      agent("close", check=False)
       try:
         simlock("release", lease["id"])
       except SimlockError:
@@ -234,7 +252,7 @@ def command_start(args):
   except SimlockError as error:
     if error.code not in ("UNKNOWN_BASELINE", "BASELINE_STALE"):
       sys.exit(f"simlock couldn't lease an emulator: {error}")
-    print(f"The {BASELINE} baseline is missing or stale, preparing it first. That takes about 3 minutes.", flush=True)
+    print(f"The {BASELINE} baseline is missing or stale, preparing it first. That takes about 5 minutes.", flush=True)
     prepare()
     lease = lease_device(BASELINE)
   os.environ.update(device_env(lease))
@@ -259,7 +277,10 @@ def command_prepare(args):
 
 
 def command_setup(args):
-  install_library(repo_root())
+  require_trailblaze()
+  root = repo_root()
+  install_library(root)
+  run_trails_in_order(root, ["first-start"])
 
 
 def destination_json(entry):
@@ -303,18 +324,50 @@ def command_books(args):
       print(f"{name} | {author or '-'} | {book_id}")
 
 
+def emulator_snapshot(action):
+  output = adb("emu", "avd", "snapshot", action, SMOKE_SNAPSHOT).stdout.decode(errors="replace")
+  if "KO" in output:
+    sys.exit(f"The emulator couldn't {action} the snapshot {SMOKE_SNAPSHOT}: {output.strip()}")
+  # adb loses the emulator for a moment after a load, and a load can also crash the emulator.
+  deadline = time.monotonic() + 60
+  while not package_manager_answers():
+    if time.monotonic() > deadline:
+      state = subprocess.run(["adb", "-s", serial(), "get-state"], capture_output=True, text=True)
+      sys.exit(f"The emulator didn't come back after the {action} of the snapshot {SMOKE_SNAPSHOT}. adb: {(state.stdout + state.stderr).strip()}")
+    # adb can keep a loaded emulator as offline until it connects again.
+    subprocess.run(["adb", "reconnect", "offline"], capture_output=True)
+    time.sleep(1)
+
+
+def package_manager_answers():
+  try:
+    result = subprocess.run(["adb", "-s", serial(), "shell", "pm", "path", "android"], capture_output=True, text=True, timeout=10)
+  except subprocess.TimeoutExpired:
+    return False
+  return "package:" in result.stdout
+
+
 def command_smoke(args):
-  if not shutil.which("trailblaze"):
-    sys.exit("trailblaze is missing. Install it with: brew install block/tap/trailblaze")
+  require_trailblaze()
   root = repo_root()
-  # Trailblaze writes its settings and logs into the working directory.
-  work = root / "build" / "smoke"
-  work.mkdir(parents=True, exist_ok=True)
-  command = ["trailblaze", "run", str(root / "smoke-tests"), "-d", f"android/{serial()}", "--no-save-recording"]
-  result = subprocess.run(command, cwd=work)
-  # agent-device can't read the screen while the Trailblaze app runs.
+  paths = [trail_path(root, name) for name in args.trails] or sorted((root / "smoke-tests").glob("*.trail.yaml"))
+  work = trailblaze_work_dir(root)
   adb("shell", "am", "force-stop", "xyz.block.trailblaze.runner", check=False)
-  sys.exit(result.returncode)
+  # Without the last load, the next run would save the state that a trail left behind.
+  signal.signal(signal.SIGTERM, lambda *_: sys.exit("smoke was stopped."))
+  # Every trail starts from this state and may change what it likes. The last load gives the emulator back as it was.
+  emulator_snapshot("save")
+  failed = []
+  try:
+    for path in paths:
+      emulator_snapshot("load")
+      if not run_trail(work, path):
+        failed.append(path.name.removesuffix(".trail.yaml"))
+  finally:
+    emulator_snapshot("load")
+  if failed:
+    sys.exit(f"Failed trails: {', '.join(failed)}")
+  print(f"All {len(paths)} trails passed.")
 
 
 def main():
@@ -325,7 +378,7 @@ def main():
   subparsers.add_parser("stop", help="give your emulator back").set_defaults(func=command_stop)
   subparsers.add_parser("prepare", help=f"(re)build the {BASELINE} baseline from your worktree's app").set_defaults(func=command_prepare)
 
-  setup_help = "put the built app and the generated test library on a plain emulator, as CI does"
+  setup_help = "put the built app and the generated test library on a plain emulator and run first-start, as CI does"
   subparsers.add_parser("setup", help=setup_help).set_defaults(func=command_setup)
 
   open_parser = subparsers.add_parser("open", help="restart the debug app on a back stack: open BookOverview Settings")
@@ -340,7 +393,9 @@ def main():
   books_parser.add_argument("--all", action="store_true", help="also books whose files are gone")
   books_parser.set_defaults(func=command_books)
 
-  subparsers.add_parser("smoke", help="run the smoke test flows on your emulator").set_defaults(func=command_smoke)
+  smoke_parser = subparsers.add_parser("smoke", help="run the smoke test trails on your emulator, each from the same state")
+  smoke_parser.add_argument("trails", nargs="*", help="names of the trails to run, like listen. Default: all")
+  smoke_parser.set_defaults(func=command_smoke)
 
   args = parser.parse_args()
   try:

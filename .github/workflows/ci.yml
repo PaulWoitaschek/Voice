@@ -46,12 +46,46 @@ jobs:
       - uses: ./.github/actions/build_setup
       - name: Build
         run: ./gradlew :app:assembleFossDebug
-      - name: Install agent-device
-        run: npm install -g agent-device@0.21.39
-      - uses: block/trailblaze/.github/actions/trailblaze@v2026.11.20
+      - name: Install Trailblaze
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download v2026.11.20 --repo block/trailblaze -p trailblaze -p trailblaze.jar -D "$RUNNER_TEMP/trailblaze"
+          chmod +x "$RUNNER_TEMP/trailblaze/trailblaze"
+          echo "$RUNNER_TEMP/trailblaze" >> "$GITHUB_PATH"
+          echo "TRAILBLAZE_HOME=$RUNNER_TEMP/trailblaze-home" >> "$GITHUB_ENV"
+      # Trailblaze reads the scripted tool in smoke-tests with bun and bundles it with esbuild.
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - name: Install esbuild
+        run: npm install -g esbuild@0.28.2
+      - name: Install ffmpeg for the test books
+        run: sudo apt-get update -q && sudo apt-get install -y -q ffmpeg
+      - name: Enable KVM and keep the Trailblaze daemon port free
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          sudo sysctl -q -w net.ipv4.ip_local_reserved_ports=52525-52526
+      - name: Smoke test
+        uses: reactivecircus/android-emulator-runner@b530d96654c385303d652368551fb075bc2f0b6b
         with:
-          trails: smoke-tests
-          setup: >-
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disk-size: 6000M
+          heap-size: 600M
+          # The smoke test saves and loads its own snapshot, so snapshots stay on.
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot-load -no-snapshot-save -feature -Vulkan
+          script: >-
             python3 scripts/populate_test_files.py --skip-adb
             && ANDROID_SERIAL=emulator-5554 .agents/skills/emulator/scripts/emulator.py setup
-          comment: false
+            && ANDROID_SERIAL=emulator-5554 .agents/skills/emulator/scripts/emulator.py smoke
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: trailblaze-logs
+          path: |
+            build/smoke/logs
+            ${{ env.TRAILBLAZE_HOME }}/logs
+            ${{ env.TRAILBLAZE_HOME }}/daemon.log

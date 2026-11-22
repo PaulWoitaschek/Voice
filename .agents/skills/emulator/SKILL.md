@@ -39,9 +39,10 @@ no emulator and agent-device may pick another agent's.
   `simlock release --all` or `simlock nuke`, and never stop an emulator with adb.
 - Run `emulator.py stop` when you're done with the task. `simlock status` shows all emulators and leases.
 
-The first `start` on a machine runs `prepare`, which builds the `voice` baseline with your worktree's app in about 3
-minutes. Run `prepare` yourself when the app in it is too old for your branch, e.g. after a database migration. Agents
-on the old baseline keep it until they stop.
+The first `start` on a machine runs `prepare`, which builds the `voice` baseline with your worktree's app in about 5
+minutes. It replays the `first-start` and `listen` trails, so it needs Trailblaze, see [Smoke test](#smoke-test).
+Run `prepare` yourself when the app in it is too old for your branch, e.g. after a database migration. Agents on the
+old baseline keep it until they stop.
 
 ## Install your build
 
@@ -92,15 +93,24 @@ without extra code, as long as they stay `@Serializable`.
 ## Smoke test
 
 ```sh
-emulator.py smoke
+emulator.py smoke          # all trails
+emulator.py smoke listen   # only the trails you name
 ```
 
-It replays the trails in `smoke-tests` on your emulator with
-[Trailblaze](https://block.github.io/trailblaze), without a model, in about 45 seconds per trail. Run it after you
-install your build, when the change touches playback or a screen that a trail goes through. If `trailblaze` is
-missing, ask the user to run `brew install block/tap/trailblaze`.
+It replays the trails in `smoke-tests` on your emulator with [Trailblaze](https://block.github.io/trailblaze),
+without a model. Run it after you install your build, when the change touches playback or a screen that a trail goes
+through. If `trailblaze` is missing, ask the user to run `brew install block/tap/trailblaze`.
 
-When a step fails, the output names the step and what it looked for. Then decide:
+A full run takes about 7 minutes. Run it in the background or with a timeout of 10 minutes or more. When the run
+stops early, it still loads the snapshot. Only a hard kill stops it before that.
+
+Before the first trail, `smoke` saves an emulator snapshot. It loads that snapshot before each trail and at the end.
+So each trail starts from your emulator as it was, and your library and places are the same after the run. A
+failed trail doesn't stop the others: at the end, the run names each failed trail. There is one Trailblaze daemon per
+machine. When it doesn't list your emulator or Voice's tools, `smoke` starts it again on simlock's adb server, in
+`smoke-tests`.
+
+When a step fails, the output names the trail, the step and what it looked for. Then decide:
 
 - Voice does the wrong thing: your change has a bug. Fix the app.
 - The screen changed on purpose, like a button with a new name: correct the step in the trail in the same pull
@@ -116,7 +126,13 @@ repair one, do the journey with `trailblaze snapshot` and `trailblaze tool`, the
 - Don't expect a value that the trail changes itself, like the position of a book. Remember it and check that it
   changes.
 - Don't use `verify` steps, `trailblaze step` or `--self-heal`. They call a model.
-- End in a state that the same trail can start from again.
+- Start from the library with the six books, like the baseline. Change what you like: the next trail starts from the
+  snapshot.
+- Android's folder picker ignores Trailblaze's taps. `voice_tapWithAdb` taps an element by its text through adb. It
+  is a scripted tool in `smoke-tests/trailblaze-config`, and a trail that uses it needs `target: voice` in its config.
+  Trailblaze needs `bun` and `esbuild` for the tool. If one is missing, ask the user to install it.
+- Trailblaze reads only the screen. To check what Voice does in the background, like `headset` does with the play
+  key, wait a few seconds and then open Voice.
 - When you're done, run `adb shell am force-stop xyz.block.trailblaze.runner`. agent-device can't read the screen
   while that app runs.
 
