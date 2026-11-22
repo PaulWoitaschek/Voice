@@ -95,14 +95,19 @@ without extra code, as long as they stay `@Serializable`.
 ```sh
 emulator.py smoke          # all trails
 emulator.py smoke listen   # only the trails you name
+emulator.py check          # the trails and the tools, without an emulator
 ```
 
-It replays the trails in `smoke-tests` on your emulator with [Trailblaze](https://block.github.io/trailblaze),
+`smoke` replays the trails in `smoke-tests` on your emulator with [Trailblaze](https://block.github.io/trailblaze),
 without a model. Run it after you install your build, when the change touches playback or a screen that a trail goes
 through. If `trailblaze` is missing, ask the user to run `brew install block/tap/trailblaze`.
 
-A full run takes about 7 minutes. Run it in the background or with a timeout of 10 minutes or more. When the run
-stops early, it still loads the snapshot. Only a hard kill stops it before that.
+`smoke` runs `check` first. It takes seconds, so run it after each change to a trail. It finds a wrong tool name and
+a missing parameter, but not a wrong key in a selector. Don't run `trailblaze check` in its place: that one passes
+when a trail doesn't load or has no target.
+
+A full smoke run takes about 7 minutes. Run it in the background or with a timeout of 10 minutes or more. When the
+run stops early, it still loads the snapshot. Only a hard kill stops it before that.
 
 Before the first trail, `smoke` saves an emulator snapshot. It loads that snapshot before each trail and at the end.
 So each trail starts from your emulator as it was, and your library and places are the same after the run. A
@@ -136,9 +141,10 @@ repair one, do the journey with `trailblaze snapshot` and `trailblaze tool`, the
 - Don't use `verify` steps, `trailblaze step` or `--self-heal`. They call a model.
 - Start from the library with the six books, like the baseline. Change what you like: the next trail starts from the
   snapshot.
+- Each trail has `target: voice` in its config. Without it, the check fails.
 - Android's folder picker ignores Trailblaze's taps. `voice_tapWithAdb` taps an element by its text through adb. It
-  is a scripted tool in `smoke-tests/trailblaze-config`, and a trail that uses it needs `target: voice` in its config.
-  Trailblaze needs `bun` and `esbuild` for the tool. If one is missing, ask the user to install it.
+  is a scripted tool in `smoke-tests/trailblaze-config`. Trailblaze needs `bun` and `esbuild` for the tool. If one is
+  missing, ask the user to install it.
 - Trailblaze reads only the screen. To check what Voice does in the background, like `headset` does with the play
   key, wait a few seconds and then open Voice.
 - When you're done, run `adb shell am force-stop xyz.block.trailblaze.runner`. agent-device can't read the screen

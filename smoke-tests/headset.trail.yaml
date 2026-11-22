@@ -3,6 +3,7 @@ config:
     android:
       driver: ANDROID_ONDEVICE_ACCESSIBILITY
   title: headset
+  target: voice
 
 trail:
   # On a new emulator nothing has played yet, so the play key has nowhere to go.
