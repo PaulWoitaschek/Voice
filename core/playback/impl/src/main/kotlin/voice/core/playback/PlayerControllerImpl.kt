@@ -181,13 +181,19 @@ class PlayerControllerImpl(
     controller.play()
   }
 
-  override fun playPause(source: ListeningEvent.Source) = executeAfterPrepare { controller ->
-    if (!Util.shouldShowPlayButton(controller)) {
-      controller.record(ListeningEvent.Type.Pause, source)
-      controller.pause()
-    } else {
-      controller.record(ListeningEvent.Type.Play, source)
-      controller.play()
+  override fun playPause(source: ListeningEvent.Source) {
+    scope.launch {
+      val controller = awaitConnect() ?: return@launch
+      // Loading a finished book again makes it look as if it plays.
+      val play = Util.shouldShowPlayButton(controller)
+      if (maybePrepare(controller) == Preparation.NoBook) return@launch
+      if (play) {
+        controller.record(ListeningEvent.Type.Play, source)
+        controller.play()
+      } else {
+        controller.record(ListeningEvent.Type.Pause, source)
+        controller.pause()
+      }
     }
   }
 
