@@ -41,12 +41,14 @@ platform :android do
       UI.user_error!("#{version_code} is already on production")
     end
 
-    # Promoting from the internal track only works for the newest build there, and a later
-    # release or internal upload replaces it. version_codes_to_retain puts a build that Play
-    # already has on the track, wherever it is now.
+    # A later internal upload replaces the build on the internal track, so force the promotion
+    # of a build that Play already has, wherever it is now.
     supply(
-      track: 'production',
-      version_codes_to_retain: [version_code],
+      track: 'internal',
+      track_promote_to: 'production',
+      track_promote_force: true,
+      version_code: version_code,
+      version_name: options[:version_name],
       rollout: "0.001", # 0.1%
       skip_upload_apk: true,
       skip_upload_aab: true,
