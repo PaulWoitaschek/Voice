@@ -11,6 +11,7 @@
 /.kotlin
 /fastlane/README.md
 /fastlane/report.xml
+Gemfile.lock
 /artwork/package-lock.json
 artifacts
 build
