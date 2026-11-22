@@ -1,0 +1,9 @@
+id: voice
+dependencies:
+  - trailblaze
+target:
+  display_name: Voice
+  platforms:
+    android:
+      app_ids:
+        - de.ph1b.audiobook

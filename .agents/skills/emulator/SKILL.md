@@ -107,7 +107,8 @@ stops early, it still loads the snapshot. Only a hard kill stops it before that.
 Before the first trail, `smoke` saves an emulator snapshot. It loads that snapshot before each trail and at the end.
 So each trail starts from your emulator as it was, and your library and places are the same after the run. A
 failed trail doesn't stop the others: at the end, the run names each failed trail. There is one Trailblaze daemon per
-machine. When it doesn't list your emulator, `smoke` starts it again on simlock's adb server.
+machine. When it doesn't list your emulator or Voice's tools, `smoke` starts it again on simlock's adb server, in
+`smoke-tests`.
 
 When a step fails, the output names the trail, the step and what it looked for. Then decide:
 
@@ -127,7 +128,8 @@ repair one, do the journey with `trailblaze snapshot` and `trailblaze tool`, the
 - Don't use `verify` steps, `trailblaze step` or `--self-heal`. They call a model.
 - Start from the library with the six books, like the baseline. Change what you like: the next trail starts from the
   snapshot.
-- Android's folder picker ignores Trailblaze's taps. `first-start` opens its folders with the keyboard.
+- Android's folder picker ignores Trailblaze's taps. `voice_tapWithAdb` taps an element by its text through adb. It
+  is a scripted tool in `smoke-tests/trailblaze-config`, and a trail that uses it needs `target: voice` in its config.
 - Trailblaze reads only the screen. To check what Voice does in the background, like `headset` does with the play
   key, wait a few seconds and then open Voice.
 - When you're done, run `adb shell am force-stop xyz.block.trailblaze.runner`. agent-device can't read the screen

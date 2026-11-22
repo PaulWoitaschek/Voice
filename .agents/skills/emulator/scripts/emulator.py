@@ -132,22 +132,23 @@ def require_trailblaze():
     sys.exit("trailblaze is missing. Install it with: brew install block/tap/trailblaze")
 
 
-def trailblaze_sees_emulator(work):
+def trailblaze_ready(work):
   devices = subprocess.run(["trailblaze", "device", "list"], cwd=work, capture_output=True, text=True).stdout
-  return f"android/{serial()}" in devices
+  voice_tools = subprocess.run(["trailblaze", "toolbox", "-n", "voice_tapWithAdb"], cwd=work, capture_output=True).returncode == 0
+  return f"android/{serial()}" in devices and voice_tools
 
 
 def trailblaze_work_dir(root):
   # Trailblaze writes its settings into the working directory.
   work = root / "build" / "smoke"
   work.mkdir(parents=True, exist_ok=True)
-  # The one Trailblaze daemon per machine keeps the adb server it started with.
-  if not trailblaze_sees_emulator(work):
-    print("Trailblaze doesn't see your emulator. Starting its daemon again on this adb server.", flush=True)
+  # The one Trailblaze daemon per machine keeps the adb server and the workspace with Voice's tools that it started with.
+  if not trailblaze_ready(work):
+    print("Trailblaze doesn't see your emulator or Voice's tools. Starting its daemon again.", flush=True)
     subprocess.run(["trailblaze", "app", "--stop"], cwd=work, capture_output=True)
-    subprocess.run(["trailblaze", "app", "--headless"], cwd=work, capture_output=True)
-    if not trailblaze_sees_emulator(work):
-      sys.exit(f"Trailblaze still doesn't see {serial()}. Check trailblaze device list.")
+    subprocess.run(["trailblaze", "app", "--headless"], cwd=root / "smoke-tests", capture_output=True)
+    if not trailblaze_ready(work):
+      sys.exit(f"Trailblaze still doesn't see {serial()} or voice_tapWithAdb. Check trailblaze device list and toolbox.")
   return work
 
 

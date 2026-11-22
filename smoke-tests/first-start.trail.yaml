@@ -3,6 +3,7 @@ config:
     android:
       driver: ANDROID_ONDEVICE_ACCESSIBILITY
   title: first-start
+  target: voice
 
 trail:
   - step: "Clear the app data and open Voice"
@@ -40,36 +41,11 @@ trail:
               androidAccessibility:
                 textRegex: Choose a folder
 
-  # The picker's folders ignore Trailblaze's taps, so the keyboard opens them. Typing a name focuses that folder,
-  # but only while the focus is in the folder list. Down keys stop at the button above the list, and Tab moves on
-  # to the list. Trailblaze's pressKey sometimes loses the Enter here, so adb sends it, like the other keys.
   - step: "Open the testfiles folder"
     recording:
       android:
-        - android_adbShell:
-            command: [input, keyevent, KEYCODE_DPAD_DOWN]
-        - android_adbShell:
-            command: [input, keyevent, KEYCODE_DPAD_DOWN]
-        - android_adbShell:
-            command: [input, keyevent, KEYCODE_DPAD_DOWN]
-        - assertVisibleBySelector:
-            nodeSelector:
-              androidAccessibility:
-                isFocused: true
-                textRegex: "(?i)create new folder"
-        - android_adbShell:
-            command: [input, keyevent, KEYCODE_TAB]
-        - android_adbShell:
-            command: [input, text, testfiles]
-        - assertVisibleBySelector:
-            nodeSelector:
-              androidAccessibility:
-                isFocused: true
-              containsDescendants:
-                - androidAccessibility:
-                    textRegex: testfiles
-        - android_adbShell:
-            command: [input, keyevent, KEYCODE_ENTER]
+        - voice_tapWithAdb:
+            textRegex: testfiles
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
@@ -78,17 +54,8 @@ trail:
   - step: "Open the Audiobooks folder in testfiles"
     recording:
       android:
-        - android_adbShell:
-            command: [input, text, Audiobooks]
-        - assertVisibleBySelector:
-            nodeSelector:
-              androidAccessibility:
-                isFocused: true
-              containsDescendants:
-                - androidAccessibility:
-                    textRegex: Audiobooks
-        - android_adbShell:
-            command: [input, keyevent, KEYCODE_ENTER]
+        - voice_tapWithAdb:
+            textRegex: Audiobooks
         - assertVisibleBySelector:
             nodeSelector:
               androidAccessibility:
