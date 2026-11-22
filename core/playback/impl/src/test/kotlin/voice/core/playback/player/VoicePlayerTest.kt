@@ -1318,6 +1318,79 @@ class VoicePlayerTest {
   }
 
   @Test
+  fun `at the end of the book, play starts the book again from its start`() = scope.runTest {
+    val chapters = twoChaptersOfAMinute()
+    setMediaItems(chapters, currentChapter = chapters[1], positionInChapter = 60_000)
+    player.prepare()
+    awaitReady()
+
+    player.play()
+
+    player.shouldHavePosition(0, 0)
+    TestPlayerRunHelper.advance(internalPlayer).untilPosition(0, 1_000)
+    assertTrue(player.isPlaying)
+  }
+
+  @Test
+  fun `at the end of the book, play on headphones or in the notification starts the book again from its start`() =
+    scope.runTest {
+      setMediaItems(twoChaptersOfAMinute())
+      player.seekTo(1, 58_000)
+      player.prepare()
+      awaitReady()
+      TestPlayerRunHelper.play(internalPlayer).untilState(Player.STATE_ENDED)
+      shadowOf(Looper.getMainLooper()).idle()
+
+      Util.handlePlayButtonAction(player)
+
+      player.shouldHavePosition(0, 0)
+      TestPlayerRunHelper.advance(internalPlayer).untilPosition(0, 1_000)
+      assertTrue(player.isPlaying)
+    }
+
+  @Test
+  fun `at the end of the book, play from the car right after the book loads starts the book again from its start`() =
+    scope.runTest {
+      val chapters = twoChaptersOfAMinute()
+      setMediaItems(chapters, currentChapter = chapters[1], positionInChapter = 60_000)
+      player.prepare()
+
+      Util.handlePlayButtonAction(player)
+
+      player.shouldHavePosition(0, 0)
+      awaitReady()
+      shadowOf(Looper.getMainLooper()).idle()
+      assertTrue(player.isPlaying)
+    }
+
+  @Test
+  fun `chapters in one file, at the end of the book, play starts the book again from its start`() =
+    scope.runTest {
+      val book = listOf(twelveChapters())
+      setMediaItems(book, currentChapter = book[0], positionInChapter = 31_000)
+      player.prepare()
+      awaitReady()
+
+      player.play()
+
+      player.shouldHavePosition(0, 0)
+    }
+
+  @Test
+  fun `playing, a jump to the end of the book and play keep the place at the end`() =
+    scope.runTest {
+      setMediaItems(twoChaptersOfAMinute())
+      player.prepare()
+      awaitReady()
+      player.play()
+
+      player.seekTo(1, 59_999)
+      player.play()
+
+      player.shouldHavePosition(1, 59_999)
+    }
+
+  @Test
   fun `pausing a finished book keeps it at its end`() = scope.runTest {
     setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 10_000, name = null))))
     autoRewindAmountStore.updateData { 5.seconds }

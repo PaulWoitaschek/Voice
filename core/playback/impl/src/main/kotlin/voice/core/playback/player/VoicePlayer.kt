@@ -218,6 +218,15 @@ class VoicePlayer(
     super.seekTo(mediaItemIndex, positionMs)
   }
 
+  // Media3 calls this before play when the player ended.
+  override fun seekToDefaultPosition() {
+    if (isAtTheEndOfTheBook()) {
+      player.seekTo(0, 0)
+    } else {
+      super.seekToDefaultPosition()
+    }
+  }
+
   override fun seekToDefaultPosition(mediaItemIndex: Int) {
     recordExternalSeek(mediaItemIndex, 0)
     super.seekToDefaultPosition(mediaItemIndex)
@@ -284,6 +293,7 @@ class VoicePlayer(
     }
     if (playWhenReady && (!getPlayWhenReady() || stopped)) {
       stopped = false
+      if (isAtTheEndOfTheBook()) player.seekTo(0, 0)
       trackPlay(source)
     }
 
@@ -294,6 +304,13 @@ class VoicePlayer(
       analytics.event("pause")
     }
     super.setPlayWhenReady(playWhenReady)
+  }
+
+  private fun isAtTheEndOfTheBook(): Boolean {
+    if (player.nextMediaItemIndex != C.INDEX_UNSET) return false
+    if (player.playbackState == STATE_ENDED) return true
+    val duration = player.duration.takeUnless { it == C.TIME_UNSET } ?: return false
+    return player.currentPosition >= duration
   }
 
   private fun trackPlay(commandSource: CommandSource?) {
