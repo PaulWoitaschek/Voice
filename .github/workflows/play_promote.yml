@@ -31,12 +31,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tag=$(gh release view --json tagName --jq .tagName)
-          if [[ ! "$tag" =~ ^[0-9]+\.[0-9]+\.[0-9]+-([0-9]+)$ ]]; then
+          if [[ ! "$tag" =~ ^([0-9]+\.[0-9]+\.[0-9]+)-([0-9]+)$ ]]; then
             echo "The latest release has the tag '$tag', which has no version code." >&2
             exit 1
           fi
           echo "Promoting $tag"
-          echo "version_code=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+          echo "version_name=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+          echo "version_code=${BASH_REMATCH[2]}" >> "$GITHUB_OUTPUT"
 
       - name: Setup Play Access
         env:
@@ -49,4 +50,4 @@ jobs:
           bundler-cache: true
 
       - name: Promote to PRODUCTION (0.1%)
-        run: bundle exec fastlane android promote version_code:${{ steps.release.outputs.version_code }}
+        run: bundle exec fastlane android promote version_code:${{ steps.release.outputs.version_code }} version_name:${{ steps.release.outputs.version_name }}
