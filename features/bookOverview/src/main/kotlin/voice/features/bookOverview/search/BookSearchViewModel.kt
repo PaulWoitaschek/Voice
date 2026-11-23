@@ -101,7 +101,7 @@ class BookSearchViewModel(
     val recentSearches = remember {
       recentBookSearchRepo.flow()
     }
-      .collectAsState(initial = emptyList())
+      .collectAsState(initial = null)
       .value
     val currentBookId = remember { currentBookStore.data }.collectAsState(initial = null).value
     val playState = remember {

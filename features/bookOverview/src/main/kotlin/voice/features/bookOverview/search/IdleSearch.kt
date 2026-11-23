@@ -46,7 +46,8 @@ internal fun IdleSearch(
   Column(
     modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding),
   ) {
-    if (viewState.recentSearches.isEmpty()) {
+    val recentSearches = viewState.recentSearches ?: return@Column
+    if (recentSearches.isEmpty()) {
       Text(
         text = stringResource(StringsR.string.library_search_no_results_message),
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 32.dp),
@@ -64,7 +65,7 @@ internal fun IdleSearch(
         },
       )
       RecentSearches(
-        recentSearches = viewState.recentSearches,
+        recentSearches = recentSearches,
         onClick = listener::onRecentSearchClick,
         onRemove = listener::onRemoveRecentSearch,
       )

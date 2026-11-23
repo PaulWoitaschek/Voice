@@ -152,7 +152,7 @@ private fun GroupRow(
           text = groupSummary(group),
           style = MaterialTheme.typography.bodyMedium,
           color = colors.onSurfaceVariant,
-          maxLines = 1,
+          maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
       }

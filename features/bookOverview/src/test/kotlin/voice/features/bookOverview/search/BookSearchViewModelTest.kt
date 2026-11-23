@@ -341,7 +341,7 @@ class BookSearchViewModelTest {
     testState(viewModel()) {
       assertEquals(
         expected = BookSearchViewState.Idle(recentSearches = listOf("hail mary", "rothfuss")),
-        actual = awaitState<BookSearchViewState.Idle> { it.recentSearches.isNotEmpty() },
+        actual = awaitState<BookSearchViewState.Idle> { !it.recentSearches.isNullOrEmpty() },
       )
     }
   }

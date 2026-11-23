@@ -163,16 +163,16 @@ private fun Destination.Compose.sharesElements(): Boolean {
 }
 
 /**
- * Only what the listener tapped flies from the library to a series or an author: the stack into the
- * series, or the author's tile into their photo. The Continue listening card and Current can show
- * books of the same series or author, and their covers would fly into its rows.
+ * Only what the listener tapped flies from the library or the search to a series or an author: the
+ * stack into the series, or the author's tile into their photo. Both can show books of the same
+ * series or author, and their covers would fly into its rows.
  */
 internal fun sharesCovers(
   initial: Scene<*>,
   target: Scene<*>,
 ): Boolean {
   val destinations = listOf(initial.destination(), target.destination())
-  return Destination.BookOverview !in destinations ||
+  return destinations.none { it.listsBooks() } ||
     destinations.none { it is Destination.Series || it is Destination.Author }
 }
 
@@ -181,5 +181,9 @@ internal fun sharesSeriesCovers(
   target: Scene<*>,
 ): Boolean {
   val destinations = listOf(initial.destination(), target.destination())
-  return Destination.BookOverview !in destinations || destinations.none { it is Destination.Author }
+  return destinations.none { it.listsBooks() } || destinations.none { it is Destination.Author }
+}
+
+private fun Destination?.listsBooks(): Boolean {
+  return this == Destination.BookOverview || this == Destination.LibrarySearch
 }

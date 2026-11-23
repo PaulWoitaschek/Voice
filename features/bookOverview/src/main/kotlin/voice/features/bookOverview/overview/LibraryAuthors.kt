@@ -39,7 +39,6 @@ internal fun List<Book>.byAuthorKey(): Map<String?, List<Book>> {
   return authors
 }
 
-// the most common spelling
 internal fun List<Book>.authorName(key: String): String? {
   return filter { it.authorKey == key }.mapNotNull { it.author?.trim() }.mostCommon()
 }

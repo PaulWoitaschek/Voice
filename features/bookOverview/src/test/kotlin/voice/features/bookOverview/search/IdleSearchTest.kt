@@ -37,7 +37,15 @@ class IdleSearchTest {
     compose.onNodeWithText(looksThrough).assertDoesNotExist()
   }
 
-  private fun show(recentSearches: List<String>) {
+  @Test
+  fun `opening search shows nothing before the recent searches are read`() {
+    show(recentSearches = null)
+
+    compose.onNodeWithText("Recent").assertDoesNotExist()
+    compose.onNodeWithText(looksThrough).assertDoesNotExist()
+  }
+
+  private fun show(recentSearches: List<String>?) {
     compose.setContent {
       VoiceTheme {
         IdleSearch(
