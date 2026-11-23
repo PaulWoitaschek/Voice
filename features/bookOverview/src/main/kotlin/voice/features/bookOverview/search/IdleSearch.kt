@@ -56,40 +56,26 @@ internal fun IdleSearch(
         textAlign = TextAlign.Center,
       )
     } else {
-      SectionHeader(
-        title = stringResource(StringsR.string.library_search_recent_title),
-        action = {
-          TextButton(onClick = listener::onClearRecentSearches) {
-            Text(stringResource(StringsR.string.library_search_recent_clear_all))
-          }
-        },
-      )
+      Row(
+        modifier = Modifier.fillMaxWidth().heightIn(min = 40.dp).padding(start = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+      ) {
+        Text(
+          text = stringResource(StringsR.string.library_search_recent_title),
+          modifier = Modifier.weight(1F),
+          style = MaterialTheme.typography.titleSmall,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        TextButton(onClick = listener::onClearRecentSearches) {
+          Text(stringResource(StringsR.string.library_search_recent_clear_all))
+        }
+      }
       RecentSearches(
         recentSearches = recentSearches,
         onClick = listener::onRecentSearchClick,
         onRemove = listener::onRemoveRecentSearch,
       )
     }
-  }
-}
-
-@Composable
-private fun SectionHeader(
-  title: String,
-  action: @Composable () -> Unit,
-  modifier: Modifier = Modifier,
-) {
-  Row(
-    modifier = modifier.fillMaxWidth().heightIn(min = 40.dp).padding(start = 8.dp),
-    verticalAlignment = Alignment.CenterVertically,
-  ) {
-    Text(
-      text = title,
-      modifier = Modifier.weight(1F),
-      style = MaterialTheme.typography.titleSmall,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
-    action()
   }
 }
 

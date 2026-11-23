@@ -53,7 +53,6 @@ import voice.core.playback.player.VoicePlayer
 import voice.core.playback.session.search.BookSearchParser
 import voice.core.playback.session.search.book
 import voice.core.search.BookSearch
-import voice.core.search.BookSearchField
 import voice.core.search.BookSearchResult
 
 @RunWith(AndroidJUnit4::class)
@@ -179,30 +178,19 @@ class LibrarySessionCallbackTest {
   }
 
   @Test
-  fun `searching in the car lists the books by an author`() = scope.runTest {
-    val books = listOf(mockk<Book>(), mockk<Book>())
-    val items =
-      listOf("The Hobbit", "The Silmarillion").map { title ->
-        MediaItem(
-          title = title,
-          mediaId = MediaId.Book(BookId(title)),
-          isPlayable = true,
-          browsable = false,
-          mediaType = MediaType.AudioBook,
-        )
-      }
-    books.zip(items).forEach { (book, item) ->
-      every { mediaItemProvider.mediaItem(book) } returns item
-    }
+  fun `searching in Android Auto lists the matching books`() = scope.runTest {
+    val book = mockk<Book>()
+    val item =
+      MediaItem(
+        title = "The Hobbit",
+        mediaId = MediaId.Book(BookId("book")),
+        isPlayable = true,
+        browsable = false,
+        mediaType = MediaType.AudioBook,
+      )
+    every { mediaItemProvider.mediaItem(book) } returns item
     coEvery { bookSearch.search("tolkien") } returns
-      books.map { book ->
-        BookSearchResult(
-          book = book,
-          matches = emptyMap(),
-          nameScores = mapOf(BookSearchField.Author to 20),
-          score = 1,
-        )
-      }
+      listOf(BookSearchResult(book, emptyMap(), emptyMap(), score = 1))
     val librarySession = mockk<MediaLibrarySession>(relaxed = true)
     val androidAuto = controller(ANDROID_AUTO_PACKAGE, OTHER_UID)
 
@@ -211,8 +199,8 @@ class LibrarySessionCallbackTest {
       callback.onGetSearchResult(librarySession, androidAuto, "tolkien", 0, Int.MAX_VALUE, null)
     runCurrent()
 
-    verify { librarySession.notifySearchResultChanged(androidAuto, "tolkien", 2, null) }
-    assertEquals(expected = items, actual = result.get().value?.toList())
+    verify { librarySession.notifySearchResultChanged(androidAuto, "tolkien", 1, null) }
+    assertEquals(expected = listOf(item), actual = result.get().value?.toList())
   }
 
   @Test

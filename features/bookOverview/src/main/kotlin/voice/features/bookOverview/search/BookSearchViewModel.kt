@@ -34,8 +34,6 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.repo.RecentBookSearchRepo
 import voice.core.data.seriesName
 import voice.core.data.store.CurrentBookStore
-import voice.core.kioskmode.KioskModeDemoData
-import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
@@ -67,7 +65,6 @@ class BookSearchViewModel(
   private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
   private val currentBookStore: CurrentBookStore,
-  private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   private val experimentalPlaybackPersistenceFeatureFlag:
     ExperimentalPlaybackPersistenceFeatureFlag,
   private val lastResults: LastBookSearchResults,
@@ -95,9 +92,6 @@ class BookSearchViewModel(
 
   @Composable
   internal fun state(): BookSearchViewState {
-    val kioskMode = remember { kioskModeFeatureFlag.get() }
-    if (kioskMode) return kioskModeState()
-
     val recentSearches = remember {
       recentBookSearchRepo.flow()
     }
@@ -168,12 +162,6 @@ class BookSearchViewModel(
       }
     }
     .onEach { lastResults.value = it }
-
-  private fun kioskModeState(): BookSearchViewState {
-    return BookSearchViewState.Idle(
-      recentSearches = listOf(KioskModeDemoData.echoesOfTomorrow.genre.lowercase()),
-    )
-  }
 
   fun onSearch() {
     saveRecentSearch(query.text.toString())

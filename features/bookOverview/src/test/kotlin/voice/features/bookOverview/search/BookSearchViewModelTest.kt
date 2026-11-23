@@ -31,7 +31,6 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.repo.RecentBookSearchRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.MemoryFeatureFlag
-import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
@@ -300,29 +299,6 @@ class BookSearchViewModelTest {
   }
 
   @Test
-  fun `results that match in titles and in chapters show the books and no chips`() = runTest {
-    coEvery { search.search("league") } returns
-      listOf(
-        shining.result(BookSearchField.Title),
-        carrie.chapterResult("The Red-Headed League", listOf(15..20)),
-        kingkiller.chapterResult("The League of Five", listOf(4..9)),
-      )
-    val viewModel = viewModel()
-
-    testState(viewModel) {
-      viewModel.onRecentSearchClick("league")
-
-      val state = awaitState<BookSearchViewState.Results>()
-      assertEquals(expected = shining.id, actual = state.topResult.id)
-      assertEquals(expected = emptyList(), actual = state.groups)
-      assertEquals(
-        expected = listOf(carrie.id, kingkiller.id),
-        actual = state.otherResults.map { it.id },
-      )
-    }
-  }
-
-  @Test
   fun `no book matches shows No books match without Search everything`() = runTest {
     val viewModel = viewModel()
 
@@ -342,16 +318,6 @@ class BookSearchViewModelTest {
       assertEquals(
         expected = BookSearchViewState.Idle(recentSearches = listOf("hail mary", "rothfuss")),
         actual = awaitState<BookSearchViewState.Idle> { !it.recentSearches.isNullOrEmpty() },
-      )
-    }
-  }
-
-  @Test
-  fun `opening search in kiosk mode shows a recent search`() = runTest {
-    testState(viewModel(kioskMode = true)) {
-      assertEquals(
-        expected = BookSearchViewState.Idle(recentSearches = listOf("science fiction")),
-        actual = awaitItem(),
       )
     }
   }
@@ -601,19 +567,14 @@ class BookSearchViewModelTest {
     }
   }
 
-  private fun viewModel(
-    experimentalPlaybackPersistence: Boolean = false,
-    kioskMode: Boolean = false,
-  ): BookSearchViewModel {
+  private fun viewModel(experimentalPlaybackPersistence: Boolean = false): BookSearchViewModel {
     return viewModel(
       repo = repo(listOf(shining, carrie, kingkiller)),
       search = search,
       experimentalPlaybackPersistence = experimentalPlaybackPersistence,
-      kioskMode = kioskMode,
     )
   }
 
-  /** Searches the books for real. */
   private fun viewModel(books: List<Book>): BookSearchViewModel {
     val repo = repo(books)
     return viewModel(repo = repo, search = BookSearch(repo, dispatcherProvider))
@@ -628,7 +589,6 @@ class BookSearchViewModelTest {
     repo: BookRepository,
     search: BookSearch,
     experimentalPlaybackPersistence: Boolean = false,
-    kioskMode: Boolean = false,
   ): BookSearchViewModel {
     return BookSearchViewModel(
       repo = repo,
@@ -638,7 +598,6 @@ class BookSearchViewModelTest {
       playerController = playerController,
       playStateManager = PlayStateManager(),
       currentBookStore = CurrentBookStore(currentBookStore),
-      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(kioskMode)),
       experimentalPlaybackPersistenceFeatureFlag =
         ExperimentalPlaybackPersistenceFeatureFlag(
           MemoryFeatureFlag(experimentalPlaybackPersistence),
