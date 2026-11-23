@@ -309,7 +309,6 @@
         <item quantity="other">%d ukrytych książek</item>
     </plurals>
     <string name="library.no_author">Bez autora</string>
-    <string name="library.search.browse.title">Przeglądaj</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d książka</item>
         <item quantity="few">%d książki</item>
@@ -322,20 +321,7 @@
         <item quantity="many">%d ukończonych</item>
         <item quantity="other">%d ukończonych</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d rozpoczęta</item>
-        <item quantity="few">%d rozpoczęte</item>
-        <item quantity="many">%d rozpoczętych</item>
-        <item quantity="other">%d rozpoczętych</item>
-    </plurals>
     <string name="library.search.clear">Wyczyść wyszukiwanie</string>
-    <string name="library.search.field.all">Wszystko</string>
-    <string name="library.search.field.authors">Autorzy</string>
-    <string name="library.search.field.chapters">Rozdziały</string>
-    <string name="library.search.field.genres">Gatunki</string>
-    <string name="library.search.field.narrators">Lektorzy</string>
-    <string name="library.search.field.series">Serie</string>
-    <string name="library.search.field.titles">Tytuły</string>
     <string name="library.search.hint">Przeszukaj swoją bibliotekę</string>
     <string name="library.search.match.chapter">Rozdział · %s</string>
     <string name="library.search.match.genre">Gatunek · %s</string>
@@ -343,7 +329,6 @@
     <string name="library.search.match.series">Seria · %s</string>
     <string name="library.search.no_results.folders_hint">Nie widzisz książki? Być może jej folder nie został jeszcze dodany do Voice.</string>
     <string name="library.search.no_results.message">Wyszukiwanie obejmuje tytuły, autorów, lektorów, serie, gatunki i rozdziały.</string>
-    <string name="library.search.no_results.search_everything">Szukaj wszędzie</string>
     <string name="library.search.no_results.title">Brak książek pasujących do „%s”</string>
     <string name="library.search.recent.clear_all">Wyczyść wszystko</string>
     <string name="library.search.recent.remove">Usuń %s</string>

@@ -60,7 +60,6 @@ class BookSearch(
     // a new keystroke or position update starts a new search
     ensureActive()
     val matches = mutableMapOf<Int, MutableList<IntRange>>()
-    val matchedTerms = mutableMapOf<BookSearchField, MutableSet<String>>()
     var score = 0
     var foundThroughChapter = false
     for (term in terms) {
@@ -73,7 +72,6 @@ class BookSearch(
           val match = match(word.text, term, fieldTypos)
           if (match != null) {
             matches.getOrPut(index) { mutableListOf() } += word.originalRange(match.length)
-            matchedTerms.getOrPut(field) { mutableSetOf() } += term
             bestTermScore = maxOf(bestTermScore, field.score(match.quality))
             if (field != BookSearchField.Chapters) matchesOutsideChapters = true
           }
@@ -100,19 +98,28 @@ class BookSearch(
           val (field, text) = book.texts[index]
           field to matches.getValue(index).merged(text)
         },
-      fieldsMatchingAllWords =
-        matchedTerms
-          .filter { (field, fieldTerms) ->
-            fieldTerms.size == terms.size &&
-              (foundThroughChapter || field != BookSearchField.Chapters)
-          }
-          .keys,
+      nameScores =
+        book.names
+          .mapNotNull { (field, words) -> nameScore(words, terms, typos)?.let { field to it } }
+          .toMap(),
       score = score,
       chapter =
         shown.firstNotNullOfOrNull { index ->
           book.texts[index].takeIf { it.first == BookSearchField.Chapters }?.second
         },
     )
+  }
+
+  private fun nameScore(
+    words: List<SearchText.Word>,
+    terms: List<String>,
+    typos: Map<String, MutableMap<String, Int>>?,
+  ): Int? {
+    return terms.sumOf { term ->
+      words
+        .maxOfOrNull { match(it.text, term, typos?.getValue(term))?.quality ?: 0 }
+        ?.takeIf { it > 0 } ?: return null
+    }
   }
 
   private fun match(
@@ -136,6 +143,13 @@ class BookSearch(
       BookSearchField.entries.mapNotNull { field -> field.text(book)?.let { field to it } } +
         book.chapterNames().map { BookSearchField.Chapters to it }
     val words = texts.map { (_, text) -> SearchText(text).words }
+
+    // without the part of the series, which isn't in its name
+    val names =
+      listOfNotNull(
+        book.author?.let { BookSearchField.Author to SearchText(it).words },
+        book.series?.let { BookSearchField.Series to SearchText(it).words },
+      )
 
     // a book the listener edited is still found by what its files say, which isn't shown, so it
     // ranks below

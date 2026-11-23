@@ -277,7 +277,6 @@
         <item quantity="other">%d gizli kitap</item>
     </plurals>
     <string name="library.no_author">Yazar yok</string>
-    <string name="library.search.browse.title">Göz at</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d kitap</item>
         <item quantity="other">%d kitap</item>
@@ -286,18 +285,7 @@
         <item quantity="one">%d tamamlandı</item>
         <item quantity="other">%d tamamlandı</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d devam ediyor</item>
-        <item quantity="other">%d devam ediyor</item>
-    </plurals>
     <string name="library.search.clear">Aramayı temizle</string>
-    <string name="library.search.field.all">Tümü</string>
-    <string name="library.search.field.authors">Yazarlar</string>
-    <string name="library.search.field.chapters">Bölümler</string>
-    <string name="library.search.field.genres">Türler</string>
-    <string name="library.search.field.narrators">Seslendirenler</string>
-    <string name="library.search.field.series">Seriler</string>
-    <string name="library.search.field.titles">Başlıklar</string>
     <string name="library.search.hint">Kitaplığınızda arayın</string>
     <string name="library.search.match.chapter">Bölüm · %s</string>
     <string name="library.search.match.genre">Tür · %s</string>
@@ -305,7 +293,6 @@
     <string name="library.search.match.series">Seri · %s</string>
     <string name="library.search.no_results.folders_hint">Listede yok mu? Klasörü henüz Voice\'a eklenmemiş olabilir.</string>
     <string name="library.search.no_results.message">Başlıklar, yazarlar, seslendirenler, seriler, türler ve bölümler içinde arama yapılır.</string>
-    <string name="library.search.no_results.search_everything">Her yerde ara</string>
     <string name="library.search.no_results.title">“%s” ile eşleşen kitap yok</string>
     <string name="library.search.recent.clear_all">Tümünü temizle</string>
     <string name="library.search.recent.remove">Kaldır: %s</string>

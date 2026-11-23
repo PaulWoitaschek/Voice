@@ -293,7 +293,6 @@
         <item quantity="other">%d llibres amagats</item>
     </plurals>
     <string name="library.no_author">Sense autor</string>
-    <string name="library.search.browse.title">Explora</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d llibre</item>
         <item quantity="many">%d llibres</item>
@@ -304,19 +303,7 @@
         <item quantity="many">%d completats</item>
         <item quantity="other">%d completats</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d en curs</item>
-        <item quantity="many">%d en curs</item>
-        <item quantity="other">%d en curs</item>
-    </plurals>
     <string name="library.search.clear">Esborra la cerca</string>
-    <string name="library.search.field.all">Tot</string>
-    <string name="library.search.field.authors">Autors</string>
-    <string name="library.search.field.chapters">Capítols</string>
-    <string name="library.search.field.genres">Gèneres</string>
-    <string name="library.search.field.narrators">Narradors</string>
-    <string name="library.search.field.series">Sèries</string>
-    <string name="library.search.field.titles">Títols</string>
     <string name="library.search.hint">Cerqueu a la biblioteca</string>
     <string name="library.search.match.chapter">Capítol · %s</string>
     <string name="library.search.match.genre">Gènere · %s</string>
@@ -324,7 +311,6 @@
     <string name="library.search.match.series">Sèrie · %s</string>
     <string name="library.search.no_results.folders_hint">No surt a la llista? Potser la seva carpeta encara no s\'ha afegit a Voice.</string>
     <string name="library.search.no_results.message">La cerca inclou títols, autors, narradors, sèries, gèneres i capítols.</string>
-    <string name="library.search.no_results.search_everything">Cerca-ho tot</string>
     <string name="library.search.no_results.title">Cap llibre coincideix amb «%s»</string>
     <string name="library.search.recent.clear_all">Esborra-ho tot</string>
     <string name="library.search.recent.remove">Suprimeix %s</string>

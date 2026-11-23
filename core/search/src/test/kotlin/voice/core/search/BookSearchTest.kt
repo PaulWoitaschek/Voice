@@ -199,18 +199,38 @@ class BookSearchTest {
   }
 
   @Test
-  fun `fields matching all words`() = test {
-    val kingkiller = search.search("kingkiller 1").single()
+  fun `an author or a series gets a score when all words of the search match its name`() = test {
     assertEquals(
       expected = setOf(BookSearchField.Series),
-      actual = kingkiller.fieldsMatchingAllWords,
+      actual = search.search("kingkiller").first().nameScores.keys,
     )
+    assertEquals(
+      expected = setOf(BookSearchField.Author),
+      actual = search.search("rothfuss patrick").first().nameScores.keys,
+    )
+    assertEquals(
+      expected = setOf(BookSearchField.Author),
+      actual = search.search("MURAKAMI").single().nameScores.keys,
+    )
+  }
 
-    val rothfuss = search.search("rothfuss slow").single()
-    assertEquals(expected = emptySet(), actual = rothfuss.fieldsMatchingAllWords)
+  @Test
+  fun `a word that is not in the name leaves the author and the series without a score`() = test {
+    assertEquals(expected = emptyMap(), actual = search.search("rothfuss slow").single().nameScores)
+    assertEquals(expected = emptyMap(), actual = search.search("kingkiller 1").single().nameScores)
+    val fry = search.search("stephen fry").map { it.nameScores }.distinct().single()
+    assertEquals(expected = emptyMap(), actual = fry)
+  }
 
-    val fry = search.search("stephen fry").map { it.fieldsMatchingAllWords }.distinct().single()
-    assertEquals(expected = setOf(BookSearchField.Narrator), actual = fry)
+  @Test
+  fun `a whole word in a name scores above the start of a word, and that above a typo`() = test {
+    suspend fun authorScore(query: String) =
+      search.search(query).first().nameScores.getValue(BookSearchField.Author)
+    val wholeWord = authorScore("rothfuss")
+    val wordStart = authorScore("rothf")
+    val typo = authorScore("rotfuss")
+    assert(wholeWord > wordStart)
+    assert(wordStart > typo)
   }
 
   @Test
@@ -333,10 +353,6 @@ class BookSearchTest {
       assertEquals(
         expected = mapOf(BookSearchField.Chapters to listOf(4..6, 8..13)),
         actual = result.matches,
-      )
-      assertEquals(
-        expected = setOf(BookSearchField.Chapters),
-        actual = result.fieldsMatchingAllWords,
       )
     }
   }
@@ -477,10 +493,6 @@ class BookSearchTest {
       val result = search.search("dune").single()
       assertEquals(expected = null, actual = result.chapter)
       assertEquals(expected = setOf(BookSearchField.Title), actual = result.matches.keys)
-      assertEquals(
-        expected = setOf(BookSearchField.Title),
-        actual = result.fieldsMatchingAllWords,
-      )
     }
   }
 

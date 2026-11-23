@@ -4,12 +4,8 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
@@ -25,20 +21,19 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
-import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
-import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.data.category
+import voice.core.data.nameKey
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.RecentBookSearchRepo
+import voice.core.data.seriesName
 import voice.core.data.store.CurrentBookStore
-import voice.core.kioskmode.KioskModeDemoData
-import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
@@ -48,8 +43,14 @@ import voice.core.search.BookSearch
 import voice.core.search.BookSearchField
 import voice.core.search.BookSearchResult
 import voice.features.bookOverview.di.BookOverviewScope
+import voice.features.bookOverview.overview.AuthorGroup
 import voice.features.bookOverview.overview.ServerBookStates
+import voice.features.bookOverview.overview.authorKey
+import voice.features.bookOverview.overview.authorName
+import voice.features.bookOverview.overview.byAuthorKey
+import voice.features.bookOverview.overview.libraryEntries
 import voice.features.bookOverview.overview.rememberServerBookStates
+import voice.features.bookOverview.overview.series
 import voice.features.bookOverview.overview.toItemViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -64,45 +65,37 @@ class BookSearchViewModel(
   private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
   private val currentBookStore: CurrentBookStore,
-  private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   private val experimentalPlaybackPersistenceFeatureFlag:
     ExperimentalPlaybackPersistenceFeatureFlag,
   private val lastResults: LastBookSearchResults,
   private val serverLibrary: ServerLibrary,
   private val serverDownloads: ServerDownloads,
-  dispatcherProvider: DispatcherProvider,
+  private val dispatcherProvider: DispatcherProvider,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
 
   val query = TextFieldState()
-  private var selectedFilter by mutableStateOf<BookSearchField?>(null)
-  private var selectedBrowseCategory by mutableStateOf<BrowseCategory?>(null)
 
   /**
-   * Navigation disposes the search while the player is open, and this view model with it. The saved
-   * state brings back what was searched.
+   * Navigation disposes the search while another screen is open, and this view model with it. The
+   * saved state brings back what was searched.
    */
-  internal val saver: Saver<BookSearchViewModel, Any> =
-    listSaver<BookSearchViewModel, String?>(
-      save = { listOf(query.text.toString(), selectedFilter?.name, selectedBrowseCategory?.name) },
-      restore = { (text, filter, browseCategory) ->
-        query.setTextAndPlaceCursorAtEnd(text.orEmpty())
-        selectedFilter = filter?.let(BookSearchField::valueOf)
-        selectedBrowseCategory = browseCategory?.let(BrowseCategory::valueOf)
+  internal val saver: Saver<BookSearchViewModel, String> =
+    Saver(
+      save = { query.text.toString() },
+      restore = { text ->
+        query.setTextAndPlaceCursorAtEnd(text)
         this
       },
     )
 
   @Composable
   internal fun state(): BookSearchViewState {
-    val kioskMode = remember { kioskModeFeatureFlag.get() }
-    if (kioskMode) return kioskModeState()
-
     val recentSearches = remember {
       recentBookSearchRepo.flow()
     }
-      .collectAsState(initial = emptyList())
+      .collectAsState(initial = null)
       .value
     val currentBookId = remember { currentBookStore.data }.collectAsState(initial = null).value
     val playState = remember {
@@ -116,40 +109,22 @@ class BookSearchViewModel(
     val results = remember {
       queryResults()
     }
-    // coming back from the player shows the results right away, so the cover can fly back into its
-    // row
+    // coming back shows the results right away, so the cover can fly back into its row
     .collectAsState(initial = lastResults.value?.takeIf { it.query == queryText })
       .value
       ?.takeIf { queryText.isNotEmpty() }
 
-    if (results == null) {
-      val books = remember { repo.flow() }.collectAsState(initial = null).value
-      val browse =
-        remember(books, selectedBrowseCategory) {
-          books?.let(::browse)
-        }
-      return BookSearchViewState.Idle(
-        recentSearches = recentSearches,
-        browse = browse,
-      )
-    }
-
-    val filter = selectedFilter
-    val filtered = results.results.filter { filter == null || filter in it.fieldsMatchingAllWords }
-    if (filtered.isEmpty()) {
-      return BookSearchViewState.NoResults(
-        query = results.query,
-        filtered = filter != null && results.results.isNotEmpty(),
-      )
-    }
+    if (results == null) return BookSearchViewState.Idle(recentSearches)
+    if (results.results.isEmpty()) return BookSearchViewState.NoResults(results.query)
 
     val livePlaybackState = livePlaybackState(currentBookId)
-    val topResult = filtered.first().toViewState(livePlaybackState, serverStates)
+    val topResult = results.results.first().toViewState(livePlaybackState, serverStates)
     return BookSearchViewState.Results(
-      filters = filters(results.results, filter),
       topResult = topResult,
       topResultPlaying = playState == PlayStateManager.PlayState.Playing(topResult.id),
-      otherResults = filtered.drop(1).map { it.toViewState(livePlaybackState, serverStates) },
+      groups = results.groups,
+      otherResults =
+        results.results.drop(1).map { it.toViewState(livePlaybackState, serverStates) },
     )
   }
 
@@ -170,126 +145,30 @@ class BookSearchViewModel(
     query.text.toString().trim()
   }
     .distinctUntilChanged()
-  // a new search starts with all results
-  .onEach { if (it.isEmpty()) selectedFilter = null }
   // clearing the field shows the recent searches right away
   .debounce { if (it.isEmpty()) Duration.ZERO else 150.milliseconds }
   // searching again when the library changes keeps the progress and the results up to date
-  .combine(repo.flow()) { query, _ -> query }
-    .mapLatest { query ->
+  .combine(repo.flow(), ::Pair)
+    .mapLatest { (query, books) ->
       if (query.isEmpty()) {
         null
       } else {
-        QueryResults(query, search.search(query))
+        val results = search.search(query)
+        QueryResults(
+          query = query,
+          results = results,
+          groups = withContext(dispatcherProvider.default) { groups(results, books) },
+        )
       }
     }
     .onEach { lastResults.value = it }
-
-  private fun filters(
-    results: List<BookSearchResult>,
-    selected: BookSearchField?,
-  ): List<BookSearchViewState.Filter> {
-    val fieldFilters =
-      BookSearchField.entries.mapNotNull { field ->
-        val count = results.count { field in it.fieldsMatchingAllWords }
-        if (count > 0) {
-          BookSearchViewState.Filter(field = field, count = count, selected = field == selected)
-        } else {
-          null
-        }
-      }
-    // chips that each hold all results don't filter anything, unless one is picked and can be
-    // unpicked
-    if (selected == null && fieldFilters.none { it.count < results.size }) return emptyList()
-    return listOf(
-      BookSearchViewState.Filter(field = null, count = results.size, selected = selected == null),
-    ) + fieldFilters
-  }
-
-  private fun browse(books: List<Book>): BookSearchViewState.Browse? {
-    val categories =
-      BrowseCategory.entries.filter { category ->
-        books.any { category.value(it) != null }
-      }
-    if (categories.isEmpty()) return null
-    val selected = selectedBrowseCategory?.takeIf { it in categories } ?: categories.first()
-    val entries =
-      books
-        .mapNotNull { book -> selected.value(book)?.let { it to book } }
-        .groupBy({ (value, _) -> value.lowercase() }, { (value, book) -> value to book })
-        .map { (_, values) ->
-          val name = values.groupingBy { (value, _) -> value }.eachCount().maxBy { it.value }.key
-          val bookCategories = values.map { (_, book) -> book.category }
-          BookSearchViewState.BrowseEntry(
-            name = name,
-            bookCount = values.size,
-            inProgressCount = bookCategories.count { it == BookCategory.CURRENT },
-            finishedCount = bookCategories.count { it == BookCategory.FINISHED },
-          )
-        }
-        .sortedWith(compareBy(NaturalOrderComparator.stringComparator) { it.name.lowercase() })
-    return BookSearchViewState.Browse(
-      categories = categories,
-      selectedCategory = selected,
-      entries = entries,
-    )
-  }
-
-  private fun kioskModeState(): BookSearchViewState {
-    return BookSearchViewState.Idle(
-      recentSearches = listOf(KioskModeDemoData.echoesOfTomorrow.genre.lowercase()),
-      browse =
-        BookSearchViewState.Browse(
-          categories = listOf(BrowseCategory.Authors, BrowseCategory.Genres),
-          selectedCategory = BrowseCategory.Authors,
-          entries =
-            KioskModeDemoData.demoAudiobooks
-              .groupBy { it.author }
-              .map { (author, books) ->
-                BookSearchViewState.BrowseEntry(
-                  name = author,
-                  bookCount = books.size,
-                  inProgressCount = books.count { it.progress in 1..99 },
-                  finishedCount = books.count { it.progress >= 100 },
-                )
-              }
-              .sortedBy { it.name },
-        ),
-    )
-  }
 
   fun onSearch() {
     saveRecentSearch(query.text.toString())
   }
 
-  fun onFilterClick(field: BookSearchField?) {
-    selectedFilter = field
-  }
-
-  fun onSearchEverythingClick() {
-    selectedFilter = null
-  }
-
-  fun onBrowseCategoryClick(category: BrowseCategory) {
-    selectedBrowseCategory = category
-  }
-
-  fun onBrowseEntryClick(
-    category: BrowseCategory,
-    name: String,
-  ) {
-    if (category == BrowseCategory.Authors) {
-      navigator.goTo(Destination.Author(name))
-      return
-    }
-    query.setTextAndPlaceCursorAtEnd(name)
-    selectedFilter = category.field
-    saveRecentSearch(name)
-  }
-
   fun onRecentSearchClick(recentSearch: String) {
     query.setTextAndPlaceCursorAtEnd(recentSearch)
-    selectedFilter = null
     saveRecentSearch(recentSearch)
   }
 
@@ -312,6 +191,16 @@ class BookSearchViewModel(
 
   fun onBookLongClick(id: BookId) {
     navigator.goTo(Destination.BookActions(id))
+  }
+
+  internal fun onGroupClick(group: SearchGroupViewState) {
+    saveRecentSearch(query.text.toString())
+    navigator.goTo(
+      when (group.kind) {
+        SearchGroupViewState.Kind.Author -> Destination.Author(group.name)
+        SearchGroupViewState.Kind.Series -> Destination.Series(group.name)
+      },
+    )
   }
 
   fun onPlayClick(id: BookId) {
@@ -348,6 +237,7 @@ class BookSearchViewModel(
 internal data class QueryResults(
   val query: String,
   val results: List<BookSearchResult>,
+  val groups: List<SearchGroupViewState>,
 )
 
 /**
@@ -360,15 +250,63 @@ class LastBookSearchResults {
   internal var value: QueryResults? = null
 }
 
-private fun BrowseCategory.value(book: Book): String? {
-  val value =
-    when (this) {
-      BrowseCategory.Authors -> book.author
-      BrowseCategory.Series -> book.series
-      BrowseCategory.Narrators -> book.content.metadata.narrator
-      BrowseCategory.Genres -> book.content.metadata.genre
+private const val MIN_GROUP_BOOKS = 2
+private const val MAX_GROUPS = 3
+
+private fun groups(
+  results: List<BookSearchResult>,
+  books: List<Book>,
+): List<SearchGroupViewState> {
+  fun scores(
+    field: BookSearchField,
+    key: (Book) -> String?,
+  ): Map<String, Int> = buildMap {
+    results.forEach { result ->
+      val score = result.nameScores[field] ?: return@forEach
+      val groupKey = key(result.book) ?: return@forEach
+      put(groupKey, maxOf(score, get(groupKey) ?: 0))
     }
-  return value?.trim()?.takeIf { it.isNotEmpty() }
+  }
+  val authorScores = scores(BookSearchField.Author) { it.authorKey }
+  val seriesScores = scores(BookSearchField.Series) { it.seriesName?.let(::nameKey) }
+  if (authorScores.isEmpty() && seriesScores.isEmpty()) return emptyList()
+
+  val authors = books.byAuthorKey()
+  val authorGroups = authorScores.mapNotNull { (key, score) ->
+    val authorBooks = authors[key] ?: return@mapNotNull null
+    val name = authorBooks.authorName(key) ?: return@mapNotNull null
+    val group =
+      SearchGroupViewState(
+        kind = SearchGroupViewState.Kind.Author,
+        key = key,
+        name = name,
+        bookCount = authorBooks.size,
+        covers = AuthorGroup(key, name, libraryEntries(authorBooks).values.flatten()).covers,
+      )
+    group to score
+  }
+  val seriesGroups =
+    books.series().mapNotNull { series ->
+      val score = seriesScores[series.key] ?: return@mapNotNull null
+      val group =
+        SearchGroupViewState(
+          kind = SearchGroupViewState.Kind.Series,
+          key = series.key,
+          name = series.name,
+          bookCount = series.bookCount,
+          covers = series.covers,
+        )
+      group to score
+    }
+  return (authorGroups + seriesGroups)
+    .filter { (group, _) -> group.bookCount >= MIN_GROUP_BOOKS }
+    .sortedWith(
+      compareByDescending<Pair<SearchGroupViewState, Int>> { (_, score) -> score }
+        .thenByDescending { (group, _) -> group.bookCount },
+    )
+    .take(MAX_GROUPS)
+    .map { (group, _) -> group }
+    .sortedBy { it.kind == SearchGroupViewState.Kind.Series }
 }
 
 private val TagFields =

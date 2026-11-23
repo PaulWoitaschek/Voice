@@ -309,7 +309,6 @@
         <item quantity="other">%d скрытых книг</item>
     </plurals>
     <string name="library.no_author">Без автора</string>
-    <string name="library.search.browse.title">Обзор</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>
@@ -322,20 +321,7 @@
         <item quantity="many">%d прослушано</item>
         <item quantity="other">%d прослушано</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d в процессе</item>
-        <item quantity="few">%d в процессе</item>
-        <item quantity="many">%d в процессе</item>
-        <item quantity="other">%d в процессе</item>
-    </plurals>
     <string name="library.search.clear">Очистить поиск</string>
-    <string name="library.search.field.all">Все</string>
-    <string name="library.search.field.authors">Авторы</string>
-    <string name="library.search.field.chapters">Главы</string>
-    <string name="library.search.field.genres">Жанры</string>
-    <string name="library.search.field.narrators">Чтецы</string>
-    <string name="library.search.field.series">Серии</string>
-    <string name="library.search.field.titles">Названия</string>
     <string name="library.search.hint">Поиск в библиотеке</string>
     <string name="library.search.match.chapter">Глава · %s</string>
     <string name="library.search.match.genre">Жанр · %s</string>
@@ -343,7 +329,6 @@
     <string name="library.search.match.series">Серия · %s</string>
     <string name="library.search.no_results.folders_hint">Книги нет в списке? Возможно, её папка ещё не добавлена в Voice.</string>
     <string name="library.search.no_results.message">Поиск ведётся по названиям, авторам, чтецам, сериям, жанрам и главам.</string>
-    <string name="library.search.no_results.search_everything">Искать везде</string>
     <string name="library.search.no_results.title">Нет книг по запросу «%s»</string>
     <string name="library.search.recent.clear_all">Очистить всё</string>
     <string name="library.search.recent.remove">Удалить %s</string>

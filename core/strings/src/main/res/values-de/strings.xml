@@ -277,7 +277,6 @@
         <item quantity="other">%d ausgeblendete Bücher</item>
     </plurals>
     <string name="library.no_author">Ohne Autor</string>
-    <string name="library.search.browse.title">Stöbern</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d Buch</item>
         <item quantity="other">%d Bücher</item>
@@ -286,18 +285,7 @@
         <item quantity="one">%d abgeschlossen</item>
         <item quantity="other">%d abgeschlossen</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d angefangen</item>
-        <item quantity="other">%d angefangen</item>
-    </plurals>
     <string name="library.search.clear">Suche löschen</string>
-    <string name="library.search.field.all">Alle</string>
-    <string name="library.search.field.authors">Autoren</string>
-    <string name="library.search.field.chapters">Kapitel</string>
-    <string name="library.search.field.genres">Genres</string>
-    <string name="library.search.field.narrators">Sprecher</string>
-    <string name="library.search.field.series">Reihen</string>
-    <string name="library.search.field.titles">Titel</string>
     <string name="library.search.hint">Durchsuche Deine Bibliothek</string>
     <string name="library.search.match.chapter">Kapitel · %s</string>
     <string name="library.search.match.genre">Genre · %s</string>
@@ -305,7 +293,6 @@
     <string name="library.search.match.series">Reihe · %s</string>
     <string name="library.search.no_results.folders_hint">Nicht in der Liste? Vielleicht wurde der Ordner noch nicht zu Voice hinzugefügt.</string>
     <string name="library.search.no_results.message">Die Suche umfasst Titel, Autoren, Sprecher, Reihen, Genres und Kapitel.</string>
-    <string name="library.search.no_results.search_everything">Alles durchsuchen</string>
     <string name="library.search.no_results.title">Keine Bücher zu „%s“ gefunden</string>
     <string name="library.search.recent.clear_all">Alle löschen</string>
     <string name="library.search.recent.remove">%s entfernen</string>
