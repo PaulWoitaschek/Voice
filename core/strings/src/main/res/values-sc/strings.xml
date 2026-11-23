@@ -277,7 +277,6 @@
         <item quantity="other">%d libros cuados</item>
     </plurals>
     <string name="library.no_author">Chene autore</string>
-    <string name="library.search.browse.title">Esplora</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d libru</item>
         <item quantity="other">%d libros</item>
@@ -286,18 +285,7 @@
         <item quantity="one">%d acabbadu</item>
         <item quantity="other">%d acabbados</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d in cursu</item>
-        <item quantity="other">%d in cursu</item>
-    </plurals>
     <string name="library.search.clear">Isbòida sa chirca</string>
-    <string name="library.search.field.all">Totu</string>
-    <string name="library.search.field.authors">Autores</string>
-    <string name="library.search.field.chapters">Capìtulos</string>
-    <string name="library.search.field.genres">Gèneres</string>
-    <string name="library.search.field.narrators">Narradores</string>
-    <string name="library.search.field.series">Sèries</string>
-    <string name="library.search.field.titles">Tìtulos</string>
     <string name="library.search.hint">Chirca in sa biblioteca tua</string>
     <string name="library.search.match.chapter">Capìtulu · %s</string>
     <string name="library.search.match.genre">Gènere · %s</string>
@@ -305,7 +293,6 @@
     <string name="library.search.match.series">Sèrie · %s</string>
     <string name="library.search.no_results.folders_hint">No est in sa lista? Fortzis sa cartella sua no est galu agiunta a Voice.</string>
     <string name="library.search.no_results.message">Sa chirca cumprendet tìtulos, autores, narradores, sèries, gèneres e capìtulos.</string>
-    <string name="library.search.no_results.search_everything">Chirca in totue</string>
     <string name="library.search.no_results.title">Perunu libru currispondet a “%s”</string>
     <string name="library.search.recent.clear_all">Isbòida totu</string>
     <string name="library.search.recent.remove">Boga %s</string>

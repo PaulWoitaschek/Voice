@@ -277,7 +277,6 @@
         <item quantity="other">%d skjulte bøger</item>
     </plurals>
     <string name="library.no_author">Ingen forfatter</string>
-    <string name="library.search.browse.title">Gennemse</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d bog</item>
         <item quantity="other">%d bøger</item>
@@ -286,18 +285,7 @@
         <item quantity="one">%d afsluttet</item>
         <item quantity="other">%d afsluttede</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d i gang</item>
-        <item quantity="other">%d i gang</item>
-    </plurals>
     <string name="library.search.clear">Ryd søgning</string>
-    <string name="library.search.field.all">Alle</string>
-    <string name="library.search.field.authors">Forfattere</string>
-    <string name="library.search.field.chapters">Kapitler</string>
-    <string name="library.search.field.genres">Genrer</string>
-    <string name="library.search.field.narrators">Oplæsere</string>
-    <string name="library.search.field.series">Serier</string>
-    <string name="library.search.field.titles">Titler</string>
     <string name="library.search.hint">Søg i dit bibliotek</string>
     <string name="library.search.match.chapter">Kapitel · %s</string>
     <string name="library.search.match.genre">Genre · %s</string>
@@ -305,7 +293,6 @@
     <string name="library.search.match.series">Serie · %s</string>
     <string name="library.search.no_results.folders_hint">Ikke på listen? Mappen er måske ikke tilføjet til Voice endnu.</string>
     <string name="library.search.no_results.message">Søgningen omfatter titler, forfattere, oplæsere, serier, genrer og kapitler.</string>
-    <string name="library.search.no_results.search_everything">Søg i alt</string>
     <string name="library.search.no_results.title">Ingen bøger matcher »%s«</string>
     <string name="library.search.recent.clear_all">Ryd alle</string>
     <string name="library.search.recent.remove">Fjern %s</string>

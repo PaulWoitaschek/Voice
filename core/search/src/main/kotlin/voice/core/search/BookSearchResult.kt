@@ -6,7 +6,8 @@ data class BookSearchResult(
   val book: Book,
   // the ranges point into the field's text, which for a series includes its part
   val matches: Map<BookSearchField, List<IntRange>>,
-  val fieldsMatchingAllWords: Set<BookSearchField>,
+  // how well the author and the series match, for each whose name has all words of the search
+  val nameScores: Map<BookSearchField, Int>,
   val score: Int,
   // the chapter that explains why the search found the book, null when the other fields do
   val chapter: String? = null,

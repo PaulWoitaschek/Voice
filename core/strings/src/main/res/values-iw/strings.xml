@@ -293,7 +293,6 @@
         <item quantity="other">%d ספרים מוסתרים</item>
     </plurals>
     <string name="library.no_author">ללא מחבר</string>
-    <string name="library.search.browse.title">עיון</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d ספר</item>
         <item quantity="two">%d ספרים</item>
@@ -304,19 +303,7 @@
         <item quantity="two">%d הושלמו</item>
         <item quantity="other">%d הושלמו</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d בהאזנה</item>
-        <item quantity="two">%d בהאזנה</item>
-        <item quantity="other">%d בהאזנה</item>
-    </plurals>
     <string name="library.search.clear">ניקוי החיפוש</string>
-    <string name="library.search.field.all">הכול</string>
-    <string name="library.search.field.authors">מחברים</string>
-    <string name="library.search.field.chapters">פרקים</string>
-    <string name="library.search.field.genres">ז׳אנרים</string>
-    <string name="library.search.field.narrators">קריינים</string>
-    <string name="library.search.field.series">סדרות</string>
-    <string name="library.search.field.titles">כותרים</string>
     <string name="library.search.hint">חיפוש בספרייה שלכם</string>
     <string name="library.search.match.chapter">פרק · %s</string>
     <string name="library.search.match.genre">ז׳אנר · %s</string>
@@ -324,7 +311,6 @@
     <string name="library.search.match.series">סדרה · %s</string>
     <string name="library.search.no_results.folders_hint">לא מופיע ברשימה? ייתכן שהתיקייה שלו עדיין לא נוספה ל-Voice.</string>
     <string name="library.search.no_results.message">החיפוש עובר על כותרים, מחברים, קריינים, סדרות, ז׳אנרים ופרקים.</string>
-    <string name="library.search.no_results.search_everything">חיפוש בהכול</string>
     <string name="library.search.no_results.title">אין ספרים שתואמים ל-\"%s\"</string>
     <string name="library.search.recent.clear_all">ניקוי הכול</string>
     <string name="library.search.recent.remove">הסרת %s</string>

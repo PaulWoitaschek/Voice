@@ -59,7 +59,6 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
-import voice.core.search.BookSearchField
 import voice.core.strings.R as StringsR
 import voice.core.ui.CenteredContent
 import voice.core.ui.R as UiR
@@ -108,15 +107,7 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
 
         override fun onClearRecentSearches() = viewModel.onClearRecentSearches()
 
-        override fun onBrowseCategoryClick(category: BrowseCategory) =
-          viewModel.onBrowseCategoryClick(category)
-
-        override fun onBrowseEntryClick(
-          category: BrowseCategory,
-          name: String,
-        ) = viewModel.onBrowseEntryClick(category, name)
-
-        override fun onFilterClick(field: BookSearchField?) = viewModel.onFilterClick(field)
+        override fun onGroupClick(group: SearchGroupViewState) = viewModel.onGroupClick(group)
 
         override fun onBookClick(id: BookId) = viewModel.onBookClick(id)
 
@@ -125,8 +116,6 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
         override fun onPlayClick(id: BookId) = viewModel.onPlayClick(id)
 
         override fun onFoldersClick() = viewModel.onFoldersClick()
-
-        override fun onSearchEverythingClick() = viewModel.onSearchEverythingClick()
       },
     modifier = modifier,
   )
@@ -143,14 +132,7 @@ internal interface BookSearchListener {
 
   fun onClearRecentSearches()
 
-  fun onBrowseCategoryClick(category: BrowseCategory)
-
-  fun onBrowseEntryClick(
-    category: BrowseCategory,
-    name: String,
-  )
-
-  fun onFilterClick(field: BookSearchField?)
+  fun onGroupClick(group: SearchGroupViewState)
 
   fun onBookClick(id: BookId)
 
@@ -159,8 +141,6 @@ internal interface BookSearchListener {
   fun onPlayClick(id: BookId)
 
   fun onFoldersClick()
-
-  fun onSearchEverythingClick()
 
   companion object {
     val Noop =
@@ -175,14 +155,7 @@ internal interface BookSearchListener {
 
         override fun onClearRecentSearches() {}
 
-        override fun onBrowseCategoryClick(category: BrowseCategory) {}
-
-        override fun onBrowseEntryClick(
-          category: BrowseCategory,
-          name: String,
-        ) {}
-
-        override fun onFilterClick(field: BookSearchField?) {}
+        override fun onGroupClick(group: SearchGroupViewState) {}
 
         override fun onBookClick(id: BookId) {}
 
@@ -191,8 +164,6 @@ internal interface BookSearchListener {
         override fun onPlayClick(id: BookId) {}
 
         override fun onFoldersClick() {}
-
-        override fun onSearchEverythingClick() {}
       }
   }
 }
@@ -274,7 +245,6 @@ internal fun BookSearch(
                 viewState = state,
                 contentPadding = contentPadding,
                 onFoldersClick = listener::onFoldersClick,
-                onSearchEverythingClick = listener::onSearchEverythingClick,
               )
           }
         }
@@ -353,19 +323,5 @@ private fun SearchField(
         focusedContainerColor = containerColor,
         unfocusedContainerColor = containerColor,
       ),
-  )
-}
-
-@Composable
-internal fun BookSearchField.label(): String {
-  return stringResource(
-    when (this) {
-      BookSearchField.Title -> StringsR.string.library_search_field_titles
-      BookSearchField.Author -> StringsR.string.library_search_field_authors
-      BookSearchField.Series -> StringsR.string.library_search_field_series
-      BookSearchField.Narrator -> StringsR.string.library_search_field_narrators
-      BookSearchField.Genre -> StringsR.string.library_search_field_genres
-      BookSearchField.Chapters -> StringsR.string.library_search_field_chapters
-    },
   )
 }

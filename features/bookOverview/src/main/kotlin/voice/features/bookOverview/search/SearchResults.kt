@@ -3,7 +3,6 @@
 package voice.features.bookOverview.search
 
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,11 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -51,11 +48,14 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.PlayButton
 import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
+import voice.core.ui.authorSharedBoundsModifier
 import voice.core.ui.bookText
 import voice.core.ui.playButtonSharedElementModifier
 import voice.core.ui.segmentedShape
+import voice.features.bookOverview.views.AuthorCovers
 import voice.features.bookOverview.views.BookCover
 import voice.features.bookOverview.views.HiddenLabel
+import voice.features.bookOverview.views.SeriesCover
 
 @Composable
 internal fun SearchResults(
@@ -69,15 +69,6 @@ internal fun SearchResults(
     contentPadding = contentPadding,
     verticalArrangement = Arrangement.spacedBy(2.dp),
   ) {
-    if (viewState.filters.isNotEmpty()) {
-      item(key = "filters", contentType = "filters") {
-        Filters(
-          filters = viewState.filters,
-          onClick = listener::onFilterClick,
-          modifier = Modifier.padding(bottom = 10.dp),
-        )
-      }
-    }
     item(key = viewState.topResult.id.value, contentType = "topResult") {
       TopResult(
         result = viewState.topResult,
@@ -86,6 +77,19 @@ internal fun SearchResults(
         onLongClick = { listener.onBookLongClick(viewState.topResult.id) },
         onPlayClick = { listener.onPlayClick(viewState.topResult.id) },
         modifier = Modifier.animateItem().padding(bottom = 10.dp),
+      )
+    }
+    itemsIndexed(
+      items = viewState.groups,
+      key = { _, group -> "${group.kind}-${group.key}" },
+      contentType = { _, _ -> "group" },
+    ) { index, group ->
+      val last = index == viewState.groups.lastIndex
+      GroupRow(
+        group = group,
+        shape = segmentedShape(index, viewState.groups.size),
+        onClick = { listener.onGroupClick(group) },
+        modifier = Modifier.animateItem().padding(bottom = if (last) 10.dp else 0.dp),
       )
     }
     itemsIndexed(
@@ -105,43 +109,79 @@ internal fun SearchResults(
 }
 
 @Composable
-private fun Filters(
-  filters: List<BookSearchViewState.Filter>,
-  onClick: (BookSearchField?) -> Unit,
+private fun GroupRow(
+  group: SearchGroupViewState,
+  shape: Shape,
+  onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  Row(
-    modifier =
-      modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 4.dp),
-    horizontalArrangement = Arrangement.spacedBy(8.dp),
+  val colors = MaterialTheme.colorScheme
+  Surface(
+    onClick = onClick,
+    modifier = modifier.fillMaxWidth(),
+    shape = shape,
+    color = colors.surfaceBright,
   ) {
-    filters.forEach { filter ->
-      FilterChip(
-        selected = filter.selected,
-        onClick = { onClick(filter.field) },
-        label = {
-          Text(filter.field?.label() ?: stringResource(StringsR.string.library_search_field_all))
-          Spacer(Modifier.width(6.dp))
-          Text(
-            text = filter.count.toString(),
-            fontWeight = FontWeight.SemiBold,
+    Row(
+      modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      when (group.kind) {
+        SearchGroupViewState.Kind.Author ->
+          AuthorCovers(
+            covers = group.covers,
+            modifier = Modifier.size(56.dp).authorSharedBoundsModifier(group.key),
           )
-        },
-        leadingIcon =
-          if (filter.selected) {
-            {
-              Icon(
-                painter = painterResource(UiR.drawable.ic_check),
-                contentDescription = null,
-                modifier = Modifier.size(FilterChipDefaults.IconSize),
-              )
-            }
-          } else {
-            null
-          },
+        SearchGroupViewState.Kind.Series ->
+          SeriesCover(
+            seriesKey = group.key,
+            covers = group.covers,
+            modifier = Modifier.size(56.dp),
+            gapColor = colors.surfaceBright,
+          )
+      }
+      Spacer(Modifier.width(16.dp))
+      Column(Modifier.weight(1F)) {
+        Text(
+          text = group.name,
+          style = MaterialTheme.typography.titleMediumEmphasized.bookText(),
+          maxLines = 2,
+          overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+          text = groupSummary(group),
+          style = MaterialTheme.typography.bodyMedium,
+          color = colors.onSurfaceVariant,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+        )
+      }
+      Spacer(Modifier.width(12.dp))
+      Icon(
+        painter = painterResource(UiR.drawable.ic_chevron_right),
+        contentDescription = null,
+        tint = colors.onSurfaceVariant,
       )
     }
   }
+}
+
+@Composable
+private fun groupSummary(group: SearchGroupViewState): String {
+  val kind =
+    stringResource(
+      when (group.kind) {
+        SearchGroupViewState.Kind.Author -> StringsR.string.book_edit_author_label
+        SearchGroupViewState.Kind.Series -> StringsR.string.book_edit_series_label
+      },
+    )
+  val books =
+    pluralStringResource(
+      StringsR.plurals.library_search_browse_book_count,
+      group.bookCount,
+      group.bookCount,
+    )
+  return "$kind · $books"
 }
 
 @Composable
@@ -411,30 +451,6 @@ private fun SearchResultsPreview() {
       SearchResults(
         viewState =
           BookSearchViewState.Results(
-            filters =
-              listOf(
-                BookSearchViewState.Filter(field = null, count = 6, selected = true),
-                BookSearchViewState.Filter(
-                  field = BookSearchField.Title,
-                  count = 2,
-                  selected = false,
-                ),
-                BookSearchViewState.Filter(
-                  field = BookSearchField.Author,
-                  count = 2,
-                  selected = false,
-                ),
-                BookSearchViewState.Filter(
-                  field = BookSearchField.Series,
-                  count = 1,
-                  selected = false,
-                ),
-                BookSearchViewState.Filter(
-                  field = BookSearchField.Chapters,
-                  count = 1,
-                  selected = false,
-                ),
-              ),
             topResult =
               result(
                 title = "The Way of Kings",
@@ -443,6 +459,23 @@ private fun SearchResultsPreview() {
                 titleHighlights = listOf(11..14),
               ),
             topResultPlaying = false,
+            groups =
+              listOf(
+                SearchGroupViewState(
+                  kind = SearchGroupViewState.Kind.Author,
+                  key = "stephenking",
+                  name = "Stephen King",
+                  bookCount = 2,
+                  covers = listOf(null, null),
+                ),
+                SearchGroupViewState(
+                  kind = SearchGroupViewState.Kind.Series,
+                  key = "kingkillerchronicle",
+                  name = "Kingkiller Chronicle",
+                  bookCount = 2,
+                  covers = listOf(null, null),
+                ),
+              ),
             otherResults =
               listOf(
                 result(

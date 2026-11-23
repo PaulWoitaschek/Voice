@@ -277,7 +277,6 @@
         <item quantity="other">%d rejtett könyv</item>
     </plurals>
     <string name="library.no_author">Szerző nélkül</string>
-    <string name="library.search.browse.title">Böngészés</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d könyv</item>
         <item quantity="other">%d könyv</item>
@@ -286,18 +285,7 @@
         <item quantity="one">%d befejezett</item>
         <item quantity="other">%d befejezett</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d folyamatban</item>
-        <item quantity="other">%d folyamatban</item>
-    </plurals>
     <string name="library.search.clear">Keresés törlése</string>
-    <string name="library.search.field.all">Összes</string>
-    <string name="library.search.field.authors">Szerzők</string>
-    <string name="library.search.field.chapters">Fejezetek</string>
-    <string name="library.search.field.genres">Műfajok</string>
-    <string name="library.search.field.narrators">Felolvasók</string>
-    <string name="library.search.field.series">Sorozatok</string>
-    <string name="library.search.field.titles">Címek</string>
     <string name="library.search.hint">Keresés a könyvtárában</string>
     <string name="library.search.match.chapter">Fejezet · %s</string>
     <string name="library.search.match.genre">Műfaj · %s</string>
@@ -305,7 +293,6 @@
     <string name="library.search.match.series">Sorozat · %s</string>
     <string name="library.search.no_results.folders_hint">Nincs a listán? Lehet, hogy a mappája még nincs hozzáadva a Voice-hoz.</string>
     <string name="library.search.no_results.message">A keresés a címekre, szerzőkre, felolvasókra, sorozatokra, műfajokra és fejezetekre terjed ki.</string>
-    <string name="library.search.no_results.search_everything">Keresés mindenben</string>
     <string name="library.search.no_results.title">Nincs találat erre: „%s”</string>
     <string name="library.search.recent.clear_all">Összes törlése</string>
     <string name="library.search.recent.remove">%s eltávolítása</string>

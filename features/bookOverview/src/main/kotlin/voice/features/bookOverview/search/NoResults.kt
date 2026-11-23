@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
@@ -46,7 +45,6 @@ internal fun NoResults(
   viewState: BookSearchViewState.NoResults,
   contentPadding: PaddingValues,
   onFoldersClick: () -> Unit,
-  onSearchEverythingClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Column(
@@ -84,17 +82,6 @@ internal fun NoResults(
       color = MaterialTheme.colorScheme.onSurfaceVariant,
       textAlign = TextAlign.Center,
     )
-    if (viewState.filtered) {
-      Button(onClick = onSearchEverythingClick) {
-        Icon(
-          painter = painterResource(UiR.drawable.ic_search),
-          contentDescription = null,
-          modifier = Modifier.size(ButtonDefaults.IconSize),
-        )
-        Spacer(Modifier.width(ButtonDefaults.IconSpacing))
-        Text(stringResource(StringsR.string.library_search_no_results_search_everything))
-      }
-    }
     FilledTonalButton(onClick = onFoldersClick) {
       Icon(
         painter = painterResource(UiR.drawable.ic_folder),
@@ -119,10 +106,9 @@ private fun NoResultsPreview() {
   VoiceTheme {
     Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
       NoResults(
-        viewState = BookSearchViewState.NoResults(query = "dragonlance", filtered = true),
+        viewState = BookSearchViewState.NoResults(query = "dragonlance"),
         contentPadding = PaddingValues(),
         onFoldersClick = {},
-        onSearchEverythingClick = {},
       )
     }
   }

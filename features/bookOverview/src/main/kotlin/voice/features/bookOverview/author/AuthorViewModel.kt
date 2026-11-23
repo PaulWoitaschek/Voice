@@ -27,9 +27,9 @@ import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
 import voice.features.bookOverview.overview.LibraryEntry
 import voice.features.bookOverview.overview.authorKey
+import voice.features.bookOverview.overview.authorName
 import voice.features.bookOverview.overview.byAuthor
 import voice.features.bookOverview.overview.libraryEntries
-import voice.features.bookOverview.overview.mostCommon
 import voice.features.bookOverview.overview.rememberServerBookStates
 import voice.features.bookOverview.overview.toItemViewState
 import voice.features.bookOverview.overview.toStackViewState
@@ -85,10 +85,7 @@ class AuthorViewModel(
           }
         }
     return AuthorViewState(
-      name =
-        key?.let {
-          authorBooks.filter { it.authorKey == key }.mapNotNull { it.author?.trim() }.mostCommon()
-        },
+      name = key?.let(authorBooks::authorName),
       bookCount = authorBooks.size,
       finishedCount = authorBooks.count { it.category == BookCategory.FINISHED },
       info = authorInfo,

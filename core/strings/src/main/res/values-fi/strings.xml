@@ -277,7 +277,6 @@
         <item quantity="other">%d piilotettua kirjaa</item>
     </plurals>
     <string name="library.no_author">Ei tekijää</string>
-    <string name="library.search.browse.title">Selaa</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d kirja</item>
         <item quantity="other">%d kirjaa</item>
@@ -286,18 +285,7 @@
         <item quantity="one">%d kuunneltu</item>
         <item quantity="other">%d kuunneltua</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d kesken</item>
-        <item quantity="other">%d kesken</item>
-    </plurals>
     <string name="library.search.clear">Tyhjennä haku</string>
-    <string name="library.search.field.all">Kaikki</string>
-    <string name="library.search.field.authors">Tekijät</string>
-    <string name="library.search.field.chapters">Luvut</string>
-    <string name="library.search.field.genres">Lajityypit</string>
-    <string name="library.search.field.narrators">Lukijat</string>
-    <string name="library.search.field.series">Sarjat</string>
-    <string name="library.search.field.titles">Nimet</string>
     <string name="library.search.hint">Hae kirjastostasi</string>
     <string name="library.search.match.chapter">Luku · %s</string>
     <string name="library.search.match.genre">Lajityyppi · %s</string>
@@ -305,7 +293,6 @@
     <string name="library.search.match.series">Sarja · %s</string>
     <string name="library.search.no_results.folders_hint">Eikö kirjaa ole listalla? Sen kansiota ei ehkä ole vielä lisätty Voiceen.</string>
     <string name="library.search.no_results.message">Haku kattaa nimet, tekijät, lukijat, sarjat, lajityypit ja luvut.</string>
-    <string name="library.search.no_results.search_everything">Hae kaikesta</string>
     <string name="library.search.no_results.title">Haulla ”%s” ei löytynyt kirjoja</string>
     <string name="library.search.recent.clear_all">Tyhjennä kaikki</string>
     <string name="library.search.recent.remove">Poista %s</string>

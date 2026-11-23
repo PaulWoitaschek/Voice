@@ -143,7 +143,7 @@
     <string name="book.download.waiting_for_connection">Waiting for a connection</string>
     <!-- Shown while the download of a server book waits, because downloading over mobile data is off. -->
     <string name="book.download.waiting_for_wifi">Waiting for Wi-Fi</string>
-    <!-- Label for the field with the book's author, in the sheet that edits a book. -->
+    <!-- Label for the field with the book's author, in the sheet that edits a book. Also before the number of books of an author that the library search found, e.g. "Author · 7 books". -->
     <string name="book.edit.author.label">Author</string>
     <!-- Bottom-sheet item for choosing a cover from local files. -->
     <string name="book.edit.cover.file">Cover from the file system</string>
@@ -151,7 +151,7 @@
     <string name="book.edit.cover.internet">Cover from the Internet</string>
     <!-- Label for the field with the book's place in its series, like 2 or 3.5, next to the series field in the sheet that edits a book. -->
     <string name="book.edit.part.label">Part</string>
-    <!-- Label for the field with the name of the series the book belongs to, in the sheet that edits a book. -->
+    <!-- Label for the field with the name of the series the book belongs to, in the sheet that edits a book. Also before the number of books of a series that the library search found, e.g. "Series · 4 books". -->
     <string name="book.edit.series.label">Series</string>
     <!-- Error in the sheet that edits a book from an Audiobookshelf server, when saving the edits on the server failed, for example without a connection. The listener's input stays, so they can tap Save again. -->
     <string name="book.edit.server.failed">Couldn\'t save on your server. Try again.</string>
@@ -463,39 +463,18 @@
     </plurals>
     <!-- Entry at the end of each library section while the library is grouped by author, and the title of its screen. It holds the books that have no author. -->
     <string name="library.no_author">No author</string>
-    <!-- Header above the browse section of the library search, which lists the library by authors, series, narrators or genres. -->
-    <string name="library.search.browse.title">Browse</string>
-    <!-- Number of books by an author, in a series, by a narrator or in a genre, in the browse section of the library search. Also below a series or an author in the library, on the screen of a series, below each series suggested while editing a book, and below Hidden books in the library filter. Also the header of the sheet that sets the series or author of several selected books. -->
+    <!-- Number of books by an author or in a series: below an author or a series that the library search found, below a series or an author in the library, on the screen of a series, below each series suggested while editing a book, and below Hidden books in the library filter. Also the header of the sheet that sets the series or author of several selected books. -->
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d book</item>
         <item quantity="other">%d books</item>
     </plurals>
-    <!-- How many of the books by an author, in a series, by a narrator or in a genre are finished. Shown after the number of books, e.g. "4 books · 2 finished". -->
+    <!-- How many of the books in a series are finished. Shown after the number of books, e.g. "4 books · 2 finished". -->
     <plurals name="library.search.browse.finished">
         <item quantity="one">%d finished</item>
         <item quantity="other">%d finished</item>
     </plurals>
-    <!-- How many of the books by an author, in a series, by a narrator or in a genre are in progress. Shown after the number of books, e.g. "4 books · 1 in progress". -->
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d in progress</item>
-        <item quantity="other">%d in progress</item>
-    </plurals>
     <!-- Content description for the button that clears the text in the library search field. -->
     <string name="library.search.clear">Clear search</string>
-    <!-- Filter chip in the library search that shows the results from all fields. -->
-    <string name="library.search.field.all">All</string>
-    <!-- Browse tab and filter chip in the library search for book authors. -->
-    <string name="library.search.field.authors">Authors</string>
-    <!-- Filter chip in the library search for the chapter names of books. -->
-    <string name="library.search.field.chapters">Chapters</string>
-    <!-- Browse tab and filter chip in the library search for book genres. -->
-    <string name="library.search.field.genres">Genres</string>
-    <!-- Browse tab and filter chip in the library search for book narrators. -->
-    <string name="library.search.field.narrators">Narrators</string>
-    <!-- Browse tab and filter chip in the library search for book series. -->
-    <string name="library.search.field.series">Series</string>
-    <!-- Filter chip in the library search for book titles. -->
-    <string name="library.search.field.titles">Titles</string>
     <!-- Placeholder of the library search field. -->
     <string name="library.search.hint">Search your library</string>
     <!-- Tag on a library search result that matched by the name of one of its chapters. %s is the chapter name. -->
@@ -508,10 +487,8 @@
     <string name="library.search.match.series">Series · %s</string>
     <!-- Hint below the audiobook folders button when the library search finds nothing. -->
     <string name="library.search.no_results.folders_hint">Not on the list? Its folder may not be added to Voice yet.</string>
-    <!-- Explanation when the library search finds nothing. -->
+    <!-- Explanation when the library search finds nothing. Also shown in the library search before the listener types, when there are no recent searches. -->
     <string name="library.search.no_results.message">Search looks through titles, authors, narrators, series, genres and chapters.</string>
-    <!-- Button when the library search finds nothing with a filter on. Removes the filter. -->
-    <string name="library.search.no_results.search_everything">Search everything</string>
     <!-- Title when the library search finds nothing. %s is what was searched for. -->
     <string name="library.search.no_results.title">No books match “%s”</string>
     <!-- Action that removes all recent searches in the library search. -->

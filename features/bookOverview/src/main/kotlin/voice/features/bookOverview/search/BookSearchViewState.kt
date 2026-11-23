@@ -10,49 +10,30 @@ import voice.features.bookOverview.overview.DownloadBadge
 sealed interface BookSearchViewState {
 
   /** Nothing typed yet. */
-  data class Idle(
-    val recentSearches: List<String>,
-    val browse: Browse?,
-  ) : BookSearchViewState
+  data class Idle(val recentSearches: List<String>) : BookSearchViewState
 
   data class Results(
-    val filters: List<Filter>,
     val topResult: SearchResultViewState,
     val topResultPlaying: Boolean,
+    val groups: List<SearchGroupViewState>,
     val otherResults: List<SearchResultViewState>,
   ) : BookSearchViewState
 
-  data class NoResults(
-    val query: String,
-    val filtered: Boolean,
-  ) : BookSearchViewState
-
-  data class Browse(
-    val categories: List<BrowseCategory>,
-    val selectedCategory: BrowseCategory,
-    val entries: List<BrowseEntry>,
-  )
-
-  data class BrowseEntry(
-    val name: String,
-    val bookCount: Int,
-    val inProgressCount: Int,
-    val finishedCount: Int,
-  )
-
-  /** A filter chip. [field] is null for the one that shows all results. */
-  data class Filter(
-    val field: BookSearchField?,
-    val count: Int,
-    val selected: Boolean,
-  )
+  data class NoResults(val query: String) : BookSearchViewState
 }
 
-enum class BrowseCategory(val field: BookSearchField) {
-  Authors(BookSearchField.Author),
-  Series(BookSearchField.Series),
-  Narrators(BookSearchField.Narrator),
-  Genres(BookSearchField.Genre),
+@Immutable
+data class SearchGroupViewState(
+  val kind: Kind,
+  val key: String,
+  val name: String,
+  val bookCount: Int,
+  val covers: List<String?>,
+) {
+  enum class Kind {
+    Author,
+    Series,
+  }
 }
 
 @Immutable

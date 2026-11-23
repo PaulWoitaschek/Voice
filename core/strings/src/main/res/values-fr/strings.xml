@@ -293,7 +293,6 @@
         <item quantity="other">%d livres masqués</item>
     </plurals>
     <string name="library.no_author">Sans auteur</string>
-    <string name="library.search.browse.title">Parcourir</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d livre</item>
         <item quantity="many">%d livres</item>
@@ -304,19 +303,7 @@
         <item quantity="many">%d terminés</item>
         <item quantity="other">%d terminés</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d en cours</item>
-        <item quantity="many">%d en cours</item>
-        <item quantity="other">%d en cours</item>
-    </plurals>
     <string name="library.search.clear">Effacer la recherche</string>
-    <string name="library.search.field.all">Tout</string>
-    <string name="library.search.field.authors">Auteurs</string>
-    <string name="library.search.field.chapters">Chapitres</string>
-    <string name="library.search.field.genres">Genres</string>
-    <string name="library.search.field.narrators">Narrateurs</string>
-    <string name="library.search.field.series">Séries</string>
-    <string name="library.search.field.titles">Titres</string>
     <string name="library.search.hint">Rechercher dans votre bibliothèque</string>
     <string name="library.search.match.chapter">Chapitre · %s</string>
     <string name="library.search.match.genre">Genre · %s</string>
@@ -324,7 +311,6 @@
     <string name="library.search.match.series">Série · %s</string>
     <string name="library.search.no_results.folders_hint">Absent de la liste ? Son dossier n\'a peut-être pas encore été ajouté à Voice.</string>
     <string name="library.search.no_results.message">La recherche porte sur les titres, auteurs, narrateurs, séries, genres et chapitres.</string>
-    <string name="library.search.no_results.search_everything">Tout rechercher</string>
     <string name="library.search.no_results.title">Aucun livre ne correspond à « %s »</string>
     <string name="library.search.recent.clear_all">Tout effacer</string>
     <string name="library.search.recent.remove">Supprimer %s</string>

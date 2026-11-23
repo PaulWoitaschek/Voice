@@ -277,7 +277,6 @@
         <item quantity="other">%d peidetud raamatut</item>
     </plurals>
     <string name="library.no_author">Autorita</string>
-    <string name="library.search.browse.title">Sirvi</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d raamat</item>
         <item quantity="other">%d raamatut</item>
@@ -286,18 +285,7 @@
         <item quantity="one">%d kuulatud</item>
         <item quantity="other">%d kuulatud</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d pooleli</item>
-        <item quantity="other">%d pooleli</item>
-    </plurals>
     <string name="library.search.clear">Tühjenda otsing</string>
-    <string name="library.search.field.all">Kõik</string>
-    <string name="library.search.field.authors">Autorid</string>
-    <string name="library.search.field.chapters">Peatükid</string>
-    <string name="library.search.field.genres">Žanrid</string>
-    <string name="library.search.field.narrators">Lugejad</string>
-    <string name="library.search.field.series">Sarjad</string>
-    <string name="library.search.field.titles">Pealkirjad</string>
     <string name="library.search.hint">Otsi oma raamatukogust</string>
     <string name="library.search.match.chapter">Peatükk · %s</string>
     <string name="library.search.match.genre">Žanr · %s</string>
@@ -305,7 +293,6 @@
     <string name="library.search.match.series">Sari · %s</string>
     <string name="library.search.no_results.folders_hint">Pole loendis? Võimalik, et selle kausta pole veel Voice\'i lisatud.</string>
     <string name="library.search.no_results.message">Otsing hõlmab pealkirju, autoreid, lugejaid, sarju, žanre ja peatükke.</string>
-    <string name="library.search.no_results.search_everything">Otsi kõikjalt</string>
     <string name="library.search.no_results.title">„%s“ kohta ei leitud ühtegi raamatut</string>
     <string name="library.search.recent.clear_all">Tühjenda kõik</string>
     <string name="library.search.recent.remove">Eemalda %s</string>

@@ -261,24 +261,13 @@
         <item quantity="other">已隱藏 %d 本書</item>
     </plurals>
     <string name="library.no_author">無作者</string>
-    <string name="library.search.browse.title">瀏覽</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="other">%d 本書</item>
     </plurals>
     <plurals name="library.search.browse.finished">
         <item quantity="other">已聽完 %d 本</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="other">正在聽 %d 本</item>
-    </plurals>
     <string name="library.search.clear">清除搜尋內容</string>
-    <string name="library.search.field.all">全部</string>
-    <string name="library.search.field.authors">作者</string>
-    <string name="library.search.field.chapters">章節</string>
-    <string name="library.search.field.genres">類型</string>
-    <string name="library.search.field.narrators">朗讀者</string>
-    <string name="library.search.field.series">系列</string>
-    <string name="library.search.field.titles">書名</string>
     <string name="library.search.hint">搜尋你的書庫</string>
     <string name="library.search.match.chapter">章節 · %s</string>
     <string name="library.search.match.genre">類型 · %s</string>
@@ -286,7 +275,6 @@
     <string name="library.search.match.series">系列 · %s</string>
     <string name="library.search.no_results.folders_hint">不在清單上？它的資料夾可能還沒加入 Voice。</string>
     <string name="library.search.no_results.message">搜尋範圍包括書名、作者、朗讀者、系列、類型和章節。</string>
-    <string name="library.search.no_results.search_everything">搜尋全部</string>
     <string name="library.search.no_results.title">沒有符合「%s」的書</string>
     <string name="library.search.recent.clear_all">全部清除</string>
     <string name="library.search.recent.remove">移除 %s</string>

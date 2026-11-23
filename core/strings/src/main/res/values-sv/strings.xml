@@ -277,7 +277,6 @@
         <item quantity="other">%d dolda böcker</item>
     </plurals>
     <string name="library.no_author">Ingen författare</string>
-    <string name="library.search.browse.title">Bläddra</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d bok</item>
         <item quantity="other">%d böcker</item>
@@ -286,18 +285,7 @@
         <item quantity="one">%d färdiglyssnad</item>
         <item quantity="other">%d färdiglyssnade</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d påbörjad</item>
-        <item quantity="other">%d påbörjade</item>
-    </plurals>
     <string name="library.search.clear">Rensa sökning</string>
-    <string name="library.search.field.all">Alla</string>
-    <string name="library.search.field.authors">Författare</string>
-    <string name="library.search.field.chapters">Kapitel</string>
-    <string name="library.search.field.genres">Genrer</string>
-    <string name="library.search.field.narrators">Uppläsare</string>
-    <string name="library.search.field.series">Serier</string>
-    <string name="library.search.field.titles">Titlar</string>
     <string name="library.search.hint">Sök i ditt bibliotek</string>
     <string name="library.search.match.chapter">Kapitel · %s</string>
     <string name="library.search.match.genre">Genre · %s</string>
@@ -305,7 +293,6 @@
     <string name="library.search.match.series">Serie · %s</string>
     <string name="library.search.no_results.folders_hint">Saknas boken i listan? Dess mapp kanske inte har lagts till i Voice ännu.</string>
     <string name="library.search.no_results.message">Sökningen omfattar titlar, författare, uppläsare, serier, genrer och kapitel.</string>
-    <string name="library.search.no_results.search_everything">Sök i allt</string>
     <string name="library.search.no_results.title">Inga böcker matchar ”%s”</string>
     <string name="library.search.recent.clear_all">Rensa alla</string>
     <string name="library.search.recent.remove">Ta bort %s</string>

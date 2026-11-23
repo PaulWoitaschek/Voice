@@ -1,6 +1,5 @@
 package voice.features.bookOverview.search
 
-import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.saveable.SaverScope
 import app.cash.molecule.RecompositionMode
@@ -85,71 +84,7 @@ class BookSearchViewModelTest {
     }
 
   @Test
-  fun `idle shows the recent searches and browses by author`() = runTest {
-    val viewModel = viewModel()
-
-    testState(viewModel) {
-      val state =
-        awaitState<BookSearchViewState.Idle> { it.browse != null && it.recentSearches.isNotEmpty() }
-      assertEquals(expected = listOf("hail mary", "rothfuss"), actual = state.recentSearches)
-      assertEquals(
-        expected =
-          BookSearchViewState.Browse(
-            categories =
-              listOf(BrowseCategory.Authors, BrowseCategory.Series, BrowseCategory.Genres),
-            selectedCategory = BrowseCategory.Authors,
-            entries =
-              listOf(
-                BookSearchViewState.BrowseEntry(
-                  name = "Patrick Rothfuss",
-                  bookCount = 1,
-                  inProgressCount = 1,
-                  finishedCount = 0,
-                ),
-                // grouped regardless of the spelling
-                BookSearchViewState.BrowseEntry(
-                  name = "Stephen King",
-                  bookCount = 2,
-                  inProgressCount = 2,
-                  finishedCount = 0,
-                ),
-              ),
-          ),
-        actual = state.browse,
-      )
-    }
-  }
-
-  @Test
-  fun `browse category click shows that category`() = runTest {
-    val viewModel = viewModel()
-
-    testState(viewModel) {
-      awaitState<BookSearchViewState.Idle> { it.browse != null }
-      viewModel.onBrowseCategoryClick(BrowseCategory.Genres)
-
-      val browse =
-        awaitState<BookSearchViewState.Idle> {
-            it.browse?.selectedCategory == BrowseCategory.Genres
-          }
-          .browse!!
-      assertEquals(
-        expected =
-          listOf(
-            BookSearchViewState.BrowseEntry(
-              name = "Horror",
-              bookCount = 2,
-              inProgressCount = 2,
-              finishedCount = 0,
-            ),
-          ),
-        actual = browse.entries,
-      )
-    }
-  }
-
-  @Test
-  fun `query shows the top result, the other results and the filters`() = runTest {
+  fun `query shows the top result and the other results`() = runTest {
     val viewModel = viewModel()
 
     testState(viewModel) {
@@ -161,76 +96,312 @@ class BookSearchViewModelTest {
         expected = listOf(carrie.id, kingkiller.id),
         actual = state.otherResults.map { it.id },
       )
-      assertEquals(
-        expected =
-          listOf(
-            BookSearchViewState.Filter(field = null, count = 3, selected = true),
-            BookSearchViewState.Filter(field = BookSearchField.Author, count = 2, selected = false),
-            BookSearchViewState.Filter(field = BookSearchField.Series, count = 1, selected = false),
-          ),
-        actual = state.filters,
-      )
       assertEquals(expected = false, actual = state.topResultPlaying)
     }
   }
 
-  @Test
-  fun `filter click narrows the results`() = runTest {
-    val viewModel = viewModel()
-
-    testState(viewModel) {
-      viewModel.onRecentSearchClick("king")
-      awaitState<BookSearchViewState.Results>()
-
-      viewModel.onFilterClick(BookSearchField.Series)
-
-      val state = awaitState<BookSearchViewState.Results> { it.topResult.id == kingkiller.id }
-      assertEquals(expected = emptyList(), actual = state.otherResults)
-      assertEquals(
-        expected = BookSearchField.Series,
-        actual = state.filters.single { it.selected }.field,
+  private val herbert =
+    listOf(
+        "Destination: Void",
+        "Dune",
+        "Hellstrom's Hive",
+        "The Dosadi Experiment",
+        "The Green Brain",
+        "The Santaroga Barrier",
+        "Whipping Star",
       )
+      .map { book(name = it, author = "Frank Herbert") }
+  private val expanse =
+    listOf("Leviathan Wakes", "Caliban's War", "Abaddon's Gate", "Cibola Burn").mapIndexed {
+      index,
+      name ->
+      book(name = name, author = "James S. A. Corey", series = "The Expanse", part = "${index + 1}")
+    }
+
+  @Test
+  fun `searching herbert shows the first result, then Frank Herbert with 7 books, then the books`() =
+    runTest {
+      val state = results("herbert", herbert + expanse)
+
+      assertEquals(expected = herbert.first().id, actual = state.topResult.id)
+      assertEquals(expected = listOf(author("Frank Herbert", bookCount = 7)), actual = state.rows)
+      assertEquals(
+        expected = herbert.drop(1).map { it.id },
+        actual = state.otherResults.map { it.id },
+      )
+    }
+
+  @Test
+  fun `tapping the row Frank Herbert opens the author screen and puts herbert into the recent searches`() =
+    runTest {
+      val viewModel = viewModel(herbert)
+
+      testState(viewModel) {
+        viewModel.query.setTextAndPlaceCursorAtEnd("herbert")
+        viewModel.onGroupClick(awaitState<BookSearchViewState.Results>().groups.single())
+      }
+
+      verify { navigator.goTo(Destination.Author("Frank Herbert")) }
+      coVerify { recentBookSearchRepo.add("herbert") }
+    }
+
+  @Test
+  fun `going back from the author screen shows herbert and its results`() = runTest {
+    val viewModel = viewModel(herbert)
+    lateinit var results: BookSearchViewState.Results
+    testState(viewModel) {
+      viewModel.query.setTextAndPlaceCursorAtEnd("herbert")
+      results = awaitState<BookSearchViewState.Results>()
+      viewModel.onGroupClick(results.groups.single())
+    }
+    val saved = with(viewModel.saver) { SaverScope { true }.save(viewModel) }!!
+
+    // navigation disposes the search while the author screen is open
+    val restored = viewModel(herbert)
+    restored.saver.restore(saved)
+    testState(restored) {
+      assertEquals(expected = results, actual = awaitItem())
+      assertEquals(expected = "herbert", actual = restored.query.text.toString())
     }
   }
 
   @Test
-  fun `filters are hidden when none of them narrows the results`() = runTest {
-    coEvery { search.search("horror") } returns
+  fun `searching expanse shows the first result, then The Expanse with 4 books, then the books`() =
+    runTest {
+      val state = results("expanse", herbert + expanse)
+
+      assertEquals(expected = expanse.first().id, actual = state.topResult.id)
+      assertEquals(expected = listOf(series("The Expanse", bookCount = 4)), actual = state.rows)
+      assertEquals(
+        expected = expanse.drop(1).map { it.id },
+        actual = state.otherResults.map { it.id },
+      )
+    }
+
+  @Test
+  fun `tapping the row The Expanse opens the series screen`() = runTest {
+    val viewModel = viewModel(expanse)
+
+    testState(viewModel) {
+      viewModel.query.setTextAndPlaceCursorAtEnd("expanse")
+      viewModel.onGroupClick(awaitState<BookSearchViewState.Results>().groups.single())
+    }
+
+    verify { navigator.goTo(Destination.Series("The Expanse")) }
+    coVerify { recentBookSearchRepo.add("expanse") }
+  }
+
+  @Test
+  fun `searching king shows the first result, then Stephen King, then Kingkiller Chronicle, then the books`() =
+    runTest {
+      val king = listOf("Carrie", "The Shining").map { book(name = it, author = "Stephen King") }
+      val kingkiller =
+        listOf("The Name of the Wind", "The Wise Man's Fear").mapIndexed { index, name ->
+          book(
+            name = name,
+            author = "Patrick Rothfuss",
+            series = "Kingkiller Chronicle",
+            part = "${index + 1}",
+          )
+        }
+
+      val state = results("king", kingkiller + king)
+
+      assertEquals(expected = king.first().id, actual = state.topResult.id)
+      assertEquals(
+        expected =
+          listOf(
+            author("Stephen King", bookCount = 2),
+            series("Kingkiller Chronicle", bookCount = 2),
+          ),
+        actual = state.rows,
+      )
+      assertEquals(
+        expected = (king.drop(1) + kingkiller).map { it.id },
+        actual = state.otherResults.map { it.id },
+      )
+    }
+
+  @Test
+  fun `searching herbert with one book by Frank Herbert shows the book and no row`() = runTest {
+    val state = results("herbert", herbert.take(1) + expanse)
+
+    assertEquals(expected = herbert.first().id, actual = state.topResult.id)
+    assertEquals(expected = emptyList(), actual = state.groups)
+    assertEquals(expected = emptyList(), actual = state.otherResults)
+  }
+
+  @Test
+  fun `searching the series of one book shows the book and no row`() = runTest {
+    val state = results("expanse", herbert + expanse.take(1))
+
+    assertEquals(expected = expanse.first().id, actual = state.topResult.id)
+    assertEquals(expected = emptyList(), actual = state.groups)
+    assertEquals(expected = emptyList(), actual = state.otherResults)
+  }
+
+  @Test
+  fun `searching herbert dune shows Dune and no row`() = runTest {
+    val state = results("herbert dune", herbert)
+
+    assertEquals(expected = "Dune", actual = state.topResult.title.text)
+    assertEquals(expected = emptyList(), actual = state.groups)
+    assertEquals(expected = emptyList(), actual = state.otherResults)
+  }
+
+  @Test
+  fun `searching herbart shows the first result, then Frank Herbert, then the books`() = runTest {
+    val state = results("herbart", herbert + expanse)
+
+    assertEquals(expected = herbert.first().id, actual = state.topResult.id)
+    assertEquals(expected = listOf(author("Frank Herbert", bookCount = 7)), actual = state.rows)
+    assertEquals(
+      expected = herbert.drop(1).map { it.id },
+      actual = state.otherResults.map { it.id },
+    )
+  }
+
+  @Test
+  fun `searching s with 5 authors whose names start with s shows the first result, 3 author rows, then the books`() =
+    runTest {
+      val bookCounts =
+        mapOf("Sam Hale" to 2, "Sara Lund" to 4, "Sid Moor" to 3, "Sol Park" to 5, "Sue Finch" to 2)
+      val books = bookCounts.flatMap { (author, count) ->
+        List(count) { index -> book(name = "Book $index", author = author) }
+      }
+
+      val state = results("s", books)
+
+      assertEquals(
+        expected =
+          listOf(
+            author("Sol Park", bookCount = 5),
+            author("Sara Lund", bookCount = 4),
+            author("Sid Moor", bookCount = 3),
+          ),
+        actual = state.rows,
+      )
+      assertEquals(expected = books.size - 1, actual = state.otherResults.size)
+    }
+
+  @Test
+  fun `searching an author with 2 books, one hidden, shows a row that says 2 books`() = runTest {
+    val books =
       listOf(
-        shining.result(BookSearchField.Genre),
-        carrie.result(BookSearchField.Genre),
+        book(name = "Carrie", author = "Stephen King"),
+        book(name = "The Shining", author = "Stephen King", hidden = true),
       )
-    val viewModel = viewModel()
 
-    testState(viewModel) {
-      viewModel.onRecentSearchClick("horror")
+    val state = results("stephen king", books)
 
-      assertEquals(
-        expected = emptyList(),
-        actual = awaitState<BookSearchViewState.Results>().filters,
-      )
-    }
+    assertEquals(expected = listOf(author("Stephen King", bookCount = 2)), actual = state.rows)
+    assertEquals(expected = false, actual = state.topResult.hidden)
+    assertEquals(expected = listOf(true), actual = state.otherResults.map { it.hidden })
   }
 
   @Test
-  fun `clearing the query resets the filter`() = runTest {
+  fun `results that match in titles and in chapters show the books and no chips`() = runTest {
+    coEvery { search.search("league") } returns
+      listOf(
+        shining.result(BookSearchField.Title),
+        carrie.chapterResult("The Red-Headed League", listOf(15..20)),
+        kingkiller.chapterResult("The League of Five", listOf(4..9)),
+      )
     val viewModel = viewModel()
 
     testState(viewModel) {
-      viewModel.onRecentSearchClick("king")
-      awaitState<BookSearchViewState.Results>()
-      viewModel.onFilterClick(BookSearchField.Series)
-      awaitState<BookSearchViewState.Results> { it.topResult.id == kingkiller.id }
-
-      viewModel.query.clearText()
-      awaitState<BookSearchViewState.Idle>()
-      viewModel.query.setTextAndPlaceCursorAtEnd("king")
+      viewModel.onRecentSearchClick("league")
 
       val state = awaitState<BookSearchViewState.Results>()
-      assertEquals(expected = null, actual = state.filters.single { it.selected }.field)
       assertEquals(expected = shining.id, actual = state.topResult.id)
+      assertEquals(expected = emptyList(), actual = state.groups)
+      assertEquals(
+        expected = listOf(carrie.id, kingkiller.id),
+        actual = state.otherResults.map { it.id },
+      )
     }
   }
+
+  @Test
+  fun `no book matches shows No books match without Search everything`() = runTest {
+    val viewModel = viewModel()
+
+    testState(viewModel) {
+      viewModel.onRecentSearchClick("dragonlance")
+
+      assertEquals(
+        expected = BookSearchViewState.NoResults(query = "dragonlance"),
+        actual = awaitState<BookSearchViewState.NoResults>(),
+      )
+    }
+  }
+
+  @Test
+  fun `opening search with recent searches shows only Recent`() = runTest {
+    testState(viewModel()) {
+      assertEquals(
+        expected = BookSearchViewState.Idle(recentSearches = listOf("hail mary", "rothfuss")),
+        actual = awaitState<BookSearchViewState.Idle> { it.recentSearches.isNotEmpty() },
+      )
+    }
+  }
+
+  @Test
+  fun `opening search in kiosk mode shows a recent search`() = runTest {
+    testState(viewModel(kioskMode = true)) {
+      assertEquals(
+        expected = BookSearchViewState.Idle(recentSearches = listOf("science fiction")),
+        actual = awaitItem(),
+      )
+    }
+  }
+
+  @Test
+  fun `4 rows match, the 3 best matches show with the authors first`() = runTest {
+    val books =
+      mapOf("Samuel Hale" to 3, "Samantha Lund" to 3, "Sammy Moor" to 4, "Sam" to 2).flatMap {
+        (author, count) ->
+        List(count) { index -> book(name = "Book $index", author = author) }
+      } +
+        List(2) { index ->
+          book(name = "Tale $index", author = "Ann Lee", series = "Sam", part = "$index")
+        }
+
+    val state = results("sam", books)
+
+    assertEquals(
+      expected =
+        listOf(
+          author("Sam", bookCount = 2),
+          author("Sammy Moor", bookCount = 4),
+          series("Sam", bookCount = 2),
+        ),
+      actual = state.rows,
+    )
+  }
+
+  @Test
+  fun `books with a placeholder for the author show no row`() = runTest {
+    val books = List(2) { index -> book(name = "Book $index", author = "Unknown") }
+
+    val state = results("unknown", books)
+
+    assertEquals(expected = emptyList(), actual = state.groups)
+    assertEquals(expected = 1, actual = state.otherResults.size)
+  }
+
+  @Test
+  fun `a row counts the books with another spelling of the author and shows the most common one`() =
+    runTest {
+      val books =
+        listOf("J.R.R. Tolkien", "J.R.R. Tolkien", "J. R. R. Tolkien").mapIndexed { index, author ->
+          book(name = "Book $index", author = author)
+        }
+
+      val state = results("tolkien", books)
+
+      assertEquals(expected = listOf(author("J.R.R. Tolkien", bookCount = 3)), actual = state.rows)
+    }
 
   @Test
   fun `the playing book shows its live progress`() = runTest {
@@ -286,8 +457,6 @@ class BookSearchViewModelTest {
     testState(viewModel) {
       viewModel.onRecentSearchClick("king")
       awaitState<BookSearchViewState.Results>()
-      viewModel.onFilterClick(BookSearchField.Series)
-      awaitState<BookSearchViewState.Results> { it.topResult.id == kingkiller.id }
     }
     val saved = with(viewModel.saver) { SaverScope { true }.save(viewModel) }!!
 
@@ -298,52 +467,8 @@ class BookSearchViewModelTest {
       val state = awaitItem()
       assertEquals(expected = "king", actual = restored.query.text.toString())
       assertIs<BookSearchViewState.Results>(state)
-      assertEquals(expected = kingkiller.id, actual = state.topResult.id)
-    }
-  }
-
-  @Test
-  fun `query without results shows no results`() = runTest {
-    val viewModel = viewModel()
-
-    testState(viewModel) {
-      viewModel.onRecentSearchClick("dragonlance")
-
-      assertEquals(
-        expected = BookSearchViewState.NoResults(query = "dragonlance", filtered = false),
-        actual = awaitState<BookSearchViewState.NoResults>(),
-      )
-    }
-  }
-
-  @Test
-  fun `browse entry click searches within that category`() = runTest {
-    coEvery { search.search("Horror") } returns
-      listOf(
-        shining.result(BookSearchField.Genre),
-        kingkiller.result(BookSearchField.Title),
-      )
-    val viewModel = viewModel()
-
-    testState(viewModel) {
-      viewModel.onBrowseEntryClick(BrowseCategory.Genres, "Horror")
-
-      val state = awaitState<BookSearchViewState.Results>()
-      assertEquals(expected = "Horror", actual = viewModel.query.text.toString())
       assertEquals(expected = shining.id, actual = state.topResult.id)
-      assertEquals(expected = emptyList(), actual = state.otherResults)
-      coVerify { recentBookSearchRepo.add("Horror") }
     }
-  }
-
-  @Test
-  fun `browse author click opens the author`() = runTest {
-    val viewModel = viewModel()
-
-    viewModel.onBrowseEntryClick(BrowseCategory.Authors, "Stephen King")
-
-    verify { navigator.goTo(Destination.Author("Stephen King")) }
-    assertEquals(expected = "", actual = viewModel.query.text.toString())
   }
 
   @Test
@@ -405,10 +530,7 @@ class BookSearchViewModelTest {
     coEvery { search.search("kingkiller wind") } returns
       listOf(
         kingkiller.chapterResult("The Wind", listOf(4..7)).let { result ->
-          result.copy(
-            matches = result.matches + (BookSearchField.Series to listOf(0..9)),
-            fieldsMatchingAllWords = emptySet(),
-          )
+          result.copy(matches = result.matches + (BookSearchField.Series to listOf(0..9)))
         },
       )
     val viewModel = viewModel()
@@ -422,40 +544,6 @@ class BookSearchViewModelTest {
       )
     }
   }
-
-  @Test
-  fun `results that match in titles and in chapters show a Chapters chip with its count`() =
-    runTest {
-      coEvery { search.search("league") } returns
-        listOf(
-          shining.result(BookSearchField.Title),
-          carrie.chapterResult("The Red-Headed League", listOf(15..20)),
-          kingkiller.chapterResult("The League of Five", listOf(4..9)),
-        )
-      val viewModel = viewModel()
-
-      testState(viewModel) {
-        viewModel.onRecentSearchClick("league")
-
-        assertEquals(
-          expected =
-            listOf(
-              BookSearchViewState.Filter(field = null, count = 3, selected = true),
-              BookSearchViewState.Filter(
-                field = BookSearchField.Title,
-                count = 1,
-                selected = false,
-              ),
-              BookSearchViewState.Filter(
-                field = BookSearchField.Chapters,
-                count = 2,
-                selected = false,
-              ),
-            ),
-          actual = awaitState<BookSearchViewState.Results>().filters,
-        )
-      }
-    }
 
   @Test
   fun `tapping a book found through a chapter opens the book and the place stays`() = runTest {
@@ -513,19 +601,44 @@ class BookSearchViewModelTest {
     }
   }
 
-  private fun viewModel(experimentalPlaybackPersistence: Boolean = false): BookSearchViewModel {
+  private fun viewModel(
+    experimentalPlaybackPersistence: Boolean = false,
+    kioskMode: Boolean = false,
+  ): BookSearchViewModel {
+    return viewModel(
+      repo = repo(listOf(shining, carrie, kingkiller)),
+      search = search,
+      experimentalPlaybackPersistence = experimentalPlaybackPersistence,
+      kioskMode = kioskMode,
+    )
+  }
+
+  /** Searches the books for real. */
+  private fun viewModel(books: List<Book>): BookSearchViewModel {
+    val repo = repo(books)
+    return viewModel(repo = repo, search = BookSearch(repo, dispatcherProvider))
+  }
+
+  private fun repo(books: List<Book>): BookRepository = mockk {
+    every { flow() } returns MutableStateFlow(books)
+    coEvery { all() } returns books
+  }
+
+  private fun viewModel(
+    repo: BookRepository,
+    search: BookSearch,
+    experimentalPlaybackPersistence: Boolean = false,
+    kioskMode: Boolean = false,
+  ): BookSearchViewModel {
     return BookSearchViewModel(
-      repo =
-        mockk<BookRepository> {
-          every { flow() } returns MutableStateFlow(listOf(shining, carrie, kingkiller))
-        },
+      repo = repo,
       search = search,
       recentBookSearchRepo = recentBookSearchRepo,
       navigator = navigator,
       playerController = playerController,
       playStateManager = PlayStateManager(),
       currentBookStore = CurrentBookStore(currentBookStore),
-      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
+      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(kioskMode)),
       experimentalPlaybackPersistenceFeatureFlag =
         ExperimentalPlaybackPersistenceFeatureFlag(
           MemoryFeatureFlag(experimentalPlaybackPersistence),
@@ -543,6 +656,19 @@ class BookSearchViewModelTest {
     )
   }
 
+  private suspend fun TestScope.results(
+    query: String,
+    books: List<Book>,
+  ): BookSearchViewState.Results {
+    val viewModel = viewModel(books)
+    lateinit var results: BookSearchViewState.Results
+    testState(viewModel) {
+      viewModel.query.setTextAndPlaceCursorAtEnd(query)
+      results = awaitState<BookSearchViewState.Results>()
+    }
+    return results
+  }
+
   private suspend fun TestScope.testState(
     viewModel: BookSearchViewModel,
     validate: suspend ReceiveTurbine<BookSearchViewState>.() -> Unit,
@@ -555,11 +681,30 @@ class BookSearchViewModelTest {
   }
 }
 
-private fun Book.result(vararg fieldsMatchingAllWords: BookSearchField): BookSearchResult {
+private data class Row(
+  val kind: SearchGroupViewState.Kind,
+  val name: String,
+  val bookCount: Int,
+)
+
+private fun author(
+  name: String,
+  bookCount: Int,
+) = Row(SearchGroupViewState.Kind.Author, name, bookCount)
+
+private fun series(
+  name: String,
+  bookCount: Int,
+) = Row(SearchGroupViewState.Kind.Series, name, bookCount)
+
+private val BookSearchViewState.Results.rows: List<Row>
+  get() = groups.map { Row(it.kind, it.name, it.bookCount) }
+
+private fun Book.result(vararg matches: BookSearchField): BookSearchResult {
   return BookSearchResult(
     book = this,
-    matches = fieldsMatchingAllWords.associateWith { emptyList() },
-    fieldsMatchingAllWords = fieldsMatchingAllWords.toSet(),
+    matches = matches.associateWith { emptyList() },
+    nameScores = emptyMap(),
     score = 0,
   )
 }
@@ -571,7 +716,7 @@ private fun Book.chapterResult(
   return BookSearchResult(
     book = this,
     matches = mapOf(BookSearchField.Chapters to highlights),
-    fieldsMatchingAllWords = setOf(BookSearchField.Chapters),
+    nameScores = emptyMap(),
     score = 0,
     chapter = chapter,
   )

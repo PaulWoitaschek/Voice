@@ -309,7 +309,6 @@
         <item quantity="other">%d skrytých knih</item>
     </plurals>
     <string name="library.no_author">Bez autora</string>
-    <string name="library.search.browse.title">Procházet</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d kniha</item>
         <item quantity="few">%d knihy</item>
@@ -322,20 +321,7 @@
         <item quantity="many">%d dokončených</item>
         <item quantity="other">%d dokončených</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d rozposlouchaná</item>
-        <item quantity="few">%d rozposlouchané</item>
-        <item quantity="many">%d rozposlouchaných</item>
-        <item quantity="other">%d rozposlouchaných</item>
-    </plurals>
     <string name="library.search.clear">Vymazat hledání</string>
-    <string name="library.search.field.all">Vše</string>
-    <string name="library.search.field.authors">Autoři</string>
-    <string name="library.search.field.chapters">Kapitoly</string>
-    <string name="library.search.field.genres">Žánry</string>
-    <string name="library.search.field.narrators">Interpreti</string>
-    <string name="library.search.field.series">Série</string>
-    <string name="library.search.field.titles">Názvy</string>
     <string name="library.search.hint">Prohledat knihovnu</string>
     <string name="library.search.match.chapter">Kapitola · %s</string>
     <string name="library.search.match.genre">Žánr · %s</string>
@@ -343,7 +329,6 @@
     <string name="library.search.match.series">Série · %s</string>
     <string name="library.search.no_results.folders_hint">Není v seznamu? Její složka možná ještě nebyla do Voice přidána.</string>
     <string name="library.search.no_results.message">Hledání prochází názvy, autory, interprety, série, žánry a kapitoly.</string>
-    <string name="library.search.no_results.search_everything">Hledat všude</string>
     <string name="library.search.no_results.title">Žádná kniha neodpovídá „%s“</string>
     <string name="library.search.recent.clear_all">Vymazat vše</string>
     <string name="library.search.recent.remove">Odstranit %s</string>

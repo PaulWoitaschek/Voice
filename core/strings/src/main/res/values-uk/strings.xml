@@ -309,7 +309,6 @@
         <item quantity="other">%d прихованих книг</item>
     </plurals>
     <string name="library.no_author">Без автора</string>
-    <string name="library.search.browse.title">Огляд</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d книга</item>
         <item quantity="few">%d книги</item>
@@ -322,20 +321,7 @@
         <item quantity="many">%d завершених</item>
         <item quantity="other">%d завершених</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="one">%d в процесі</item>
-        <item quantity="few">%d в процесі</item>
-        <item quantity="many">%d у процесі</item>
-        <item quantity="other">%d у процесі</item>
-    </plurals>
     <string name="library.search.clear">Очистити пошук</string>
-    <string name="library.search.field.all">Усі</string>
-    <string name="library.search.field.authors">Автори</string>
-    <string name="library.search.field.chapters">Розділи</string>
-    <string name="library.search.field.genres">Жанри</string>
-    <string name="library.search.field.narrators">Читці</string>
-    <string name="library.search.field.series">Серії</string>
-    <string name="library.search.field.titles">Назви</string>
     <string name="library.search.hint">Пошук у бібліотеці</string>
     <string name="library.search.match.chapter">Розділ · %s</string>
     <string name="library.search.match.genre">Жанр · %s</string>
@@ -343,7 +329,6 @@
     <string name="library.search.match.series">Серія · %s</string>
     <string name="library.search.no_results.folders_hint">Книги немає у списку? Можливо, її папку ще не додано до Voice.</string>
     <string name="library.search.no_results.message">Пошук охоплює назви, авторів, читців, серії, жанри та розділи.</string>
-    <string name="library.search.no_results.search_everything">Шукати всюди</string>
     <string name="library.search.no_results.title">Немає книг за запитом «%s»</string>
     <string name="library.search.recent.clear_all">Очистити все</string>
     <string name="library.search.recent.remove">Видалити %s</string>

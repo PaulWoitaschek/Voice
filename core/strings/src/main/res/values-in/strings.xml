@@ -261,24 +261,13 @@
         <item quantity="other">%d buku tersembunyi</item>
     </plurals>
     <string name="library.no_author">Tanpa penulis</string>
-    <string name="library.search.browse.title">Jelajahi</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="other">%d buku</item>
     </plurals>
     <plurals name="library.search.browse.finished">
         <item quantity="other">%d selesai</item>
     </plurals>
-    <plurals name="library.search.browse.in_progress">
-        <item quantity="other">%d sedang didengarkan</item>
-    </plurals>
     <string name="library.search.clear">Hapus pencarian</string>
-    <string name="library.search.field.all">Semua</string>
-    <string name="library.search.field.authors">Penulis</string>
-    <string name="library.search.field.chapters">Bab</string>
-    <string name="library.search.field.genres">Genre</string>
-    <string name="library.search.field.narrators">Narator</string>
-    <string name="library.search.field.series">Seri</string>
-    <string name="library.search.field.titles">Judul</string>
     <string name="library.search.hint">Cari di pustaka Anda</string>
     <string name="library.search.match.chapter">Bab · %s</string>
     <string name="library.search.match.genre">Genre · %s</string>
@@ -286,7 +275,6 @@
     <string name="library.search.match.series">Seri · %s</string>
     <string name="library.search.no_results.folders_hint">Tidak ada di daftar? Foldernya mungkin belum ditambahkan ke Voice.</string>
     <string name="library.search.no_results.message">Pencarian mencakup judul, penulis, narator, seri, genre, dan bab.</string>
-    <string name="library.search.no_results.search_everything">Cari di semua</string>
     <string name="library.search.no_results.title">Tidak ada buku yang cocok dengan “%s”</string>
     <string name="library.search.recent.clear_all">Hapus semua</string>
     <string name="library.search.recent.remove">Hapus %s</string>
