@@ -491,6 +491,13 @@
     <string name="playback.jump_back.chapter">Înapoi la cap. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Omitere liniște</string>
     <string name="playback.option.volume_boost">Amplificare volum</string>
+    <string name="playback.seek_bar">Poziție</string>
+    <string name="playback.seek_bar.position">%1$s din %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d minut din %2$s</item>
+        <item quantity="few">%1$d minute din %2$s</item>
+        <item quantity="other">%1$d minute din %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Mai încet</string>
     <string name="playback.speed.increase">Mai repede</string>
     <string name="playback.speed.title">Viteză de redare</string>

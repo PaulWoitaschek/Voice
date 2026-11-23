@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">بازگشت به فصل %1$d · %2$s</string>
     <string name="playback.option.skip_silence">رد کردن بخش های حاوی سکوت</string>
     <string name="playback.option.volume_boost">افزایش ولوم صدا</string>
+    <string name="playback.seek_bar">موقعیت</string>
+    <string name="playback.seek_bar.position">%1$s از %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d دقیقه از %2$s</item>
+        <item quantity="other">%1$d دقیقه از %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">آهسته‌تر</string>
     <string name="playback.speed.increase">سریع‌تر</string>
     <string name="playback.speed.title">سرعت پخش</string>

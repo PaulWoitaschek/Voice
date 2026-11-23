@@ -520,6 +520,14 @@
     <string name="playback.jump_back.chapter">Вернуться к гл. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Пропускать тишину</string>
     <string name="playback.option.volume_boost">Усиление звука</string>
+    <string name="playback.seek_bar">Позиция</string>
+    <string name="playback.seek_bar.position">%1$s из %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d минута из %2$s</item>
+        <item quantity="few">%1$d минуты из %2$s</item>
+        <item quantity="many">%1$d минут из %2$s</item>
+        <item quantity="other">%1$d минут из %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Медленнее</string>
     <string name="playback.speed.increase">Быстрее</string>
     <string name="playback.speed.title">Скорость воспроизведения</string>

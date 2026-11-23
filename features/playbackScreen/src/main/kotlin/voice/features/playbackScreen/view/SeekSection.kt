@@ -57,11 +57,14 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.setProgress
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import kotlin.math.PI
@@ -71,6 +74,8 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import voice.core.strings.R as StringsR
 import voice.core.ui.ProgressWave
@@ -79,6 +84,7 @@ import voice.core.ui.formatTime
 import voice.features.playbackScreen.BookPlayViewState
 
 private val HorizontalInset = 12.dp
+private val AccessibilitySeekStep = 30.seconds
 
 /**
  * Seek bar for the current chapter: a wave that ripples while audio plays and flattens when paused
@@ -118,6 +124,18 @@ internal fun SeekSection(
   val shownTime = duration * shownFraction.toDouble()
   val dragging = dragFraction != null
   var showRemaining by rememberSaveable { mutableStateOf(true) }
+  val shownTimeText = formatTime(shownTime.inWholeMilliseconds, duration.inWholeMilliseconds)
+  val durationText = formatTime(duration.inWholeMilliseconds, duration.inWholeMilliseconds)
+  var seekedTime by remember(duration, playing) { mutableStateOf<Duration?>(null) }
+  // TalkBack reads out each change of the bar, so while it plays it changes once a minute.
+  // After a seek it says the exact time, else a swipe in the same minute gets no answer.
+  val spokenTime =
+    when {
+      !playing || dragging -> shownTime
+      seekedTime?.inWholeMinutes == shownTime.inWholeMinutes -> seekedTime
+      else -> null
+    }
+  val spokenMinutes = shownTime.inWholeMinutes
 
   Column(modifier = modifier) {
     WavySeekBar(
@@ -125,12 +143,37 @@ internal fun SeekSection(
       wavy = playing && !dragging,
       dragging = dragging,
       clock = clock,
-      bubbleText = formatTime(shownTime.inWholeMilliseconds, duration.inWholeMilliseconds),
+      bubbleText = shownTimeText,
+      accessibilityFraction =
+        if (spokenTime != null) {
+          (spokenTime / duration).toFloat()
+        } else {
+          // above 0, as TalkBack only offers a swipe down above the start
+          (spokenMinutes.minutes / duration).toFloat().coerceAtLeast(Float.MIN_VALUE)
+        },
+      stateDescription =
+        if (spokenTime != null) {
+          stringResource(
+            StringsR.string.playback_seek_bar_position,
+            formatTime(spokenTime.inWholeMilliseconds, duration.inWholeMilliseconds),
+            durationText,
+          )
+        } else {
+          pluralStringResource(
+            StringsR.plurals.playback_seek_bar_position_minutes,
+            spokenMinutes.toInt(),
+            spokenMinutes.toInt(),
+            durationText,
+          )
+        },
+      accessibilitySteps = ((duration / AccessibilitySeekStep).roundToInt() - 1).coerceAtLeast(0),
       onDrag = { dragFraction = it },
       onSeek = { fraction ->
         dragFraction = null
         pendingFraction = fraction
-        onSeek(duration * fraction.toDouble())
+        val target = duration * fraction.toDouble()
+        seekedTime = target
+        onSeek(target)
       },
       modifier = Modifier.fillMaxWidth(),
     )
@@ -150,7 +193,7 @@ internal fun SeekSection(
           {
             Text(
               modifier = Modifier.testTag("elapsed"),
-              text = formatTime(shownTime.inWholeMilliseconds, duration.inWholeMilliseconds),
+              text = shownTimeText,
               style =
                 MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),
               color = elapsedColor,
@@ -182,7 +225,7 @@ internal fun SeekSection(
                       duration.inWholeMilliseconds,
                     )
                 } else {
-                  formatTime(duration.inWholeMilliseconds, duration.inWholeMilliseconds)
+                  durationText
                 },
               style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
               color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -244,6 +287,9 @@ private fun WavySeekBar(
   dragging: Boolean,
   clock: () -> Float,
   bubbleText: String,
+  accessibilityFraction: Float,
+  stateDescription: String,
+  accessibilitySteps: Int,
   onDrag: (Float) -> Unit,
   onSeek: (Float) -> Unit,
   modifier: Modifier = Modifier,
@@ -277,6 +323,7 @@ private fun WavySeekBar(
   val currentOnDrag by rememberUpdatedState(onDrag)
   val currentOnSeek by rememberUpdatedState(onSeek)
   var lastDragFraction by remember { mutableFloatStateOf(0F) }
+  val name = stringResource(StringsR.string.playback_seek_bar)
 
   Layout(
     modifier = modifier,
@@ -286,9 +333,17 @@ private fun WavySeekBar(
           Modifier.fillMaxWidth()
             .height(48.dp)
             .semantics {
-              progressBarRangeInfo = ProgressBarRangeInfo(current = fraction, range = 0F..1F)
+              contentDescription = name
+              this.stateDescription = stateDescription
+              progressBarRangeInfo =
+                ProgressBarRangeInfo(
+                  current = accessibilityFraction,
+                  range = 0F..1F,
+                  steps = accessibilitySteps,
+                )
+              // a step moves from the real position, not from the whole minute
               setProgress { target ->
-                currentOnSeek(target.coerceIn(0F, 1F))
+                currentOnSeek((currentFraction + target - accessibilityFraction).coerceIn(0F, 1F))
                 true
               }
             }

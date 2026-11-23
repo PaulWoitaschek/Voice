@@ -491,6 +491,13 @@
     <string name="playback.jump_back.chapter">Retour au chap. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Sauter les silences</string>
     <string name="playback.option.volume_boost">Augmentation du volume</string>
+    <string name="playback.seek_bar">Position</string>
+    <string name="playback.seek_bar.position">%1$s sur %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d minute sur %2$s</item>
+        <item quantity="many">%1$d minutes sur %2$s</item>
+        <item quantity="other">%1$d minutes sur %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Plus lent</string>
     <string name="playback.speed.increase">Plus rapide</string>
     <string name="playback.speed.title">Vitesse de lecture</string>

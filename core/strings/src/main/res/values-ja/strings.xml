@@ -433,6 +433,11 @@
     <string name="playback.jump_back.chapter">第%1$d章 · %2$s に戻る</string>
     <string name="playback.option.skip_silence">無音をスキップ</string>
     <string name="playback.option.volume_boost">音量ブースト</string>
+    <string name="playback.seek_bar">再生位置</string>
+    <string name="playback.seek_bar.position">%2$s 中 %1$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="other">%2$s 中 %1$d 分</item>
+    </plurals>
     <string name="playback.speed.decrease">遅く</string>
     <string name="playback.speed.increase">速く</string>
     <string name="playback.speed.title">再生速度</string>

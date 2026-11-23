@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">Vissza ide: %1$d. fej. · %2$s</string>
     <string name="playback.option.skip_silence">Csend kihagyása</string>
     <string name="playback.option.volume_boost">Hangerőnövelés</string>
+    <string name="playback.seek_bar">Pozíció</string>
+    <string name="playback.seek_bar.position">%1$s, összesen %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d perc, összesen %2$s</item>
+        <item quantity="other">%1$d perc, összesen %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Lassabb</string>
     <string name="playback.speed.increase">Gyorsabb</string>
     <string name="playback.speed.title">Lejátszási sebesség</string>

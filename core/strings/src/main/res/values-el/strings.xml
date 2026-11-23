@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">Πίσω στο κεφ. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Παράλειψη σιωπής</string>
     <string name="playback.option.volume_boost">Ενίσχυση έντασης</string>
+    <string name="playback.seek_bar">Θέση</string>
+    <string name="playback.seek_bar.position">%1$s από %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d λεπτό από %2$s</item>
+        <item quantity="other">%1$d λεπτά από %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Πιο αργά</string>
     <string name="playback.speed.increase">Πιο γρήγορα</string>
     <string name="playback.speed.title">Ταχύτητα αναπαραγωγής</string>

@@ -33,6 +33,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import java.text.DecimalFormat
@@ -55,6 +58,8 @@ internal fun SpeedSheet(
 ) {
   val speedFormat = remember { DecimalFormat("0.0#") }
   val speed = dialogState.speed
+  val speedText = speedFormat.format(speed) + "×"
+  val title = stringResource(StringsR.string.playback_speed_title)
   ModalBottomSheet(
     onDismissRequest = onDismiss,
     sheetState =
@@ -69,13 +74,13 @@ internal fun SpeedSheet(
     ) {
       Text(
         modifier = Modifier.fillMaxWidth(),
-        text = stringResource(StringsR.string.playback_speed_title),
+        text = title,
         style = MaterialTheme.typography.headlineSmallEmphasized,
         textAlign = TextAlign.Center,
       )
       Spacer(Modifier.height(16.dp))
       RollingText(
-        text = speedFormat.format(speed) + "×",
+        text = speedText,
         style = MaterialTheme.typography.displayLargeEmphasized,
         color = MaterialTheme.colorScheme.primary,
       )
@@ -94,7 +99,12 @@ internal fun SpeedSheet(
         val sliderState = rememberSliderState(value = speed, trackRange = MIN_SPEED..MAX_SPEED)
         SideEffect { sliderState.value = speed }
         Slider(
-          modifier = Modifier.weight(1F).padding(horizontal = 12.dp),
+          modifier =
+            Modifier.weight(1F).padding(horizontal = 12.dp).semantics {
+              // TalkBack skips a content description that Compose moves to a child of the slider
+              text = AnnotatedString(title)
+              stateDescription = speedText
+            },
           state = sliderState,
           onValueChange = {
             val snapped = it.snapToStep()

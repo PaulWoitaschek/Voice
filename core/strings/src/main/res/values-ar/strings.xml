@@ -578,6 +578,16 @@
     <string name="playback.jump_back.chapter">العودة إلى الفصل %1$d · %2$s</string>
     <string name="playback.option.skip_silence">تخطي الصمت</string>
     <string name="playback.option.volume_boost">تعزيز الصوت</string>
+    <string name="playback.seek_bar">الموضع</string>
+    <string name="playback.seek_bar.position">%1$s من %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="zero">%1$d دقيقة من %2$s</item>
+        <item quantity="one">%1$d دقيقة من %2$s</item>
+        <item quantity="two">%1$d دقيقتان من %2$s</item>
+        <item quantity="few">%1$d دقائق من %2$s</item>
+        <item quantity="many">%1$d دقيقة من %2$s</item>
+        <item quantity="other">%1$d دقيقة من %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">أبطأ</string>
     <string name="playback.speed.increase">أسرع</string>
     <string name="playback.speed.title">سرعة التشغيل</string>

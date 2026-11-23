@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">Назад на погл. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Прескокни тишина</string>
     <string name="playback.option.volume_boost">Појачување на звук</string>
+    <string name="playback.seek_bar">Позиција</string>
+    <string name="playback.seek_bar.position">%1$s од %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d минута од %2$s</item>
+        <item quantity="other">%1$d минути од %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Побавно</string>
     <string name="playback.speed.increase">Побрзо</string>
     <string name="playback.speed.title">Брзина на репродукција</string>

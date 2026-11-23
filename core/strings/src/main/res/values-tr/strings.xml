@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">Böl. %1$d · %2$s konumuna dön</string>
     <string name="playback.option.skip_silence">Sessizliği geç</string>
     <string name="playback.option.volume_boost">Ses yükseltme</string>
+    <string name="playback.seek_bar">Konum</string>
+    <string name="playback.seek_bar.position">%1$s, toplam %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d dakika, toplam %2$s</item>
+        <item quantity="other">%1$d dakika, toplam %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Daha yavaş</string>
     <string name="playback.speed.increase">Daha hızlı</string>
     <string name="playback.speed.title">Oynatma hızı</string>

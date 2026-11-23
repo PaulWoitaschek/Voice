@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">அத். %1$d · %2$s-க்குத் திரும்பு</string>
     <string name="playback.option.skip_silence">மௌனத்தைத் தவிர்</string>
     <string name="playback.option.volume_boost">ஒலியளவு அதிகரிப்பு</string>
+    <string name="playback.seek_bar">நிலை</string>
+    <string name="playback.seek_bar.position">%2$s இல் %1$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%2$s இல் %1$d நிமிடம்</item>
+        <item quantity="other">%2$s இல் %1$d நிமிடங்கள்</item>
+    </plurals>
     <string name="playback.speed.decrease">மெதுவாக</string>
     <string name="playback.speed.increase">வேகமாக</string>
     <string name="playback.speed.title">இயக்க வேகம்</string>
