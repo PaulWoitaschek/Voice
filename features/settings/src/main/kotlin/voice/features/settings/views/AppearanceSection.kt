@@ -61,8 +61,8 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
@@ -355,12 +355,13 @@ private fun PaletteSwatch(
     modifier =
       Modifier.size(56.dp)
         .clip(CircleShape)
-        .semantics { contentDescription = label }
         .selectable(
           selected = selected,
           onClick = onClick,
           role = Role.RadioButton,
-        ),
+        )
+        // with semantics children, Compose moves the name to a made-up child node
+        .clearAndSetSemantics { contentDescription = label },
     contentAlignment = Alignment.Center,
   ) {
     Canvas(

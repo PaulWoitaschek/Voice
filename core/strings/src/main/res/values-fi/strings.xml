@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">Takaisin: luku %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Ohita hiljaisuus</string>
     <string name="playback.option.volume_boost">Äänenvoimakkuuden tehostus</string>
+    <string name="playback.seek_bar">Toistokohta</string>
+    <string name="playback.seek_bar.position">%1$s, kesto %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d minuutti, kesto %2$s</item>
+        <item quantity="other">%1$d minuuttia, kesto %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Hitaammin</string>
     <string name="playback.speed.increase">Nopeammin</string>
     <string name="playback.speed.title">Toiston nopeus</string>

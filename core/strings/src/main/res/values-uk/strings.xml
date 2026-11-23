@@ -520,6 +520,14 @@
     <string name="playback.jump_back.chapter">Повернутися до розд. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Пропускати тишу</string>
     <string name="playback.option.volume_boost">Збільшення гучності</string>
+    <string name="playback.seek_bar">Позиція</string>
+    <string name="playback.seek_bar.position">%1$s з %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d хвилина з %2$s</item>
+        <item quantity="few">%1$d хвилини з %2$s</item>
+        <item quantity="many">%1$d хвилин з %2$s</item>
+        <item quantity="other">%1$d хвилин з %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Повільніше</string>
     <string name="playback.speed.increase">Швидше</string>
     <string name="playback.speed.title">Швидкість відтворення</string>

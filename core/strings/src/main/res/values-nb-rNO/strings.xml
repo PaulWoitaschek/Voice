@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">Tilbake til kap. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Hopp over stillhet</string>
     <string name="playback.option.volume_boost">Lydstyrkeforsterkning</string>
+    <string name="playback.seek_bar">Posisjon</string>
+    <string name="playback.seek_bar.position">%1$s av %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d minutt av %2$s</item>
+        <item quantity="other">%1$d minutter av %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Saktere</string>
     <string name="playback.speed.increase">Raskere</string>
     <string name="playback.speed.title">Avspillingshastighet</string>

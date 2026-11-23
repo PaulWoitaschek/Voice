@@ -792,6 +792,15 @@
     <string name="playback.option.skip_silence">Skip Silence</string>
     <!-- Menu and dialog title for changing volume gain. -->
     <string name="playback.option.volume_boost">Volume boost</string>
+    <!-- Content description for the seek bar on the playback screen, TalkBack reads it before the position. -->
+    <string name="playback.seek_bar">Position</string>
+    <!-- What TalkBack reads for the seek bar on the playback screen: the time in the chapter and its length, e.g. "2:10 of 9:56". -->
+    <string name="playback.seek_bar.position">%1$s of %2$s</string>
+    <!-- What TalkBack reads for the seek bar while the book plays, so it changes only once a minute: the whole minutes played in the chapter and the chapter length, e.g. "5 minutes of 9:56". -->
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d minute of %2$s</item>
+        <item quantity="other">%1$d minutes of %2$s</item>
+    </plurals>
     <!-- Content description for lowering the playback speed by a small step. -->
     <string name="playback.speed.decrease">Slower</string>
     <!-- Content description for raising the playback speed by a small step. -->

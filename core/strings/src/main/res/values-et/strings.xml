@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">Tagasi: ptk %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Jäta vaikus vahele</string>
     <string name="playback.option.volume_boost">Helivõimendus</string>
+    <string name="playback.seek_bar">Asukoht</string>
+    <string name="playback.seek_bar.position">%1$s, kokku %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d minut, kokku %2$s</item>
+        <item quantity="other">%1$d minutit, kokku %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Aeglasemalt</string>
     <string name="playback.speed.increase">Kiiremini</string>
     <string name="playback.speed.title">Taasesituse kiirus</string>

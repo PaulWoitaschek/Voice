@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">Terug naar hfst. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Stilte overslaan</string>
     <string name="playback.option.volume_boost">Volumeversterking</string>
+    <string name="playback.seek_bar">Positie</string>
+    <string name="playback.seek_bar.position">%1$s van %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d minuut van %2$s</item>
+        <item quantity="other">%1$d minuten van %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Langzamer</string>
     <string name="playback.speed.increase">Sneller</string>
     <string name="playback.speed.title">Afspeelsnelheid</string>

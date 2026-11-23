@@ -433,6 +433,11 @@
     <string name="playback.jump_back.chapter">Kembali ke Bab %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Lewati keheningan</string>
     <string name="playback.option.volume_boost">Peningkatan volume</string>
+    <string name="playback.seek_bar">Posisi</string>
+    <string name="playback.seek_bar.position">%1$s dari %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="other">%1$d menit dari %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Lebih lambat</string>
     <string name="playback.speed.increase">Lebih cepat</string>
     <string name="playback.speed.title">Kecepatan pemutaran</string>

@@ -433,6 +433,11 @@
     <string name="playback.jump_back.chapter">返回第 %1$d 章 · %2$s</string>
     <string name="playback.option.skip_silence">跳过空白部分</string>
     <string name="playback.option.volume_boost">音量提升</string>
+    <string name="playback.seek_bar">播放位置</string>
+    <string name="playback.seek_bar.position">%1$s，共 %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="other">%1$d 分钟，共 %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">减速</string>
     <string name="playback.speed.increase">加速</string>
     <string name="playback.speed.title">播放速度</string>

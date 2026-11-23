@@ -34,6 +34,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlin.math.ceil
@@ -50,6 +54,8 @@ internal fun VolumeGainSheet(
   onDismiss: () -> Unit,
 ) {
   val fraction = (dialogState.gain.value / dialogState.maxGain.value).coerceIn(0F, 1F)
+  val title = stringResource(StringsR.string.playback_option_volume_boost)
+  val gainText = "+" + dialogState.valueFormatted
   ModalBottomSheet(
     onDismissRequest = onDismiss,
     sheetState =
@@ -64,13 +70,13 @@ internal fun VolumeGainSheet(
     ) {
       Text(
         modifier = Modifier.fillMaxWidth(),
-        text = stringResource(StringsR.string.playback_option_volume_boost),
+        text = title,
         style = MaterialTheme.typography.headlineSmallEmphasized,
         textAlign = TextAlign.Center,
       )
       Spacer(Modifier.height(16.dp))
       RollingText(
-        text = "+" + dialogState.valueFormatted,
+        text = gainText,
         style = MaterialTheme.typography.displayMediumEmphasized,
         color = MaterialTheme.colorScheme.primary,
       )
@@ -84,7 +90,12 @@ internal fun VolumeGainSheet(
         )
       SideEffect { sliderState.value = dialogState.gain.value }
       Slider(
-        modifier = Modifier.fillMaxWidth(),
+        modifier =
+          Modifier.fillMaxWidth().semantics {
+            // TalkBack skips a content description that Compose moves to a child of the slider
+            text = AnnotatedString(title)
+            stateDescription = gainText
+          },
         state = sliderState,
         onValueChange = {
           sliderState.value = it

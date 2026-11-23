@@ -491,6 +491,13 @@
     <string name="playback.jump_back.chapter">חזרה לפרק %1$d · %2$s</string>
     <string name="playback.option.skip_silence">דילוג על קטעים שקטים</string>
     <string name="playback.option.volume_boost">הגברת עוצמה</string>
+    <string name="playback.seek_bar">מיקום</string>
+    <string name="playback.seek_bar.position">%1$s מתוך %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d דקה מתוך %2$s</item>
+        <item quantity="two">%1$d דקות מתוך %2$s</item>
+        <item quantity="other">%1$d דקות מתוך %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">לאט יותר</string>
     <string name="playback.speed.increase">מהר יותר</string>
     <string name="playback.speed.title">מהירות השמעה</string>

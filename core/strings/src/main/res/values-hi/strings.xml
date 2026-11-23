@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">अध्याय %1$d · %2$s पर वापस जाएँ</string>
     <string name="playback.option.skip_silence">मौन भाग छोड़ें</string>
     <string name="playback.option.volume_boost">आवाज बढ़ाएँ</string>
+    <string name="playback.seek_bar">स्थान</string>
+    <string name="playback.seek_bar.position">%2$s में से %1$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%2$s में से %1$d मिनट</item>
+        <item quantity="other">%2$s में से %1$d मिनट</item>
+    </plurals>
     <string name="playback.speed.decrease">धीमा करें</string>
     <string name="playback.speed.increase">तेज़ करें</string>
     <string name="playback.speed.title">प्लेबैक की गति</string>

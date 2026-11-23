@@ -462,6 +462,12 @@
     <string name="playback.jump_back.chapter">Torra a cap. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Brinca su mudìmene</string>
     <string name="playback.option.volume_boost">Crèschida de volùmene</string>
+    <string name="playback.seek_bar">Positzione</string>
+    <string name="playback.seek_bar.position">%1$s de %2$s</string>
+    <plurals name="playback.seek_bar.position_minutes">
+        <item quantity="one">%1$d minutu de %2$s</item>
+        <item quantity="other">%1$d minutos de %2$s</item>
+    </plurals>
     <string name="playback.speed.decrease">Prus lentu</string>
     <string name="playback.speed.increase">Prus lestru</string>
     <string name="playback.speed.title">Lestresa de riprodutzione</string>
