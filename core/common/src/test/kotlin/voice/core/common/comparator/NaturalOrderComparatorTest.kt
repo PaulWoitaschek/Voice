@@ -106,7 +106,7 @@ class NaturalOrderComparatorTest {
   fun `the order has no circles`() {
     val comparator = NaturalOrderComparator.stringComparator
     val random = Random(42)
-    val chars = "aAbäÄ~_-. 019éz!"
+    val chars = "aAbäÄ~_-. 019２²٠éz!"
     val values =
       List(60) {
         String(CharArray(random.nextInt(1, 4)) { chars[random.nextInt(chars.length)] })

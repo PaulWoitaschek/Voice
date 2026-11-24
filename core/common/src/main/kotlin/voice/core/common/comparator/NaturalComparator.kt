@@ -137,7 +137,8 @@ internal object NaturalComparator : Comparator<String> {
     lhs: Char,
     rhs: Char,
   ): Int {
-    // A space can start a number, so it must sort next to the digits.
+    // Digits and spaces start a number run, so they must sort as one block against other
+    // characters.
     val collatorDiff = collator.compare(lhs.collationKey(), rhs.collationKey())
     if (collatorDiff != 0) {
       return collatorDiff
@@ -145,7 +146,8 @@ internal object NaturalComparator : Comparator<String> {
     return lhs.lowercaseChar() - rhs.lowercaseChar()
   }
 
-  private fun Char.collationKey(): String = if (this == ' ') "0" else toString()
+  private fun Char.collationKey(): String =
+    if (this == ' ' || isDecimalDigit(this)) " " else toString()
 
   private fun skipDigits(
     s: String,
