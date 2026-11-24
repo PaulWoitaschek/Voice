@@ -63,11 +63,9 @@ internal constructor(
       folders.stored.mapValues { (folderType, uris) ->
         uris
           .filter { it in folders.withAccess }
-          .map { uri ->
-            DocumentFileWithUri(
-              documentFile = uri.toDocumentFile(folderType),
-              uri = uri,
-            )
+          .mapNotNull { uri ->
+            val documentFile = uri.toDocumentFile(folderType) ?: return@mapNotNull null
+            DocumentFileWithUri(documentFile = documentFile, uri = uri)
           }
       }
     }
@@ -81,17 +79,23 @@ internal constructor(
     }
   }
 
-  private fun Uri.toDocumentFile(folderType: FolderType): CachedDocumentFile {
+  // some Samsung phones reject tree uris that look valid, see #4342
+  private fun Uri.toDocumentFile(folderType: FolderType): CachedDocumentFile? {
     val uri =
       when (folderType) {
         FolderType.SingleFile -> this
         FolderType.SingleFolder,
         FolderType.Root,
         FolderType.Author -> {
-          DocumentsContract.buildDocumentUriUsingTree(
-            this,
-            DocumentsContract.getTreeDocumentId(this),
-          )
+          val treeDocumentId =
+            try {
+              DocumentsContract.getTreeDocumentId(this)
+            } catch (_: IllegalArgumentException) {
+              // the message has the uri, which must not reach Crashlytics
+              Logger.nonFatal(IllegalArgumentException("Invalid tree uri of a $folderType folder"))
+              return null
+            }
+          DocumentsContract.buildDocumentUriUsingTree(this, treeDocumentId)
         }
       }
     return cachedDocumentFileFactory.create(uri)
