@@ -59,6 +59,7 @@ import voice.core.ui.bookText
 import voice.core.ui.drawConfetti
 import voice.core.ui.rememberConfettiState
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.rememberLetterCover
 import voice.features.bookOverview.overview.SupportCardViewState
 
 @Composable
@@ -195,7 +196,7 @@ private fun BookCard(
             modifier = Modifier.fillMaxSize().rotate(-4F).clip(CoverShape),
             model = rememberCoverThumbnailRequest(state.cover),
             placeholder = ColorPainter(colors.surfaceContainerHighest),
-            error = painterResource(id = UiR.drawable.album_art),
+            error = rememberLetterCover(state.name),
             contentScale = ContentScale.Crop,
             contentDescription = null,
           )

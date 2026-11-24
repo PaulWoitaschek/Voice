@@ -67,6 +67,9 @@ internal data class NowPlayingBook(
   val sleepTimerEnd: SleepTimerEnd?,
 )
 
+internal val NowPlayingBook.night: Boolean
+  get() = sleepTimerEnd != null && !finished
+
 /** When a running sleep timer stops playback, rounded to the minute as the widgets show minutes. */
 internal sealed interface SleepTimerEnd {
 

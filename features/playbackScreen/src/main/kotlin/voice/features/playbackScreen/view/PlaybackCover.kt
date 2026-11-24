@@ -54,6 +54,7 @@ import voice.core.data.BookId
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 import voice.core.ui.rememberFullSizeCoverRequest
+import voice.core.ui.rememberLetterCover
 import voice.core.ui.sharedCoverElementModifier
 
 private const val SWIPE_THRESHOLD = 0.28F
@@ -62,6 +63,7 @@ private const val SWIPE_THRESHOLD = 0.28F
 internal fun PlaybackCover(
   bookId: BookId,
   cover: String?,
+  title: String,
   playing: Boolean,
   swipeEnabled: Boolean,
   onPlayPause: () -> Unit,
@@ -180,7 +182,7 @@ internal fun PlaybackCover(
           .clip(shape),
       contentScale = ContentScale.Crop,
       model = rememberFullSizeCoverRequest(cover),
-      error = painterResource(id = UiR.drawable.album_art),
+      error = rememberLetterCover(title),
       contentDescription = stringResource(id = StringsR.string.cover_title),
     )
     if (pop.value < 1F) {

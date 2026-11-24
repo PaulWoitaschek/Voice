@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.ui.VoiceTheme
+import voice.features.bookOverview.overview.CoverViewState
 
 @RunWith(AndroidJUnit4::class)
 class SearchResultsTest {
@@ -72,6 +73,6 @@ class SearchResultsTest {
       key = name,
       name = name,
       bookCount = bookCount,
-      covers = listOf(null, null),
+      covers = listOf(CoverViewState(null, "Dune"), CoverViewState(null, "Dune Messiah")),
     )
 }

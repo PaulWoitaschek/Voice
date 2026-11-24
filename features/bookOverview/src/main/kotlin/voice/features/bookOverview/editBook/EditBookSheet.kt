@@ -77,6 +77,7 @@ import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.rememberLetterCover
 import voice.core.ui.segmentedShape
 import voice.features.bookOverview.views.CoverShape
 
@@ -195,7 +196,7 @@ private fun EditBookContent(
           modifier = Modifier.size(64.dp).clip(CoverShape),
           model = rememberCoverThumbnailRequest(viewState.cover),
           placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
-          error = painterResource(id = UiR.drawable.album_art),
+          error = rememberLetterCover(viewState.title),
           contentScale = ContentScale.Crop,
           contentDescription = null,
         )

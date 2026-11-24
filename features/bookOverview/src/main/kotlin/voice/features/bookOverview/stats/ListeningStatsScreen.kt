@@ -98,6 +98,7 @@ import voice.core.ui.animationsEnabled
 import voice.core.ui.bookText
 import voice.core.ui.label
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.rememberLetterCover
 import voice.features.bookOverview.views.CoverShape
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -505,7 +506,7 @@ internal fun BookCover(
     AsyncImage(
       model = rememberCoverThumbnailRequest(book.cover),
       placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
-      error = painterResource(UiR.drawable.album_art),
+      error = rememberLetterCover(book.name),
       contentScale = ContentScale.Crop,
       contentDescription = null,
       modifier = modifier.clip(CoverShape),

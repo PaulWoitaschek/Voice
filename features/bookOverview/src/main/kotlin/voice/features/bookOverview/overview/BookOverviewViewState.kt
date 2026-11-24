@@ -105,11 +105,17 @@ sealed interface LibraryItem {
 }
 
 @Immutable
+data class CoverViewState(
+  val cover: String?,
+  val title: String,
+)
+
+@Immutable
 data class SeriesStackViewState(
   val key: String,
   val name: String,
   val author: String?,
-  val covers: List<String?>,
+  val covers: List<CoverViewState>,
   val bookCount: Int,
   val finishedCount: Int,
   val progress: List<Float>,
@@ -136,7 +142,7 @@ internal fun Series.toStackViewState() =
 data class AuthorEntryViewState(
   val key: String?,
   val name: String?,
-  val covers: List<String?>,
+  val covers: List<CoverViewState>,
   val seriesCount: Int,
   val bookCount: Int,
   val category: BookCategory,

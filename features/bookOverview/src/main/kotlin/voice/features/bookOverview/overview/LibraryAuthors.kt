@@ -54,8 +54,13 @@ internal class AuthorGroup(
   val seriesCount: Int = entries.count { it is LibraryEntry.Stack }
 
   // one of each series first, so a long series doesn't take all the places
-  val covers: List<String?> =
-    (entries.map { it.front } + books).distinctBy { it.id }.take(4).map { it.coverUrl }
+  val covers: List<CoverViewState> =
+    (entries.map { it.front } + books)
+      .distinctBy { it.id }
+      .take(4)
+      .map {
+        CoverViewState(it.coverUrl, it.name)
+      }
 
   val lastPlayedAt: Instant = books.maxOf { it.content.lastPlayedAt }
 

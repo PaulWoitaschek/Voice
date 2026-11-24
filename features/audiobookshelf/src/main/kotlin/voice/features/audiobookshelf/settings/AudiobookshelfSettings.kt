@@ -96,6 +96,7 @@ import voice.core.ui.bookText
 import voice.core.ui.plus
 import voice.core.ui.rememberAnimationClock
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.rememberLetterCover
 import voice.core.ui.segmentedShape
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -506,7 +507,7 @@ private fun DownloadRow(
       modifier = Modifier.size(48.dp).clip(RoundedCornerShape(percent = 12)),
       model = rememberCoverThumbnailRequest(download.cover),
       placeholder = ColorPainter(colors.surfaceContainerHighest),
-      error = painterResource(UiR.drawable.album_art),
+      error = rememberLetterCover(download.name),
       contentScale = ContentScale.Crop,
       contentDescription = null,
     )

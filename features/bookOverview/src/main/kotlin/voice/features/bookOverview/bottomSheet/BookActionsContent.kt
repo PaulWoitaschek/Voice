@@ -80,6 +80,7 @@ import voice.core.ui.entrance
 import voice.core.ui.rememberConfettiState
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.core.ui.rememberEntranceState
+import voice.core.ui.rememberLetterCover
 import voice.core.ui.segmentedShape
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.features.bookOverview.overview.nameRes
@@ -189,7 +190,7 @@ private fun BookHeader(
       modifier = Modifier.size(88.dp).clip(CoverShape),
       model = rememberCoverThumbnailRequest(book.cover),
       placeholder = ColorPainter(colors.surfaceContainerHighest),
-      error = painterResource(id = UiR.drawable.album_art),
+      error = rememberLetterCover(book.name),
       contentScale = ContentScale.Crop,
       contentDescription = null,
     )

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.search.BookSearchField
+import voice.features.bookOverview.overview.CoverViewState
 import voice.features.bookOverview.overview.DownloadBadge
 
 @Immutable
@@ -28,7 +29,7 @@ data class SearchGroupViewState(
   val key: String,
   val name: String,
   val bookCount: Int,
-  val covers: List<String?>,
+  val covers: List<CoverViewState>,
 ) {
   enum class Kind {
     Author,

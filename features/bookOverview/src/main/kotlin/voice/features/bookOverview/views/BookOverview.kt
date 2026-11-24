@@ -70,6 +70,7 @@ import voice.features.bookOverview.overview.AuthorEntryViewState
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
+import voice.features.bookOverview.overview.CoverViewState
 import voice.features.bookOverview.overview.LibraryGrouping
 import voice.features.bookOverview.overview.LibraryItem
 import voice.features.bookOverview.overview.LibrarySource
@@ -459,7 +460,12 @@ internal class BookOverviewPreviewParameterProvider :
                     key = "signalsaga",
                     name = "The Signal Saga",
                     author = "Author",
-                    covers = listOf(null, null, null),
+                    covers =
+                      listOf(
+                        CoverViewState(null, "Dune"),
+                        CoverViewState(null, "Dune Messiah"),
+                        CoverViewState(null, "Children of Dune"),
+                      ),
                     bookCount = 4,
                     finishedCount = 1,
                     progress = listOf(1F, 0.6F, 0F, 0F),
@@ -562,7 +568,7 @@ internal class BookOverviewPreviewParameterProvider :
     AuthorEntryViewState(
       key = name?.lowercase(),
       name = name,
-      covers = List(minOf(bookCount, 4)) { null },
+      covers = List(minOf(bookCount, 4)) { CoverViewState(null, "Book ${it + 1}") },
       seriesCount = seriesCount,
       bookCount = bookCount,
       category = BookCategory.FINISHED,

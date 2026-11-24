@@ -115,8 +115,7 @@ internal fun NowPlayingContent(
   images: WidgetImages,
   actions: WidgetActions,
 ) {
-  val night =
-    state is NowPlayingState.Current && state.book.sleepTimerEnd != null && !state.book.finished
+  val night = state is NowPlayingState.Current && state.book.night
   WidgetColors(theme = state.theme, night = night) {
     val size = LocalSize.current
     val layout = nowPlayingLayout(size)

@@ -80,6 +80,7 @@ import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.authorSharedBoundsModifier
 import voice.core.ui.segmentedShape
+import voice.features.bookOverview.overview.CoverViewState
 import voice.features.bookOverview.overview.SeriesStackViewState
 import voice.features.bookOverview.overview.authorKey
 import voice.features.bookOverview.views.BookOverviewPreviewParameterProvider
@@ -379,7 +380,12 @@ private fun AuthorScreenPreview() {
                   key = "thesignalsaga",
                   name = "The Signal Saga",
                   author = null,
-                  covers = listOf(null, null, null),
+                  covers =
+                    listOf(
+                      CoverViewState(null, "Dune"),
+                      CoverViewState(null, "Dune Messiah"),
+                      CoverViewState(null, "Children of Dune"),
+                    ),
                   bookCount = 4,
                   finishedCount = 1,
                   progress = listOf(1F, 0.4F, 0F, 0F),

@@ -50,6 +50,7 @@ import voice.features.bookOverview.bottomSheet.ActionRow
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.style
 import voice.features.bookOverview.overview.AuthorEntryViewState
+import voice.features.bookOverview.overview.CoverViewState
 import voice.features.bookOverview.views.AuthorCovers
 import voice.features.bookOverview.views.authorCounts
 import voice.features.bookOverview.views.authorName
@@ -83,7 +84,7 @@ private fun AuthorActionsScreen(destination: Destination.AuthorActions) {
     }
   // shown once the books are loaded, so the sheet rises at its full height
   val author = viewModel.state() ?: return
-  CoverTheme(cover = author.covers.first()) {
+  CoverTheme(cover = author.covers.first().cover) {
     val sheetState =
       rememberBottomSheetState(
         initialValue = Hidden,
@@ -187,7 +188,13 @@ private fun AuthorActionsContentPreview() {
           AuthorEntryViewState(
             key = "lenamorgan",
             name = "Lena Morgan",
-            covers = listOf(null, null, null, null),
+            covers =
+              listOf(
+                CoverViewState(null, "Dune"),
+                CoverViewState(null, "Emma"),
+                CoverViewState(null, "Hamlet"),
+                CoverViewState(null, "Walden"),
+              ),
             seriesCount = 1,
             bookCount = 4,
             category = BookCategory.NOT_STARTED,

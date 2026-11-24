@@ -1,6 +1,7 @@
 package voice.features.widget
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapShader
 import android.graphics.Color
@@ -11,9 +12,11 @@ import android.graphics.Shader
 import android.util.LruCache
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialShapes
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toBitmap
@@ -32,7 +35,11 @@ import kotlin.math.PI
 import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlin.math.sin
+import voice.core.ui.LETTER_COVER_LETTER_SIZE
+import voice.core.ui.LetterCover
 import voice.core.ui.R as UiR
+import voice.core.ui.letterBaseline
+import voice.core.ui.letterCover
 
 internal enum class WidgetShape {
   Circle,
@@ -68,13 +75,27 @@ class WidgetImages(private val context: Context) {
       ): Int = value.allocationByteCount
     }
 
-  internal suspend fun cover(cover: String?): WidgetCover {
+  internal suspend fun cover(
+    cover: String?,
+    title: String,
+    night: Boolean = false,
+  ): WidgetCover {
     if (cover != null) {
       val key = "cover:$cover"
       val bitmap = cache.get(key) ?: load(cover)?.also { cache.put(key, it) }
       if (bitmap != null) {
         return WidgetCover(cover, bitmap)
       }
+    }
+    val dark =
+      night ||
+        context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK ==
+          Configuration.UI_MODE_NIGHT_YES
+    val letter = letterCover(title, dark)
+    if (letter != null) {
+      val key = "letter:$title:$dark"
+      val bitmap = cache.get(key) ?: letterBitmap(letter).also { cache.put(key, it) }
+      return WidgetCover(key, bitmap)
     }
     val placeholder =
       cache.get(PLACEHOLDER_KEY)
@@ -84,6 +105,23 @@ class WidgetImages(private val context: Context) {
           )
           .also { cache.put(PLACEHOLDER_KEY, it) }
     return WidgetCover(PLACEHOLDER_KEY, placeholder)
+  }
+
+  private fun letterBitmap(cover: LetterCover): Bitmap {
+    val size = COVER_SIZE_PX.toFloat()
+    val fontSize = size * LETTER_COVER_LETTER_SIZE
+    val paint =
+      Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = cover.content.toArgb()
+        typeface = ResourcesCompat.getFont(context, UiR.font.literata)
+        fontVariationSettings = "'wght' 500"
+        textSize = fontSize
+        textAlign = Paint.Align.CENTER
+      }
+    return createBitmap(COVER_SIZE_PX, COVER_SIZE_PX).applyCanvas {
+      drawColor(cover.background.toArgb())
+      drawText(cover.letter, size / 2F, letterBaseline(size, fontSize), paint)
+    }
   }
 
   private suspend fun load(cover: String): Bitmap? {

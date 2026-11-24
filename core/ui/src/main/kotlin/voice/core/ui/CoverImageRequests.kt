@@ -5,7 +5,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import coil3.request.placeholder
 
 private const val THUMBNAIL_SIZE_PX = 480
 
@@ -40,7 +39,6 @@ fun rememberFullSizeCoverRequest(cover: String?): ImageRequest {
     ImageRequest.Builder(context)
       .data(cover)
       .placeholderMemoryCacheKey(cover?.let(::thumbnailMemoryCacheKey))
-      .placeholder(R.drawable.album_art)
       .build()
   }
 }

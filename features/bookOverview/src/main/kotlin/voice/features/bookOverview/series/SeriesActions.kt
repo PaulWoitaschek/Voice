@@ -72,6 +72,7 @@ import voice.core.ui.segmentedShape
 import voice.features.bookOverview.bottomSheet.ActionRow
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.style
+import voice.features.bookOverview.overview.CoverViewState
 import voice.features.bookOverview.overview.SeriesStackViewState
 import voice.features.bookOverview.views.CoverStack
 import voice.features.bookOverview.views.seriesCounts
@@ -103,7 +104,7 @@ private fun SeriesActionsScreen(name: String) {
     }
   // shown once the series is loaded, so the sheet rises at its full height
   val state = viewModel.state() ?: return
-  CoverTheme(cover = state.series.covers.first()) {
+  CoverTheme(cover = state.series.covers.first().cover) {
     val sheetState =
       rememberBottomSheetState(
         initialValue = Hidden,
@@ -347,7 +348,12 @@ private fun SeriesActionsContentPreview() {
                 key = "thesignalsaga",
                 name = "The Signal Saga",
                 author = "Daniel Hartwell",
-                covers = listOf(null, null, null),
+                covers =
+                  listOf(
+                    CoverViewState(null, "Dune"),
+                    CoverViewState(null, "Dune Messiah"),
+                    CoverViewState(null, "Children of Dune"),
+                  ),
                 bookCount = 4,
                 finishedCount = 1,
                 progress = listOf(1F, 0.4F, 0F, 0F),

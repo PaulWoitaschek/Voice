@@ -52,6 +52,7 @@ import voice.core.ui.authorSharedBoundsModifier
 import voice.core.ui.bookText
 import voice.core.ui.playButtonSharedElementModifier
 import voice.core.ui.segmentedShape
+import voice.features.bookOverview.overview.CoverViewState
 import voice.features.bookOverview.views.AuthorCovers
 import voice.features.bookOverview.views.BookCover
 import voice.features.bookOverview.views.HiddenLabel
@@ -209,6 +210,7 @@ private fun TopResult(
       BookCover(
         bookId = result.id,
         cover = result.cover,
+        title = result.title.text,
         finished = result.category == BookCategory.FINISHED,
         unavailable = result.unavailable,
         download = result.download,
@@ -303,6 +305,7 @@ private fun SearchResultRow(
       BookCover(
         bookId = result.id,
         cover = result.cover,
+        title = result.title.text,
         finished = result.category == BookCategory.FINISHED,
         unavailable = result.unavailable,
         download = result.download,
@@ -466,14 +469,16 @@ private fun SearchResultsPreview() {
                   key = "stephenking",
                   name = "Stephen King",
                   bookCount = 2,
-                  covers = listOf(null, null),
+                  covers =
+                    listOf(CoverViewState(null, "Dune"), CoverViewState(null, "Dune Messiah")),
                 ),
                 SearchGroupViewState(
                   kind = SearchGroupViewState.Kind.Series,
                   key = "kingkillerchronicle",
                   name = "Kingkiller Chronicle",
                   bookCount = 2,
-                  covers = listOf(null, null),
+                  covers =
+                    listOf(CoverViewState(null, "Dune"), CoverViewState(null, "Dune Messiah")),
                 ),
               ),
             otherResults =

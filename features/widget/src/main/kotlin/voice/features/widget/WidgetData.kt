@@ -141,7 +141,12 @@ class WidgetData(
     } else {
       NowPlayingState.Current(
         book = model.book,
-        cover = images.cover(model.book.cover),
+        cover =
+          images.cover(
+            cover = model.book.cover,
+            title = model.book.title,
+            night = model.book.night,
+          ),
         theme = theme,
       )
     }
@@ -149,7 +154,7 @@ class WidgetData(
 
   internal fun shelfState(): Flow<ShelfState> = shelf.mapLatest { model ->
     ShelfState(
-      books = model.books.map { ShelfItem(it, images.cover(it.cover)) },
+      books = model.books.map { ShelfItem(it, images.cover(it.cover, it.title)) },
       theme = theme(model.books.firstOrNull()?.cover, model.colorSettings),
     )
   }

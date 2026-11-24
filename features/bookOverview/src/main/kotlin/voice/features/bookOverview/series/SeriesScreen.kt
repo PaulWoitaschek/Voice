@@ -69,6 +69,7 @@ import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.core.ui.segmentedShape
+import voice.features.bookOverview.overview.CoverViewState
 import voice.features.bookOverview.views.BookOverviewPreviewParameterProvider
 import voice.features.bookOverview.views.ListBookRow
 import voice.features.bookOverview.views.SeriesCover
@@ -97,7 +98,7 @@ fun SeriesScreen(name: String) {
       rootGraphAs<SeriesViewModel.Factory.Provider>().seriesViewModelFactory.create(name)
     }
   val viewState = viewModel.viewState() ?: return
-  CoverTheme(cover = viewState.covers.first()) {
+  CoverTheme(cover = viewState.covers.first().cover) {
     SeriesScreen(
       viewState = viewState,
       onCloseClick = viewModel::onCloseClick,
@@ -305,7 +306,12 @@ private fun SeriesScreenPreview() {
           key = "thesignalsaga",
           name = "The Signal Saga",
           author = "Daniel Hartwell",
-          covers = listOf(null, null, null),
+          covers =
+            listOf(
+              CoverViewState(null, "Dune"),
+              CoverViewState(null, "Dune Messiah"),
+              CoverViewState(null, "Children of Dune"),
+            ),
           bookCount = 4,
           finishedCount = 1,
           action =

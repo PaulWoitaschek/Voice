@@ -3,13 +3,14 @@ package voice.features.bookOverview.series
 import androidx.compose.runtime.Immutable
 import voice.core.data.BookId
 import voice.features.bookOverview.overview.BookOverviewItemViewState
+import voice.features.bookOverview.overview.CoverViewState
 
 @Immutable
 data class SeriesViewState(
   val key: String,
   val name: String,
   val author: String?,
-  val covers: List<String?>,
+  val covers: List<CoverViewState>,
   val bookCount: Int,
   val finishedCount: Int,
   val action: Action?,

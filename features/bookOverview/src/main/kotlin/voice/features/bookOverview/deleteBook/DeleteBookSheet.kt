@@ -66,6 +66,7 @@ import voice.core.ui.MorphShape
 import voice.core.ui.R as UiR
 import voice.core.ui.bookText
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.rememberLetterCover
 import voice.features.bookOverview.views.CoverShape
 
 @Composable
@@ -109,7 +110,7 @@ internal fun DeleteBookSheet(
           .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-      DeleteHero(cover = viewState.cover, armed = armed)
+      DeleteHero(cover = viewState.cover, title = viewState.name.orEmpty(), armed = armed)
       Spacer(Modifier.height(20.dp))
       Text(
         text = stringResource(StringsR.string.book_delete_dialog_title),
@@ -233,6 +234,7 @@ internal fun DeleteBookSheet(
 @Composable
 private fun DeleteHero(
   cover: String?,
+  title: String,
   armed: Boolean,
 ) {
   val colors = MaterialTheme.colorScheme
@@ -277,7 +279,7 @@ private fun DeleteHero(
           .clip(CoverShape),
       model = rememberCoverThumbnailRequest(cover),
       placeholder = ColorPainter(colors.surfaceContainerHighest),
-      error = painterResource(id = UiR.drawable.album_art),
+      error = rememberLetterCover(title),
       contentScale = ContentScale.Crop,
       contentDescription = null,
     )

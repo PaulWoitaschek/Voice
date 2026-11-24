@@ -37,6 +37,7 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 import voice.core.ui.bookText
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.rememberLetterCover
 import voice.features.playbackScreen.BookPlayViewState
 
 @Composable
@@ -83,7 +84,7 @@ private fun Cover(upNext: BookPlayViewState.UpNextViewState) {
     AsyncImage(
       model = rememberCoverThumbnailRequest(upNext.cover),
       placeholder = ColorPainter(colors.surfaceContainerHighest),
-      error = painterResource(UiR.drawable.album_art),
+      error = rememberLetterCover(upNext.title),
       contentScale = ContentScale.Crop,
       contentDescription = null,
       modifier =

@@ -34,6 +34,7 @@ import voice.core.data.BookId
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.rememberLetterCover
 import voice.core.ui.sharedCoverElementModifier
 import voice.features.bookOverview.overview.DownloadBadge
 
@@ -44,6 +45,7 @@ internal val CoverShape = RoundedCornerShape(percent = 12)
 internal fun BookCover(
   bookId: BookId,
   cover: String?,
+  title: String,
   modifier: Modifier = Modifier,
   shape: Shape = CoverShape,
   finished: Boolean = false,
@@ -62,7 +64,7 @@ internal fun BookCover(
       model = rememberCoverThumbnailRequest(cover),
       // a soft fill the cover fades in on, instead of the dark default art flashing up
       placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
-      error = painterResource(id = UiR.drawable.album_art),
+      error = rememberLetterCover(title),
       contentScale = ContentScale.Crop,
       contentDescription = null,
     )

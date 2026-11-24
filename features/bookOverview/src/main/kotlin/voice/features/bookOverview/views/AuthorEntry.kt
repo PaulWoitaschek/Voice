@@ -29,7 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -39,12 +38,13 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import voice.core.data.BookCategory
 import voice.core.strings.R as StringsR
-import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.authorSharedBoundsModifier
 import voice.core.ui.bookText
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.rememberLetterCover
 import voice.features.bookOverview.overview.AuthorEntryViewState
+import voice.features.bookOverview.overview.CoverViewState
 
 @Composable
 internal fun ListAuthorRow(
@@ -144,7 +144,7 @@ private fun Modifier.flying(
 // a grid and not a stack, so an author doesn't look like a series
 @Composable
 internal fun AuthorCovers(
-  covers: List<String?>,
+  covers: List<CoverViewState>,
   modifier: Modifier = Modifier,
 ) {
   if (covers.size == 1) {
@@ -173,14 +173,14 @@ internal fun AuthorCovers(
 
 @Composable
 private fun AuthorCover(
-  cover: String?,
+  cover: CoverViewState,
   modifier: Modifier = Modifier,
 ) {
   AsyncImage(
     modifier = modifier.clip(CoverShape),
-    model = rememberCoverThumbnailRequest(cover),
+    model = rememberCoverThumbnailRequest(cover.cover),
     placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
-    error = painterResource(id = UiR.drawable.album_art),
+    error = rememberLetterCover(cover.title),
     contentScale = ContentScale.Crop,
     contentDescription = null,
   )
@@ -214,7 +214,7 @@ private fun previewAuthor(
   AuthorEntryViewState(
     key = name?.lowercase(),
     name = name,
-    covers = List(covers) { null },
+    covers = List(covers) { CoverViewState(null, "Book ${it + 1}") },
     seriesCount = if (covers > 1) 1 else 0,
     bookCount = covers,
     category = category,

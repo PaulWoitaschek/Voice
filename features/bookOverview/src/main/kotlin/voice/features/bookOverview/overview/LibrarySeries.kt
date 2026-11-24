@@ -42,8 +42,10 @@ internal class Series(
 
   val front: Book = inProgress ?: firstUnfinished ?: books.first()
 
-  val covers: List<String?> =
-    (listOf(front) + books.filter { it != front }.take(2)).map { it.coverUrl }
+  val covers: List<CoverViewState> =
+    (listOf(front) + books.filter { it != front }.take(2)).map {
+      CoverViewState(it.coverUrl, it.name)
+    }
 
   val lastPlayedAt: Instant = books.maxOf { it.content.lastPlayedAt }
 

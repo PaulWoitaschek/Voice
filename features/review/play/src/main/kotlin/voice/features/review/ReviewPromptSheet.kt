@@ -103,6 +103,7 @@ import voice.core.ui.rememberAnimationClock
 import voice.core.ui.rememberConfettiState
 import voice.core.ui.rememberEntranceState
 import voice.core.ui.rememberFullSizeCoverRequest
+import voice.core.ui.rememberLetterCover
 import voice.core.ui.segmentedShape
 
 internal enum class ReviewStep {
@@ -352,7 +353,7 @@ private fun ReviewHero(
           AsyncImage(
             modifier = Modifier.fillMaxSize(),
             model = rememberFullSizeCoverRequest(headline.cover),
-            error = painterResource(UiR.drawable.album_art),
+            error = rememberLetterCover(headline.name),
             contentScale = ContentScale.Crop,
             contentDescription = null,
           )

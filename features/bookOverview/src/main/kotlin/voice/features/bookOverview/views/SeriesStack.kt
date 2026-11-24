@@ -60,7 +60,9 @@ import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.rememberLetterCover
 import voice.core.ui.seriesCoverSharedElementModifier
+import voice.features.bookOverview.overview.CoverViewState
 import voice.features.bookOverview.overview.SeriesStackViewState
 
 @Composable
@@ -239,7 +241,7 @@ private val MIN_SEGMENT_WIDTH = 8.dp
 @Composable
 internal fun SeriesCover(
   seriesKey: String,
-  covers: List<String?>,
+  covers: List<CoverViewState>,
   modifier: Modifier = Modifier,
   gapColor: Color = MaterialTheme.colorScheme.surface,
   badge: @Composable BoxScope.() -> Unit = {},
@@ -255,7 +257,7 @@ internal fun SeriesCover(
 
 @Composable
 internal fun CoverStack(
-  covers: List<String?>,
+  covers: List<CoverViewState>,
   modifier: Modifier = Modifier,
   gapColor: Color = MaterialTheme.colorScheme.surface,
   badge: @Composable BoxScope.() -> Unit = {},
@@ -265,7 +267,7 @@ internal fun CoverStack(
     covers.asReversed().forEachIndexed { index, cover ->
       val depth = if (behind == 0) 0F else (behind - index).toFloat() / behind
       // a cover keeps its image when another book comes to the front
-      key(cover) {
+      key(cover.cover) {
         AsyncImage(
           modifier =
             Modifier.fillMaxSize(if (behind == 0) 1F else STACKED_COVER_SIZE)
@@ -274,9 +276,9 @@ internal fun CoverStack(
               )
               .clip(CoverShape)
               .border(2.dp, gapColor, CoverShape),
-          model = rememberCoverThumbnailRequest(cover),
+          model = rememberCoverThumbnailRequest(cover.cover),
           placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
-          error = painterResource(id = UiR.drawable.album_art),
+          error = rememberLetterCover(cover.title),
           contentScale = ContentScale.Crop,
           contentDescription = null,
         )
@@ -386,7 +388,12 @@ private fun previewSeries(
     key = "signalsaga",
     name = "The Signal Saga",
     author = "Daniel Hartwell",
-    covers = listOf(null, null, null),
+    covers =
+      listOf(
+        CoverViewState(null, "Dune"),
+        CoverViewState(null, "Dune Messiah"),
+        CoverViewState(null, "Children of Dune"),
+      ),
     bookCount = 4,
     finishedCount = if (category == BookCategory.FINISHED) 4 else 1,
     progress = listOf(1F, 0.4F, 0F, 0F),

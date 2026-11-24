@@ -137,7 +137,7 @@ class LibraryAuthorsTest {
     val single = notStarted(name = "Single", author = "Lena Morgan", cover = "single")
     val author = groups(*saga.toTypedArray(), single).getValue(BookCategory.NOT_STARTED).single()
 
-    assertEquals(expected = single.coverUrl, actual = author.covers[1])
+    assertEquals(expected = single.coverUrl, actual = author.covers[1].cover)
     assertEquals(expected = 4, actual = author.covers.distinct().size)
   }
 

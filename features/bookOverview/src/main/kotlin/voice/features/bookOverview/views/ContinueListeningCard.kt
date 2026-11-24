@@ -85,6 +85,7 @@ internal fun ContinueListeningCard(
             BookCover(
               bookId = book.id,
               cover = book.cover,
+              title = book.name,
               unavailable = book.unavailable,
               download = book.download,
               selected = selected,
