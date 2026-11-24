@@ -13,6 +13,6 @@
     "@fontsource-variable/roboto": "^5.3.0",
     "@mediabunny/aac-encoder": "1.66.3",
     "astro": "^7.4.2",
-    "mediabunny": "1.66.3"
+    "mediabunny": "1.66.4"
   }
 }
