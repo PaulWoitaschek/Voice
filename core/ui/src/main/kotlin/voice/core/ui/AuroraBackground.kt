@@ -3,6 +3,8 @@ package voice.core.ui
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,6 +18,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import kotlin.math.PI
 import kotlin.math.cos
@@ -33,6 +36,7 @@ fun AuroraBackground(
   clock: () -> Float,
   showStars: Boolean,
   modifier: Modifier = Modifier,
+  starInsets: WindowInsets = WindowInsets.statusBars,
 ) {
   val colorScheme = MaterialTheme.colorScheme
   val starAlpha by
@@ -47,6 +51,8 @@ fun AuroraBackground(
       label = "blobAlpha",
     )
   val stars = remember { generateStars() }
+  // a star under the status bar makes the clock hard to read
+  val starsTop = starInsets.getTop(LocalDensity.current).toFloat()
   // Dark containers can still be quite bright (yellows especially), so keep the blobs subtle there
   // to preserve text contrast against the surface.
   val strength = if (colorScheme.surface.luminance() < 0.5F) 0.35F else 0.85F
@@ -99,7 +105,10 @@ fun AuroraBackground(
               val starSize = star.size.dp.toPx()
               withTransform(
                 {
-                  translate(left = star.x * w, top = star.y * h)
+                  translate(
+                    left = star.x * w,
+                    top = starsTop + starSize + star.y * (h - starsTop),
+                  )
                   scale(scaleX = starSize, scaleY = starSize, pivot = Offset.Zero)
                 },
               ) {
