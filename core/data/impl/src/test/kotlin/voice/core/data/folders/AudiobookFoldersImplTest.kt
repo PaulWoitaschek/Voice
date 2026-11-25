@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Looper
 import android.provider.DocumentsContract
+import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
@@ -125,6 +126,15 @@ class AudiobookFoldersImplTest {
       assertEquals(emptyList(), awaitItem().getValue(FolderType.Root))
     }
     assertEquals(listOf(uri), folders.all().first().getValue(FolderType.Root).map { it.uri })
+  }
+
+  @Test
+  fun `a folder Android doesn't accept as a tree is left out and the others stay`() = runTest {
+    val invalid = "content://com.android.externalstorage.documents/document/primary%3ABooks".toUri()
+    stores.getValue(FolderType.Root).updateData { setOf(invalid, uri) }
+    withAccess += setOf(invalid, uri)
+
+    assertEquals(listOf(uri), folders().all().first().getValue(FolderType.Root).map { it.uri })
   }
 
   @Test
