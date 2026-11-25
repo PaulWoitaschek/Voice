@@ -1,7 +1,9 @@
 package voice.core.common.comparator
 
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class NaturalOrderComparatorTest {
 
@@ -87,5 +89,36 @@ class NaturalOrderComparatorTest {
         "Život s vysokou inteligencí",
       ),
     )
+  }
+
+  @Test
+  fun `letters and symbols sort in one order`() {
+    assertSorted(
+      listOf(
+        "~",
+        "ä",
+        "b",
+      ),
+    )
+  }
+
+  @Test
+  fun `the order has no circles`() {
+    val comparator = NaturalOrderComparator.stringComparator
+    val random = Random(42)
+    val chars = "aAbäÄ~_-. 019２²٠éz!"
+    val values =
+      List(60) {
+        String(CharArray(random.nextInt(1, 4)) { chars[random.nextInt(chars.length)] })
+      }
+    for (a in values) {
+      for (b in values) {
+        for (c in values) {
+          if (comparator.compare(a, b) <= 0 && comparator.compare(b, c) <= 0) {
+            assertTrue(comparator.compare(a, c) <= 0)
+          }
+        }
+      }
+    }
   }
 }

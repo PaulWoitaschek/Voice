@@ -137,22 +137,17 @@ internal object NaturalComparator : Comparator<String> {
     lhs: Char,
     rhs: Char,
   ): Int {
-    if (lhs.isLetter() && rhs.isLetter()) {
-      val collatorDiff = collator.compare(lhs.toString(), rhs.toString())
-      if (collatorDiff != 0) {
-        return collatorDiff
-      }
+    // Digits and spaces start a number run, so they must sort as one block against other
+    // characters.
+    val collatorDiff = collator.compare(lhs.collationKey(), rhs.collationKey())
+    if (collatorDiff != 0) {
+      return collatorDiff
     }
-
-    val diff1 = lhs.uppercaseChar() - rhs.uppercaseChar()
-    if (diff1 != 0) {
-      val diff2 = lhs.lowercaseChar() - rhs.lowercaseChar()
-      if (diff2 != 0) {
-        return diff2
-      }
-    }
-    return 0
+    return lhs.lowercaseChar() - rhs.lowercaseChar()
   }
+
+  private fun Char.collationKey(): String =
+    if (this == ' ' || isDecimalDigit(this)) " " else toString()
 
   private fun skipDigits(
     s: String,
