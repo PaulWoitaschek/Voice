@@ -102,8 +102,7 @@ class BookmarkViewModel(
       remember(bookId) { playerController.livePlaybackStateFlow(bookId) }
         .collectAsState(initial = null)
         .value
-    val book =
-      if (livePlaybackState != null) persistedBook.overlay(livePlaybackState) else persistedBook
+    val book = livePlaybackState?.let(persistedBook::overlay) ?: persistedBook
     val bookmarks =
       remember(book.id, book.content.chapters) {
           bookmarkRepo.bookmarksFlow(book.content)

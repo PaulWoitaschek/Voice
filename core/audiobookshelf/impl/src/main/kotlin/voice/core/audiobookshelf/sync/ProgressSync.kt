@@ -24,6 +24,7 @@ import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
+import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 
 /**
@@ -178,9 +179,13 @@ internal class ProgressSync(
 
   private suspend fun send(
     account: Account,
-    book: Book,
+    stored: Book,
     serverLastUpdate: Long,
   ): SyncedProgress? {
+    // while the book plays, the stored position lags behind
+    val book =
+      playerController.livePlaybackState(stored.id)?.takeIf { it.isPlaying }?.let(stored::overlay)
+        ?: stored
     val itemId = book.id.itemId ?: return null
     val durationSeconds = book.duration / 1000.0
     val finished = book.isFinished

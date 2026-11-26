@@ -128,12 +128,7 @@ class BookPlayViewModel(
     }
       .collectAsState()
 
-    val book =
-      if (livePlaybackState != null) {
-        persistedBook.overlay(livePlaybackState)
-      } else {
-        persistedBook
-      }
+    val book = livePlaybackState?.let(persistedBook::overlay) ?: persistedBook
     val isPlaying =
       livePlaybackState?.isPlaying
         ?: (managerPlayState == PlayStateManager.PlayState.Playing(bookId))
