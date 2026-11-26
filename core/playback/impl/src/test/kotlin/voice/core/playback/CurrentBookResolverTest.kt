@@ -10,7 +10,6 @@ import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.store.CurrentBookStore
-import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.session.search.book
 
 class CurrentBookResolverTest {
@@ -40,24 +39,7 @@ class CurrentBookResolverTest {
   private val currentBookStore = MemoryDataStore<BookId?>(book.id)
 
   @Test
-  fun `returns persisted book when live playback persistence is disabled`() = runTest {
-    val resolver =
-      CurrentBookResolver(
-        bookRepository =
-          mockk {
-            coEvery { get(book.id) } returns book
-          },
-        playerController = mockk(),
-        currentBookStore = CurrentBookStore(currentBookStore),
-        experimentalPlaybackPersistenceFeatureFlag =
-          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
-      )
-
-    assertEquals(expected = book, actual = resolver.currentBook())
-  }
-
-  @Test
-  fun `overlays the current player position when live playback persistence is enabled`() = runTest {
+  fun `overlays the current player position`() = runTest {
     val resolver =
       CurrentBookResolver(
         bookRepository =
@@ -76,8 +58,6 @@ class CurrentBookResolverTest {
               )
           },
         currentBookStore = CurrentBookStore(currentBookStore),
-        experimentalPlaybackPersistenceFeatureFlag =
-          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
       )
 
     assertEquals(
@@ -107,8 +87,6 @@ class CurrentBookResolverTest {
               )
           },
         currentBookStore = CurrentBookStore(currentBookStore),
-        experimentalPlaybackPersistenceFeatureFlag =
-          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
       )
 
     assertEquals(expected = book, actual = resolver.currentBook())
@@ -127,8 +105,6 @@ class CurrentBookResolverTest {
             coEvery { livePlaybackState(book.id) } returns null
           },
         currentBookStore = CurrentBookStore(currentBookStore),
-        experimentalPlaybackPersistenceFeatureFlag =
-          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
       )
 
     assertEquals(expected = book, actual = resolver.currentBook())

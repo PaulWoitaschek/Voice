@@ -5,7 +5,6 @@ import androidx.media3.common.Player
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.time.Clock
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
-import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.PlaybackPersistenceIntervalFeatureFlag
 import voice.core.playback.di.PlaybackScope
 import voice.core.playback.session.bookId
@@ -29,8 +27,6 @@ class PositionUpdater(
   private val bookRepo: BookRepository,
   private val scope: CoroutineScope,
   private val playStateManager: PlayStateManager,
-  private val experimentalPlaybackPersistenceFeatureFlag:
-    ExperimentalPlaybackPersistenceFeatureFlag,
   private val playbackPersistenceIntervalFeatureFlag: PlaybackPersistenceIntervalFeatureFlag,
 ) : Player.Listener {
 
@@ -49,13 +45,7 @@ class PositionUpdater(
         .collectLatest { playing ->
           if (playing) {
             while (true) {
-              delay(
-                if (experimentalPlaybackPersistenceFeatureFlag.get()) {
-                  playbackPersistenceIntervalFeatureFlag.interval()
-                } else {
-                  400.milliseconds
-                },
-              )
+              delay(playbackPersistenceIntervalFeatureFlag.interval())
               flushPositionNow()
             }
           }

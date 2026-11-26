@@ -15,8 +15,6 @@ class CurrentBookResolver(
   private val bookRepository: BookRepository,
   private val playerController: PlayerController,
   private val currentBookStore: CurrentBookStore,
-  private val experimentalPlaybackPersistenceFeatureFlag:
-    ExperimentalPlaybackPersistenceFeatureFlag,
 ) {
 
   suspend fun currentBook(): Book? {
@@ -26,9 +24,6 @@ class CurrentBookResolver(
 
   suspend fun book(bookId: BookId): Book? {
     val book = bookRepository.get(bookId) ?: return null
-    if (!experimentalPlaybackPersistenceFeatureFlag.get()) {
-      return book
-    }
     val livePosition = playerController.livePlaybackState(bookId) ?: return book
     if (livePosition.chapterId !in book.content.chapters) {
       return book

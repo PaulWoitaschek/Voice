@@ -40,7 +40,6 @@ import voice.core.data.ListeningEvent
 import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeFeatureFlag
-import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
@@ -80,7 +79,6 @@ class BookmarkViewModelTest {
 
   private fun viewModel(
     editBookmarkId: String? = null,
-    experimentalPlaybackPersistence: Boolean = false,
     lastPlaybackSpeed: Float = 1F,
     historyTabOpenStore: MemoryDataStore<Boolean> = MemoryDataStore(true),
   ) =
@@ -107,10 +105,6 @@ class BookmarkViewModelTest {
       dispatcherProvider =
         DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
-      experimentalPlaybackPersistenceFeatureFlag =
-        ExperimentalPlaybackPersistenceFeatureFlag(
-          MemoryFeatureFlag(experimentalPlaybackPersistence),
-        ),
       lastPlaybackSpeedStore = LastPlaybackSpeedStore(MemoryDataStore(lastPlaybackSpeed)),
       historyTabOpenStore = HistoryTabOpenStore(historyTabOpenStore),
       analytics = analytics,
@@ -341,8 +335,8 @@ class BookmarkViewModelTest {
   }
 
   @Test
-  fun `with the experimental playback persistence, the position is the player's`() {
-    val viewModel = viewModel(experimentalPlaybackPersistence = true)
+  fun `the position is the player's`() {
+    val viewModel = viewModel()
     viewModel.onSortChange(BookmarkSort.Story)
     viewModel.test {
       // the stored position: 5 minutes into the second of two 10 minute chapters

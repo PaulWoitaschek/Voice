@@ -65,7 +65,6 @@ import voice.core.data.supporter.SupporterStatusStore
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
-import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
@@ -153,8 +152,6 @@ class BookOverviewViewModelTest {
           mockk<DeviceHasStoragePermissionBug> {
             every { hasBug } returns MutableStateFlow(false)
           },
-        experimentalPlaybackPersistenceFeatureFlag =
-          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
         kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
         dispatcherProvider = dispatcherProvider,
         serverLibrary = serverLibrary,
@@ -236,8 +233,6 @@ class BookOverviewViewModelTest {
           mockk<DeviceHasStoragePermissionBug> {
             every { hasBug } returns MutableStateFlow(false)
           },
-        experimentalPlaybackPersistenceFeatureFlag =
-          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
         kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(true)),
         dispatcherProvider = dispatcherProvider,
         serverLibrary = serverLibrary,
@@ -1906,7 +1901,9 @@ class BookOverviewViewModelTest {
     books: List<Book> = emptyList(),
     currentBookId: BookId? = null,
     currentBookStore: MemoryDataStore<BookId?> = MemoryDataStore(currentBookId),
-    playerController: PlayerController = mockk(),
+    playerController: PlayerController = mockk {
+      every { livePlaybackStateFlow(any()) } returns flowOf(null)
+    },
     playStateManager: PlayStateManager = PlayStateManager(),
     scanning: Flow<Boolean> = MutableStateFlow(false),
     survey: Survey = survey(),
@@ -1942,8 +1939,6 @@ class BookOverviewViewModelTest {
         mockk<DeviceHasStoragePermissionBug> {
           every { hasBug } returns MutableStateFlow(false)
         },
-      experimentalPlaybackPersistenceFeatureFlag =
-        ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,

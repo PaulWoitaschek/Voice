@@ -20,8 +20,7 @@ class PlaybackPersistenceIntervalFeatureFlag(flag: FeatureFlag<Long>) : FeatureF
   ) : this(
     factory.long(
       key = "experimental_playback_persistence_interval_seconds",
-      description =
-        "Seconds between position saves while a book plays, with the experimental playback persistence.",
+      description = "Seconds between position saves while a book plays.",
       defaultValue = DEFAULT_SECONDS,
     ),
   )

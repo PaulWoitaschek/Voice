@@ -30,8 +30,6 @@ import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.RecentBookSearchRepo
 import voice.core.data.store.CurrentBookStore
-import voice.core.featureflag.MemoryFeatureFlag
-import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
@@ -382,7 +380,7 @@ class BookSearchViewModelTest {
     every { playerController.livePlaybackStateFlow(shining.id) } returns
       MutableStateFlow(livePlaybackState)
     currentBookStore.updateData { shining.id }
-    val viewModel = viewModel(experimentalPlaybackPersistence = true)
+    val viewModel = viewModel()
 
     testState(viewModel) {
       viewModel.onRecentSearchClick("king")
@@ -567,11 +565,10 @@ class BookSearchViewModelTest {
     }
   }
 
-  private fun viewModel(experimentalPlaybackPersistence: Boolean = false): BookSearchViewModel {
+  private fun viewModel(): BookSearchViewModel {
     return viewModel(
       repo = repo(listOf(shining, carrie, kingkiller)),
       search = search,
-      experimentalPlaybackPersistence = experimentalPlaybackPersistence,
     )
   }
 
@@ -588,7 +585,6 @@ class BookSearchViewModelTest {
   private fun viewModel(
     repo: BookRepository,
     search: BookSearch,
-    experimentalPlaybackPersistence: Boolean = false,
   ): BookSearchViewModel {
     return BookSearchViewModel(
       repo = repo,
@@ -598,10 +594,6 @@ class BookSearchViewModelTest {
       playerController = playerController,
       playStateManager = PlayStateManager(),
       currentBookStore = CurrentBookStore(currentBookStore),
-      experimentalPlaybackPersistenceFeatureFlag =
-        ExperimentalPlaybackPersistenceFeatureFlag(
-          MemoryFeatureFlag(experimentalPlaybackPersistence),
-        ),
       lastResults = lastResults,
       serverLibrary =
         mockk {
