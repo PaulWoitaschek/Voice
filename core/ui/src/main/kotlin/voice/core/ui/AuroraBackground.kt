@@ -103,15 +103,13 @@ fun AuroraBackground(
             stars.forEach { star ->
               val twinkle = 0.25F + 0.75F * (0.5F + 0.5F * sin(t * star.speed + star.phase))
               val starSize = star.size.dp.toPx()
-              withTransform(
-                {
-                  translate(
-                    left = star.x * w,
-                    top = starsTop + starSize + star.y * (h - starsTop),
-                  )
-                  scale(scaleX = starSize, scaleY = starSize, pivot = Offset.Zero)
-                },
-              ) {
+              withTransform({
+                translate(
+                  left = star.x * w,
+                  top = starsTop + starSize + star.y * (h - starsTop),
+                )
+                scale(scaleX = starSize, scaleY = starSize, pivot = Offset.Zero)
+              }) {
                 drawPath(path = sparkle, color = colorScheme.primary, alpha = starAlpha * twinkle)
               }
             }
@@ -136,12 +134,10 @@ private fun DrawScope.drawBlob(
   radius: Float,
   alpha: Float,
 ) {
-  withTransform(
-    {
-      translate(left = center.x, top = center.y)
-      scale(scaleX = radius, scaleY = radius, pivot = Offset.Zero)
-    },
-  ) {
+  withTransform({
+    translate(left = center.x, top = center.y)
+    scale(scaleX = radius, scaleY = radius, pivot = Offset.Zero)
+  }) {
     drawCircle(brush = brush, radius = 1F, center = Offset.Zero, alpha = alpha)
   }
 }
