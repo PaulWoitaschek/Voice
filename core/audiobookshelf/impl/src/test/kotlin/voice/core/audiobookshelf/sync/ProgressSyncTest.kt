@@ -34,6 +34,7 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
+import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 
@@ -98,6 +99,40 @@ class ProgressSyncTest {
     val body = Json.parseToJsonElement(request.body!!.utf8()).jsonObject
     assertEquals(30.0, body.getValue("currentTime").jsonPrimitive.double)
     assertNull(body["isFinished"])
+    assertEquals(30_000, syncedProgress.data.first()[bookId.value]!!.positionMs)
+  }
+
+  @Test
+  fun `a book that plays sends the position of the player`() = runTest {
+    val repo = MemoryBookRepository(book(positionMs = 30_000))
+    syncedProgress.updateData {
+      mapOf(bookId.value to SyncedProgress(0, finished = false, serverLastUpdate = 10))
+    }
+    server.enqueue(MockResponse(code = 200))
+
+    progressSync(repo, player(positionMs = 40_000, isPlaying = true))
+      .syncAll(account, listOf(serverProgress(currentTime = 0.0, lastUpdate = 10)))
+
+    val body =
+      Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
+    assertEquals(40.0, body.getValue("currentTime").jsonPrimitive.double)
+    assertEquals(40_000, syncedProgress.data.first()[bookId.value]!!.positionMs)
+  }
+
+  @Test
+  fun `a paused book sends its stored position`() = runTest {
+    val repo = MemoryBookRepository(book(positionMs = 30_000))
+    syncedProgress.updateData {
+      mapOf(bookId.value to SyncedProgress(0, finished = false, serverLastUpdate = 10))
+    }
+    server.enqueue(MockResponse(code = 200))
+
+    progressSync(repo, player(positionMs = 40_000, isPlaying = false))
+      .syncAll(account, listOf(serverProgress(currentTime = 0.0, lastUpdate = 10)))
+
+    val body =
+      Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
+    assertEquals(30.0, body.getValue("currentTime").jsonPrimitive.double)
     assertEquals(30_000, syncedProgress.data.first()[bookId.value]!!.positionMs)
   }
 
@@ -289,6 +324,20 @@ class ProgressSyncTest {
       .syncAll(account, listOf(serverProgress(currentTime = 80.0, lastUpdate = 10)))
 
     assertEquals(0, repo.get(bookId)!!.position)
+  }
+
+  private fun player(
+    positionMs: Long,
+    isPlaying: Boolean,
+  ): PlayerController = mockk {
+    coEvery { livePlaybackState(bookId) } returns
+      LivePlaybackState(
+        bookId = bookId,
+        chapterId = chapters[0].id,
+        positionMs = positionMs,
+        isPlaying = isPlaying,
+        playbackSpeed = 1F,
+      )
   }
 
   private fun progressSync(

@@ -90,8 +90,7 @@ class WidgetData(
             lastPlaybackSpeedStore.data,
           ) { book, playing, _, defaultSpeed ->
             if (book != null && playing) {
-                // with live playback persistence, the database doesn't follow the position while
-                // playing
+                // the stored position lags behind while playing
                 currentBookResolver.value.book(id) ?: book
               } else {
                 book

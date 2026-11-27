@@ -13,6 +13,8 @@ import androidx.media3.test.utils.TestExoPlayerBuilder
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -50,6 +52,7 @@ import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.player.VoicePlayer
+import voice.core.playback.playstate.PositionUpdater
 import voice.core.playback.session.search.BookSearchParser
 import voice.core.playback.session.search.book
 import voice.core.search.BookSearch
@@ -76,6 +79,7 @@ class LibrarySessionCallbackTest {
         }
     }
   private val voicePlayer = mockk<VoicePlayer>(relaxed = true)
+  private val positionUpdater = mockk<PositionUpdater>(relaxUnitFun = true)
   private val app = controller(context.packageName, context.applicationInfo.uid)
   private val notificationSession =
     mockk<MediaSession>(relaxed = true) {
@@ -288,6 +292,25 @@ class LibrarySessionCallbackTest {
   }
 
   @Test
+  fun `another app asks for a book while one plays, its position is saved first`() = scope.runTest {
+    every { voicePlayer.playWhenReady } returns true
+    setChapterMarksFromCar()
+
+    coVerifyOrder {
+      positionUpdater.flushPositionNow()
+      val _ = mediaItemProvider.mediaItemsWithStartPosition(any<String>())
+    }
+  }
+
+  @Test
+  fun `another app asks for a book while none plays, the stored position stays`() = scope.runTest {
+    every { voicePlayer.playWhenReady } returns false
+    setChapterMarksFromCar()
+
+    coVerify(exactly = 0) { positionUpdater.flushPositionNow() }
+  }
+
+  @Test
   fun `resuming playback applies the settings of the current book`() = scope.runTest {
     val book = addBook { it.copy(gain = 3F) }
     currentBookStore.updateData { book.id }
@@ -318,6 +341,24 @@ class LibrarySessionCallbackTest {
         voicePlayer.prepare()
       }
     }
+
+  private fun TestScope.setChapterMarksFromCar() {
+    val book = addBook()
+    val marks = playbackItems(book)
+    coEvery { mediaItemProvider.mediaItemsWithStartPosition(marks[0].mediaId) } returns
+      MediaItemsWithStartPosition(marks, 0, 0)
+
+    val result =
+      callback.onSetMediaItems(
+        session,
+        controller(ANDROID_AUTO_PACKAGE, OTHER_UID),
+        mutableListOf(marks[0]),
+        0,
+        0,
+      )
+    runCurrent()
+    val _ = result.get()
+  }
 
   private fun TestScope.setChapterMarksFromApp(book: Book) {
     val result = callback.onSetMediaItems(session, app, playbackItems(book).toMutableList(), 0, 0)
@@ -358,6 +399,7 @@ class LibrarySessionCallbackTest {
       lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
       bookSearch = bookSearch,
       lastPlaybackSpeedStore = LastPlaybackSpeedStore(lastPlaybackSpeedStore),
+      positionUpdater = positionUpdater,
     )
 
   private fun notificationCommands(): List<Player.Commands> {

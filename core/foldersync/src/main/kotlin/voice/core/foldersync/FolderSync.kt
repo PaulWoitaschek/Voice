@@ -79,7 +79,6 @@ internal constructor(
 
   @OptIn(FlowPreview::class)
   private suspend fun syncChanges() {
-    // while playing, the position changes every few hundred ms, so this syncs once playback stops
     combine(
         audiobookFolders.all(),
         bookRepository.flow(),

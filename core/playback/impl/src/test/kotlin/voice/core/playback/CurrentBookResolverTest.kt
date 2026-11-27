@@ -6,11 +6,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Instant
 import kotlinx.coroutines.test.runTest
-import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
-import voice.core.data.store.CurrentBookStore
-import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.session.search.book
 
 class CurrentBookResolverTest {
@@ -37,27 +34,9 @@ class CurrentBookResolverTest {
           ),
         ),
     )
-  private val currentBookStore = MemoryDataStore<BookId?>(book.id)
 
   @Test
-  fun `returns persisted book when live playback persistence is disabled`() = runTest {
-    val resolver =
-      CurrentBookResolver(
-        bookRepository =
-          mockk {
-            coEvery { get(book.id) } returns book
-          },
-        playerController = mockk(),
-        currentBookStore = CurrentBookStore(currentBookStore),
-        experimentalPlaybackPersistenceFeatureFlag =
-          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
-      )
-
-    assertEquals(expected = book, actual = resolver.currentBook())
-  }
-
-  @Test
-  fun `overlays the current player position when live playback persistence is enabled`() = runTest {
+  fun `overlays the current player position`() = runTest {
     val resolver =
       CurrentBookResolver(
         bookRepository =
@@ -75,43 +54,13 @@ class CurrentBookResolverTest {
                 playbackSpeed = 1f,
               )
           },
-        currentBookStore = CurrentBookStore(currentBookStore),
-        experimentalPlaybackPersistenceFeatureFlag =
-          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
       )
 
     assertEquals(
       expected = book.chapters.last().id,
-      actual = resolver.currentBook()?.content?.currentChapter,
+      actual = resolver.book(book.id)?.content?.currentChapter,
     )
-    assertEquals(expected = 1234L, actual = resolver.currentBook()?.content?.positionInChapter)
-  }
-
-  @Test
-  fun `returns persisted book when the player is in a chapter the book no longer has`() = runTest {
-    val resolver =
-      CurrentBookResolver(
-        bookRepository =
-          mockk {
-            coEvery { get(book.id) } returns book
-          },
-        playerController =
-          mockk {
-            coEvery { livePlaybackState(book.id) } returns
-              LivePlaybackState(
-                bookId = book.id,
-                chapterId = ChapterId("deleted-chapter"),
-                positionMs = 1234L,
-                isPlaying = false,
-                playbackSpeed = 1f,
-              )
-          },
-        currentBookStore = CurrentBookStore(currentBookStore),
-        experimentalPlaybackPersistenceFeatureFlag =
-          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
-      )
-
-    assertEquals(expected = book, actual = resolver.currentBook())
+    assertEquals(expected = 1234L, actual = resolver.book(book.id)?.content?.positionInChapter)
   }
 
   @Test
@@ -126,11 +75,8 @@ class CurrentBookResolverTest {
           mockk {
             coEvery { livePlaybackState(book.id) } returns null
           },
-        currentBookStore = CurrentBookStore(currentBookStore),
-        experimentalPlaybackPersistenceFeatureFlag =
-          ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
       )
 
-    assertEquals(expected = book, actual = resolver.currentBook())
+    assertEquals(expected = book, actual = resolver.book(book.id))
   }
 }

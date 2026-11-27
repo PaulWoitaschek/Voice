@@ -115,7 +115,7 @@ internal class ListeningSessionReporter(
   ) = mutex.withLock {
     val account = accountStore.data.first()?.takeUnless { it.needsLogin } ?: return@withLock
     val stored = bookRepository.get(bookId) ?: return@withLock
-    // with the experimental persistence, the stored position lags behind while the book plays
+    // the stored position lags behind while the book plays
     val book = playerController.livePlaybackState(bookId)?.let(stored::overlay) ?: stored
     val itemId = bookId.itemId ?: return@withLock
     val api = http.authenticatedApi(account.serverUrl)

@@ -36,6 +36,7 @@ import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.player.VoicePlayer
+import voice.core.playback.playstate.PositionUpdater
 import voice.core.playback.session.search.BookSearchHandler
 import voice.core.playback.session.search.BookSearchParser
 import voice.core.playback.withDefaultSpeed
@@ -55,6 +56,7 @@ class LibrarySessionCallback(
   private val lockScreenSliderStore: LockScreenSliderStore,
   private val bookSearch: BookSearch,
   private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
+  private val positionUpdater: PositionUpdater,
 ) : MediaLibrarySession.Callback {
 
   private var notificationCommandsJob: Job? = null
@@ -103,6 +105,8 @@ class LibrarySessionCallback(
       return MediaItemsWithStartPosition(mediaItems, startIndex, startPositionMs)
     }
     val item = mediaItems.getOrNull(startIndex) ?: mediaItems.firstOrNull() ?: return null
+    // the book can play already, and while it plays the stored position lags behind
+    if (player.playWhenReady) positionUpdater.flushPositionNow()
     val searchQuery = item.requestMetadata.searchQuery
     return if (searchQuery != null) {
       val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)

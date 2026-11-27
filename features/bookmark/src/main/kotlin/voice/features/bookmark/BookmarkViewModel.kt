@@ -30,7 +30,6 @@ import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.CurrentBookResolver
-import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
@@ -53,8 +52,6 @@ class BookmarkViewModel(
   private val zone: () -> ZoneId,
   dispatcherProvider: DispatcherProvider,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
-  private val experimentalPlaybackPersistenceFeatureFlag:
-    ExperimentalPlaybackPersistenceFeatureFlag,
   private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
   private val historyTabOpenStore: HistoryTabOpenStore,
   private val analytics: Analytics,
@@ -100,20 +97,12 @@ class BookmarkViewModel(
         .collectAsState(initial = null)
         .value
         ?.withDefaultSpeed { defaultSpeed ?: return null } ?: return null
-    // with the experimental playback persistence, the stored position lags behind while playing
-    val experimentalPlaybackPersistence = remember {
-      experimentalPlaybackPersistenceFeatureFlag.get()
-    }
+    // the stored position lags behind while playing
     val livePlaybackState =
-      if (experimentalPlaybackPersistence) {
-        remember(bookId) { playerController.livePlaybackStateFlow(bookId) }
-          .collectAsState(initial = null)
-          .value
-      } else {
-        null
-      }
-    val book =
-      if (livePlaybackState != null) persistedBook.overlay(livePlaybackState) else persistedBook
+      remember(bookId) { playerController.livePlaybackStateFlow(bookId) }
+        .collectAsState(initial = null)
+        .value
+    val book = livePlaybackState?.let(persistedBook::overlay) ?: persistedBook
     val bookmarks =
       remember(book.id, book.content.chapters) {
           bookmarkRepo.bookmarksFlow(book.content)

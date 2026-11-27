@@ -22,7 +22,6 @@ import voice.core.data.BookId
 import voice.core.data.category
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
-import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.features.bookOverview.di.BookActionsScope
@@ -41,8 +40,6 @@ class BottomSheetViewModel(
   private val serverDownloads: ServerDownloads,
   private val navigator: Navigator,
   private val playerController: PlayerController,
-  private val experimentalPlaybackPersistenceFeatureFlag:
-    ExperimentalPlaybackPersistenceFeatureFlag,
   private val bookSelectionRequests: BookSelectionRequests,
 ) {
 
@@ -131,13 +128,9 @@ class BottomSheetViewModel(
           if (book == null) onClose()
         }
         .filterNotNull()
-    // with the experimental persistence, the stored position of the playing book lags behind
-    return if (experimentalPlaybackPersistenceFeatureFlag.get()) {
-      book.combine(playerController.livePlaybackStateFlow(bookId)) { book, livePlaybackState ->
-        livePlaybackState?.let(book::overlay) ?: book
-      }
-    } else {
-      book
+    // the stored position of the playing book lags behind
+    return book.combine(playerController.livePlaybackStateFlow(bookId)) { book, livePlaybackState ->
+      livePlaybackState?.let(book::overlay) ?: book
     }
   }
 

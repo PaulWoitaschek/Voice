@@ -49,7 +49,6 @@ import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.CurrentBookResolver
-import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
@@ -159,8 +158,6 @@ class BookPlayViewModelTest {
       bookId = book.id,
       dispatcherProvider =
         DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
-      experimentalPlaybackPersistenceFeatureFlag =
-        ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
       historyRecorder = historyRecorder,
       clock = clock,
@@ -451,7 +448,6 @@ class BookPlayViewModelTest {
     val viewModel =
       viewModel(
         book = persistedBook,
-        experimentalPlaybackPersistence = true,
         livePlaybackFlow = livePlaybackFlow,
       )
 
@@ -484,7 +480,6 @@ class BookPlayViewModelTest {
     scope.runTest {
       val viewModel =
         viewModel(
-          experimentalPlaybackPersistence = true,
           livePlaybackFlow = MutableStateFlow(null),
           playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing(book.id)),
         )
@@ -1040,7 +1035,6 @@ class BookPlayViewModelTest {
     book: Book = this.book,
     player: PlayerController? = null,
     currentBookStore: MemoryDataStore<BookId?> = MemoryDataStore(book.id),
-    experimentalPlaybackPersistence: Boolean = false,
     kioskMode: Boolean = false,
     livePlaybackFlow: MutableStateFlow<LivePlaybackState?> = MutableStateFlow(null),
     playStateFlow: MutableStateFlow<PlayStateManager.PlayState> =
@@ -1083,10 +1077,6 @@ class BookPlayViewModelTest {
           main = scope.coroutineContext,
           io = Dispatchers.Unconfined,
           mainImmediate = scope.coroutineContext,
-        ),
-      experimentalPlaybackPersistenceFeatureFlag =
-        ExperimentalPlaybackPersistenceFeatureFlag(
-          MemoryFeatureFlag(experimentalPlaybackPersistence),
         ),
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(kioskMode)),
       historyRecorder = historyRecorder,
