@@ -34,7 +34,8 @@ class FakePlayer(
             .build(),
         ),
       )
-      .setContentPositionMs(contentPositionMs)
+      // a plain position moves on with the clock while the player plays
+      .setContentPositionMs { contentPositionMs }
       .setPlaybackState(Player.STATE_READY)
       .setPlayWhenReady(true, Player.PLAY_WHEN_READY_CHANGE_REASON_USER_REQUEST)
       .build()
