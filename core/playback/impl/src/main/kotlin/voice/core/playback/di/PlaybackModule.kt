@@ -33,6 +33,7 @@ import voice.core.playback.player.DurationInconsistenciesUpdater
 import voice.core.playback.player.OnlyAudioRenderersFactory
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.player.onAudioSessionIdChanged
+import voice.core.playback.player.streamBuffer
 import voice.core.playback.playstate.PlayStateDelegatingListener
 import voice.core.playback.playstate.PositionUpdater
 import voice.core.playback.session.LibrarySessionCallback
@@ -82,6 +83,7 @@ object PlaybackModule {
       .setHandleAudioBecomingNoisy(true)
       .setWakeMode(C.WAKE_MODE_LOCAL)
       .setMaxSeekToPreviousPositionMs(2_000)
+      .setLoadControl(streamBuffer())
       .build()
       .also { player ->
         if (media3AudioOffloadFeatureFlag.get()) {
