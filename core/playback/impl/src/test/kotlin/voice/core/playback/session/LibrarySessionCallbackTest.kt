@@ -79,7 +79,7 @@ class LibrarySessionCallbackTest {
         }
     }
   private val voicePlayer = mockk<VoicePlayer>(relaxed = true)
-  private val positionUpdater = mockk<PositionUpdater>(relaxed = true)
+  private val positionUpdater = mockk<PositionUpdater>(relaxUnitFun = true)
   private val app = controller(context.packageName, context.applicationInfo.uid)
   private val notificationSession =
     mockk<MediaSession>(relaxed = true) {
@@ -293,7 +293,7 @@ class LibrarySessionCallbackTest {
 
   @Test
   fun `another app asks for a book while one plays, its position is saved first`() = scope.runTest {
-    every { voicePlayer.isPlaying } returns true
+    every { voicePlayer.playWhenReady } returns true
     setChapterMarksFromCar()
 
     coVerifyOrder {
@@ -304,7 +304,7 @@ class LibrarySessionCallbackTest {
 
   @Test
   fun `another app asks for a book while none plays, the stored position stays`() = scope.runTest {
-    every { voicePlayer.isPlaying } returns false
+    every { voicePlayer.playWhenReady } returns false
     setChapterMarksFromCar()
 
     coVerify(exactly = 0) { positionUpdater.flushPositionNow() }

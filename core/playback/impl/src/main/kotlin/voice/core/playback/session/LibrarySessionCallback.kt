@@ -106,7 +106,7 @@ class LibrarySessionCallback(
     }
     val item = mediaItems.getOrNull(startIndex) ?: mediaItems.firstOrNull() ?: return null
     // the book can play already, and while it plays the stored position lags behind
-    if (player.isPlaying) positionUpdater.flushPositionNow()
+    if (player.playWhenReady) positionUpdater.flushPositionNow()
     val searchQuery = item.requestMetadata.searchQuery
     return if (searchQuery != null) {
       val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)
